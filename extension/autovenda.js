@@ -1,5 +1,5 @@
 /*
- * PokeIdle Ateforp Tools - venda automática de Pokémon do Depósito (Market do jogo, venda ao NPC).
+ * PokeIdle Tools by Ateforp - venda automática de Pokémon do Depósito (Market do jogo, venda ao NPC).
  *
  * Como o jogo guarda os dados (observado):
  *   - lista de Pokémon: welcome.estado.pokemons e estado.pokemons / pkMud (alterados) / pkFora (removidos)
@@ -27,7 +27,7 @@
   const ehLendario = (p) => { const n = nomeNorm(p.nome); return LENDARIOS.some((l) => n.indexOf(l) !== -1) || extras.some((l) => l && n.indexOf(l) !== -1); };
 
   const PADRAO = {
-    simular: true,
+    simular: false,
     shiny: 'colecao',                 // 'colecao' | 'manter' | 'regras' | 'vender'
     lendario: 'colecao',              // idem, para lendários e míticos
     extras: '',                       // nomes extras tratados como lendários (separados por vírgula)
@@ -44,7 +44,7 @@
   function mesclar(base, c) {
     const out = JSON.parse(JSON.stringify(base));
     const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
-    if (typeof c.simular === 'boolean') out.simular = c.simular;
+    out.simular = false;   // não existe mais modo de teste
     if (['colecao', 'manter', 'regras', 'vender'].indexOf(c.shiny) !== -1) out.shiny = c.shiny;
     if (['colecao', 'manter', 'regras', 'vender'].indexOf(c.lendario) !== -1) out.lendario = c.lendario;
     if (typeof c.extras === 'string') out.extras = c.extras.slice(0, 300);
@@ -66,7 +66,7 @@
   let sujo = true, ultEmit = 0, ver = 1, cacheAn = null, ultSig = '';
   let hist = [];                      // últimas ações (guardadas no navegador)
   try { const h = JSON.parse(localStorage.getItem(CHAVE + '_hist') || '[]'); if (Array.isArray(h)) hist = h.slice(0, 200); } catch (e) { /* ignora */ }
-  const snap = (p) => ({ nome: p.nome, level: p.level, shiny: !!p.shiny, lend: ehLendario(p), p: p.potencia, iv: ivTotal(p), q: p.quality, n: p.nota });
+  const snap = (p) => ({ nome: p.nome, level: p.level, shiny: !!p.shiny, lend: ehLendario(p), p: p.potencia, iv: ivTotal(p), q: milesimos(p.quality), n: milesimos(p.nota) });
   function registrar(tipo, pend, extra) {
     hist.unshift(Object.assign({ em: Date.now(), tipo, id: pend.id }, pend.snap || {}, { motivo: pend.motivo || null }, extra || {}));
     hist = hist.slice(0, 200);
@@ -74,6 +74,8 @@
   }
   const S = { vendidos: 0, coletados: 0, falhas: 0, pend: null, ultAcao: 0, janela: [], pausaAte: 0, msg: 'Desligado.' };
 
+  // Q e N chegam do jogo como decimais (ex.: 1.445); o jogo mostra e o usuário digita em milésimos (1.445 → 1445)
+  const milesimos = (v) => Math.round((Number(v) || 0) * 1000);
   const ehPoke = (o) => o && typeof o === 'object' && o.id != null && o.speciesId != null && o.ivs;
   const ivTotal = (p) => Object.values(p.ivs || {}).reduce((a, b) => a + (Number(b) || 0), 0);
 
@@ -102,7 +104,7 @@
 
   // ---------- regras ----------
   const atinge = (reg, p, cmp) => {
-    const vals = { p: p.potencia, iv: ivTotal(p), q: p.quality, n: p.nota };
+    const vals = { p: p.potencia, iv: ivTotal(p), q: milesimos(p.quality), n: milesimos(p.nota) };
     const ts = ['p', 'iv', 'q', 'n'].filter((f) => reg[f] !== null);
     if (!ts.length) return null;                       // sem limites = regra sem critério
     const res = ts.map((f) => cmp(Number(vals[f]), reg[f]));
@@ -163,8 +165,9 @@
     const ws = getWs();
     const a = analisar();
     const ordem = { vender: 0, colecao: 1, manter: 2 };
-    const previa = a.itens.filter((x) => x.acao !== 'manter').sort((x, y) => ordem[x.acao] - ordem[y.acao]).slice(0, 25)
-      .map((x) => ({ id: x.p.id, nome: x.p.nome, level: x.p.level, shiny: !!x.p.shiny, lend: ehLendario(x.p), p: x.p.potencia, iv: ivTotal(x.p), q: x.p.quality, n: x.p.nota, acao: x.acao, motivo: x.motivo }));
+    const porAcao = (ac) => a.itens.filter((x) => x.acao === ac).slice(0, 40);   // até 40 de cada grupo: vender, Coleção e sem ação
+    const previa = [].concat(porAcao('vender'), porAcao('colecao'), porAcao('manter'))
+      .map((x) => ({ id: x.p.id, nome: x.p.nome, level: x.p.level, shiny: !!x.p.shiny, lend: ehLendario(x.p), p: x.p.potencia, iv: ivTotal(x.p), q: milesimos(x.p.quality), n: milesimos(x.p.nota), acao: x.acao, motivo: x.motivo }));
     const sobra = a.itens.filter((x) => x.acao === 'manter').slice(0, 40).map((x) => Object.assign({ id: x.p.id }, snap(x.p), { motivo: x.motivo }));
     const estado = { hist: hist.slice(0, 60), sobra, ativo, cfg, conectado: !!(ws && ws.readyState === 1), temLista, deposito: a.dep.length, equipe: Array.from(mapa.values()).filter((p) => p.slot != null).length, colecaoN: travados.size,
       contagem: a.c, previa, vendidos: S.vendidos, coletados: S.coletados, falhas: S.falhas, msg: ativo ? S.msg : (S.vendidos ? S.msg : 'Desligado.'), colecaoCmd: !!COLECAO_CMD, pendente: S.pend ? S.pend.nome : null };

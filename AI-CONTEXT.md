@@ -1,4 +1,4 @@
-# AI-CONTEXT — PokeIdle Ateforp Tools (v1.5.0)
+# AI-CONTEXT — PokeIdle Tools by Ateforp (v1.5.0)
 
 Extensão Chrome MV3 (e userscript gerado por `build_userscript.py`) para pokeidle.io. Painel em Shadow DOM, tema azul do Auto Captura.
 
