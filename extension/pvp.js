@@ -22,7 +22,7 @@
   const INTERVALO_MIN = 10000;        // nunca enviar "entrar" mais de 1 vez a cada 10 s
   const SEM_RESPOSTA = 8000;          // sem resposta da fila neste prazo => tenta de novo mais tarde
   const BACKOFF = 30000;
-  const MAX_FALHAS = 5;               // falhas seguidas => desliga
+  const BACKOFF_MAX = 300000;         // a espera cresce a cada falha seguida (30 s, 60 s, 2 min, 5 min), mas a busca NUNCA se desliga sozinha
 
   let ativo = false;                  // sempre começa desligado depois de recarregar a página
   let autoLigar = false;              // liga sozinho depois do login (opcional)
@@ -41,6 +41,17 @@
   function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify({ esperaPosS, ocultarLuta, autoLigar })); } catch (e) { /* ignora */ } }
 
   let jaLogou = false;
+  // "Ligar ao se logar": vigia que confere de 1 em 1 s e liga assim que o jogo está conectado e logado (também a cada reconexão)
+  let wsVisto = null, logado = false, autoFeito = false;
+  function sincronizarConexao() { const w = getWs(); if (w !== wsVisto) { wsVisto = w; logado = false; autoFeito = false; } }
+  setInterval(() => {
+    sincronizarConexao();
+    const w = getWs();
+    if (autoLigar && !autoFeito && logado && w && w.readyState === 1) {
+      autoFeito = true;
+      if (!ativo) { ligar(true); S.proximo = 0; console.log('[PokeIdle Tools by Ateforp] PvP ligado automaticamente ao logar'); }
+    }
+  }, 1000);
   function ligar(v) {
     ativo = !!v; S.falhas = 0; S.aguardandoResp = 0;
     if (ativo) { const w = getWs(); try { if (w && w.readyState === 1) w.send(JSON.stringify({ t: 'pvp.mensal', pagina: 0 })); } catch (e) { /* ignora */ } }
@@ -53,10 +64,8 @@
       const k = txt.indexOf('"servidorAgora":'); const n = parseInt(txt.slice(k + 16, k + 31), 10);
       if (n > 1e12) { offset = n - Date.now(); sujo = true; }
     }
-    if (typeof txt === 'string' && !jaLogou && txt.indexOf('"t":"welcome"') !== -1) {
-      jaLogou = true;
-      if (autoLigar && !ativo) { ligar(true); }
-    }
+    sincronizarConexao();
+    if (!logado && typeof txt === 'string' && /"t":"(welcome|estado|campo|campo\.init|pvp)"/.test(txt.slice(0, 200))) logado = true;
     if (typeof txt === 'string' && txt.indexOf('"t":"pvpMensal"') !== -1) {
       let mm; try { mm = JSON.parse(txt); } catch (e) { mm = null; }
       const eu = mm && mm.eu;
@@ -69,9 +78,8 @@
     if (typeof txt !== 'string' || txt.indexOf('"t":"pvp"') === -1) {
       if (ativo && typeof txt === 'string' && txt.indexOf('"t":"erro"') !== -1 && S.aguardandoResp) {
         let m; try { m = JSON.parse(txt); } catch (e) { return; }
-        S.aguardandoResp = 0; S.falhas++; S.proximo = Date.now() + BACKOFF;
-        S.msg = 'Servidor recusou: ' + String((m && (m.msg || m.erro || m.mensagem || m.texto)) || 'erro') + ' — tentando de novo em 30 s.';
-        if (S.falhas >= MAX_FALHAS) { ativo = false; S.msg = 'Desligado: ' + MAX_FALHAS + ' falhas seguidas.'; }
+        S.aguardandoResp = 0; S.falhas++; S.proximo = Date.now() + Math.min(BACKOFF_MAX, BACKOFF * Math.pow(2, Math.min(S.falhas - 1, 4)));
+        S.msg = 'Servidor recusou: ' + String((m && (m.msg || m.erro || m.mensagem || m.texto)) || 'erro') + ' — tentando de novo em ' + Math.round((S.proximo - Date.now()) / 1000) + ' s (falha ' + S.falhas + ').';
         sujo = true;
       }
       return;
@@ -113,8 +121,7 @@
     const ws = getWs();
     if (!ws || ws.readyState !== 1) { S.msg = 'Sem conexão com o jogo.'; sujo = true; return; }
     if (S.aguardandoResp && agora - S.aguardandoResp > SEM_RESPOSTA) {
-      S.aguardandoResp = 0; S.falhas++; S.proximo = agora + BACKOFF; S.msg = 'Sem resposta da fila; tentando de novo em 30 s.'; sujo = true;
-      if (S.falhas >= MAX_FALHAS) { ativo = false; S.msg = 'Desligado: ' + MAX_FALHAS + ' falhas seguidas.'; }
+      S.aguardandoResp = 0; S.falhas++; const esp = Math.min(BACKOFF_MAX, BACKOFF * Math.pow(2, Math.min(S.falhas - 1, 4))); S.proximo = agora + esp; S.msg = 'Sem resposta da fila; tentando de novo em ' + Math.round(esp / 1000) + ' s (falha ' + S.falhas + ').'; sujo = true;
       return;
     }
     if (S.naFila || S.aguardandoResp) return;

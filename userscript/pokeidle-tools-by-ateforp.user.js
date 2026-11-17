@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.10
+// @version      2.3.12
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -748,7 +748,7 @@
   const CHAVE = 'autocaptura_ativo';
   const CHAVE_CFG = 'autocaptura_cfg3';
   const PADRAO = { ativo: true, intervaloMs: 2000 };
-  const CFG_PADRAO = { autoLigar: false, estoque: { ativo: false, intervaloMin: 5, itens: {}, beast: { ativo: false, abaixo: 0, ate: 0 } } };
+  const CFG_PADRAO = { autoLigar: false, captura: { beastEspecial: false, bolaTela: 0, hudEco: true, hudSec: { recursos: true, captura: true, pvp: true, compras: true } }, estoque: { ativo: false, intervaloMin: 5, itens: {}, beast: { ativo: false, abaixo: 0, ate: 0 } } };
   const INICIO = Date.now();
 
   // ---------- configuração ----------
@@ -760,6 +760,7 @@
       const s = JSON.parse(localStorage.getItem(CHAVE_CFG) || 'null') || {};
       return {
         autoLigar: !!s.autoLigar,
+        captura: { beastEspecial: !!(s.captura && s.captura.beastEspecial), bolaTela: Number(s.captura && s.captura.bolaTela) || 0, hudEco: !(s.captura && s.captura.hudEco === false), hudSec: { recursos: !(s.captura && s.captura.hudSec && s.captura.hudSec.recursos === false), captura: !(s.captura && s.captura.hudSec && s.captura.hudSec.captura === false), pvp: !(s.captura && s.captura.hudSec && s.captura.hudSec.pvp === false), compras: !(s.captura && s.captura.hudSec && s.captura.hudSec.compras === false) } },
         estoque: {
           ...CFG_PADRAO.estoque, ...(s.estoque || {}),
           itens: { ...((s.estoque && s.estoque.itens) || {}) },
@@ -782,11 +783,28 @@
   const salvarAtivo = () => { try { localStorage.setItem(CHAVE, ativo ? '1' : '0'); } catch (e) { /* ignora */ } };
 
   // ---------- dados do jogo (pela mesma conexão do Mercador) ----------
-  const dados = { w: null, campos: null, welcomeEm: 0, ultMsg: 0, itensCat: null };
+  const mobsInfo = new Map();
+  let cacando = null;   // último Pokémon visto em campo (nome + nível)
+  const stats = { vistos: 0, derrotados: 0, capturados: 0, escaparam: 0, fugiram: 0, shinyVistos: 0, lendariosVistos: 0, desde: Date.now() };
+  let modoTela = false, viuCapturado = false;
+  const ultLancado = { slot: undefined, em: 0 };   // slot -> { nome, level, shiny } (montado a partir dos quadros do campo)
+  const dados = { campo: null, campoEm: 0, w: null, campos: null, welcomeEm: 0, ultMsg: 0, itensCat: null };
   const BUS = window.__PM_BUS;
   const getWs = () => (BUS && BUS.ws ? BUS.ws() : null);
 
   let jaLogou = false;
+  // "Ligar ao se logar": não depende de pegar uma única mensagem. Uma vigia confere de 1 em 1 s e liga assim que o jogo está
+  // conectado e logado; cada conexão nova (reconexão) é um novo login e liga de novo.
+  let wsVisto = null, logado = false, autoFeito = false;
+  function sincronizarConexao() { const w = getWs(); if (w !== wsVisto) { wsVisto = w; logado = false; autoFeito = false; } }
+  setInterval(() => {
+    sincronizarConexao();
+    const w = getWs();
+    if (cfg2.autoLigar && !autoFeito && logado && w && w.readyState === 1) {
+      autoFeito = true;
+      if (!ativo) { definirCaptura(true); console.log('[PokeIdle Tools by Ateforp] captura ligada automaticamente ao logar'); }
+    }
+  }, 1000);
   function mesclar(p) {
     if (!p) return;
     const { cheio, pokemons, pkMud, pkFora, dexMud, dexFora, ...resto } = p;   // só o que interessa (sem lista de pokémons)
@@ -795,10 +813,82 @@
   }
 
   function aoMensagem(txt) {
+    sincronizarConexao();
+    if (!logado && typeof txt === 'string' && /"t":"(welcome|estado|campo|campo\.init|pvp)"/.test(txt.slice(0, 200))) logado = true;
     if (typeof txt !== 'string') return;
     dados.ultMsg = Date.now();                       // qualquer mensagem do servidor = o jogo está vivo
     if (txt.indexOf('"t":"erro"') !== -1) {            // guarda o último erro do servidor (a compra de estoque lê a razão)
       try { const e = JSON.parse(txt); dados.ultErro = { em: Date.now(), txt: String((e && (e.msg || e.erro || e.mensagem || e.texto || e.message)) || '') }; } catch (err) { /* ignora */ }
+    }
+    // eventos de batalha (é por onde o jogo avisa quando um Pokémon aparece, cai ou é capturado): alimenta a contagem e a captura direta
+    if ((cfg2.captura.beastEspecial || ativo || cfg2.captura.hudEco) && txt.indexOf('"t":"batalha"') === 1 && txt.length < 60000
+        && (txt.indexOf('"k":"spawn"') !== -1 || txt.indexOf('"k":"morte"') !== -1 || txt.indexOf('"k":"capturado"') !== -1 || txt.indexOf('"k":"bola"') !== -1 || txt.indexOf('"k":"fugiu"') !== -1)) {
+      try {
+        const f = JSON.parse(txt);
+        for (const ev of f.ev || []) {
+          if (!ev) continue;
+          if (ev.k === 'spawn' && ev.slot !== undefined) {
+            const novo = !mobsInfo.has(ev.slot);
+            const e = mobsInfo.get(ev.slot) || {};
+            const recente = !novo && e.visto && (Date.now() - e.visto < 1500) && e.nome === ev.nome && !e.morto;   // quadro repetido do mesmo spawn
+            e.nome = ev.nome; e.level = ev.level; e.shiny = !!(ev.shiny || ev.sh); e.morto = false; e.expira = 0; e.tent = 0; e.doEvento = true;
+            if (!recente) e.visto = Date.now();
+            mobsInfo.set(ev.slot, e);
+            cacando = { nome: ev.nome, level: ev.level, shiny: e.shiny, em: Date.now() };
+            if (!recente) { stats.vistos++; if (e.shiny) stats.shinyVistos++; if (typeof window.__ateforpEhLendario === 'function' && window.__ateforpEhLendario(ev.nome)) stats.lendariosVistos++; }
+          } else if (ev.k === 'morte' && ev.quem === 'selvagem' && ev.slot !== undefined) {
+            const conhecido = mobsInfo.has(ev.slot);
+            const e = mobsInfo.get(ev.slot) || { nome: ev.nome };
+            if (!e.morto) { stats.derrotados++; if (!conhecido) stats.vistos++;   // morreu sem a gente ter visto o spawn: conta como visto também
+ e.morto = true; e.expira = Date.now() + 30000; e.doEvento = true; }   // fica 30 s no chão (TEMPO_CHAO do jogo)
+            mobsInfo.set(ev.slot, e);
+          } else if (ev.k === 'bola' && ev.slot !== undefined) {
+            mobsInfo.delete(ev.slot);                  // a bola resolveu: capturou ('capturado') ou o Pokémon fugiu ('fugiu') — de qualquer jeito sai do chão
+            capEsp.vistos.delete(ev.slot);
+          } else if (ev.k === 'fugiu') {
+            stats.fugiram++;
+          } else if (ev.k === 'capturado' && ev.pokemon) {
+            stats.capturados++; viuCapturado = true;
+            const s = ev.slot !== undefined ? ev.slot : ((Date.now() - ultLancado.em < 4000) ? ultLancado.slot : undefined);
+            if (s !== undefined) mobsInfo.delete(s);   // capturado: sai da lista
+          }
+        }
+      } catch (err) { /* ignora */ }
+    }
+    if ((cfg2.captura.beastEspecial || ativo || cfg2.captura.hudEco) && txt.indexOf('"t":"campo') === 1) {   // quadros do campo (campo / campo.init): guarda quem é shiny, pois o jogo manda isso só uma vez (delta)
+      if (txt.length < 80000 && (txt.indexOf('"mobs"') !== -1 || txt.indexOf('"fora"') !== -1)) {
+        try {
+          const f = JSON.parse(txt);
+          const ehInit = f.t === 'campo.init';
+          if (ehInit) mobsInfo.clear();
+          for (const b of f.mobs || []) {
+            if (!b || b.s === undefined) continue;
+            const novo = !mobsInfo.has(b.s);
+            const e = mobsInfo.get(b.s) || {};
+            if (b.n !== undefined) e.nome = b.n;
+            if (b.nv !== undefined) e.level = b.nv;
+            if (b.sh !== undefined) e.shiny = !!b.sh;
+            if (novo && b.n !== undefined) {
+              if (ehInit) e.contado = true;                       // já estava no campo antes de começarmos a contar
+              else {
+                stats.vistos++;
+                if (b.sh) stats.shinyVistos++;
+                if (typeof window.__ateforpEhLendario === 'function' && window.__ateforpEhLendario(b.n)) stats.lendariosVistos++;
+              }
+            }
+            if (b.x !== undefined) { const m2 = !!b.x; if (m2 && !e.morto) stats.derrotados++; e.morto = m2; }   // caído no chão (dá pra capturar)
+            if (b.xr !== undefined) e.expira = Date.now() + Number(b.xr);   // tempo que resta no chão
+            mobsInfo.set(b.s, e);
+          }
+          for (const s of f.fora || []) {
+            const e = mobsInfo.get(s);
+            if (e && e.morto) { if (e.expira && e.expira - Date.now() > 1500) { if (!viuCapturado) stats.capturados++; } else stats.escaparam++; }   // saiu do chão antes de acabar o tempo = capturado
+            mobsInfo.delete(s);
+          }
+          dados.campoEm = Date.now();
+        } catch (err) { /* ignora */ }
+      }
+      return;
     }
     const ehWelcome = txt.indexOf('"t":"welcome"') !== -1;
     if (!ehWelcome && txt.indexOf('"t":"estado"') === -1) return;
@@ -814,7 +904,7 @@
       dados.campos = null;
       mesclar(m.estado);
       dados.welcomeEm = Date.now();
-      if (!jaLogou) { jaLogou = true; if (cfg2.autoLigar && !ativo) { definirCaptura(true); } }   // opcional: liga ao logar
+      logado = true;   // (a vigia acima liga a captura quando o jogo estiver pronto)
       montarListaEstoque();
     } else if (m.t === 'estado') {
       mesclar(m.estado);
@@ -838,17 +928,192 @@
 
   // ---------- auto captura (clica no Pokémon caído) ----------
   let timerCaptura = null;
-  function pararCaptura() { if (timerCaptura) clearInterval(timerCaptura); timerCaptura = null; }
-  function iniciarCaptura() {
-    pararCaptura();
-    if (!ativo) return;
-    timerCaptura = setInterval(() => {
-      const b = document.querySelector('#caidos-lista .caido');
-      if (!b || b.offsetParent === null) return;
-      b.click();
-    }, Math.max(500, PADRAO.intervaloMs));
+  function pararCaptura() { if (timerCaptura) clearInterval(timerCaptura); timerCaptura = null; if (typeof timerEspecial !== 'undefined' && timerEspecial) { clearInterval(timerEspecial); timerEspecial = null; } }
+  // Beast Ball em shiny e lendário (opcional): lança a melhor bola que você tiver (Beast → Ultra → Super → Great → Poke)
+const ORDEM_BOLAS = [5, 4, 3, 2, 1];
+const capEsp = { info: '', diag: '', lancadas: 0, vistos: new Map(), diagFeito: false };
+function tentarBolaEspecial(linhas) {
+  const e = eu();
+  const bolas = (e && e.balls) || {};
+  for (const linha of linhas) {
+    if (linha.offsetParent === null) continue;
+    const slot = linha.dataset ? linha.dataset.slot : null;
+    if (slot == null || slot === '') continue;
+    const quem = linha.querySelector('.caido-quem');
+    const nome = String(quem ? quem.textContent : linha.textContent).replace(/\s*Nv\s*\d+.*$/i, '').replace(/[✨⭐]/g, '').trim();
+    const no = mobsInfo.get(Number(slot)) || mobsInfo.get(slot) || null;
+    if (!capEsp.diagFeito) {
+      capEsp.diagFeito = true;
+      capEsp.diag = no ? 'detecção de shiny ativa (dados do Pokémon caído lidos do jogo)' : 'não achei os dados deste Pokémon caído; só reconheço lendário pelo nome (a opção precisa estar ligada antes de o Pokémon aparecer)';
+      console.log('[PokeIdle Tools by Ateforp] captura especial: ' + capEsp.diag); sujo = true;
+    }
+    const shiny = !!(no && no.shiny) || /shiny|✨/i.test(linha.textContent);
+    const lend = typeof window.__ateforpEhLendario === 'function' && window.__ateforpEhLendario(nome);
+    if (!shiny && !lend) continue;
+    const ult = capEsp.vistos.get(slot) || 0;
+    if (Date.now() - ult < 1800) return true;                    // já lançou agora há pouco: espera o resultado
+    const ballId = ORDEM_BOLAS.find((id) => (Number(bolas[id]) || 0) > 0);
+    if (!ballId) return false;                                    // sem nenhuma bola: deixa o jogo avisar
+    if (!enviarJogo({ t: 'ball.throw', ballId, slot: Number.isNaN(Number(slot)) ? slot : Number(slot) })) return false;
+    capEsp.vistos.set(slot, Date.now()); capEsp.lancadas++; ultLancado.slot = Number.isNaN(Number(slot)) ? slot : Number(slot); ultLancado.em = Date.now();
+    const bolaNome = ((dados.w && dados.w.catalogoBolas) || []).find((b) => b.id === ballId);
+    capEsp.info = (shiny ? 'Shiny' : 'Lendário') + ' ' + nome + ': ' + ((bolaNome && (bolaNome.nome || bolaNome.name)) || 'bola ' + ballId) + ' · ' + hora();
+    console.log('[PokeIdle Tools by Ateforp] captura especial: ' + capEsp.info); sujo = true;
+    return true;
   }
-  function definirCaptura(v) {
+  return false;
+}
+// Sem a lista da tela (modo Economia / Ultra do jogo escondem ou não desenham os caídos): captura direto pela conexão,
+// com os dados do campo que o próprio jogo envia. A bola é a que você escolheu aqui (ou a 1ª com estoque, como o jogo faz).
+let ultSemTela = 0;
+function bolaNormal(bolas) {
+  const esc = cfg2.captura.bolaTela;
+  if (esc && (Number(bolas[esc]) || 0) > 0) return esc;
+  const cat = (dados.w && dados.w.catalogoBolas) || [];
+  const b = cat.find((x) => (Number(bolas[x.id]) || 0) > 0);
+  return b ? b.id : null;
+}
+function capturarSemTela() {
+  const agora = Date.now();
+  if (agora - ultSemTela < Math.max(500, PADRAO.intervaloMs)) return false;
+  const e = eu(); const bolas = (e && e.balls) || {};
+  const cand = [];
+  for (const [slot, m] of mobsInfo) {
+    if (m.expira && m.expira < agora - 5000) { mobsInfo.delete(slot); continue; }   // limpeza
+    if (!m.morto) continue;
+    if (m.expira && m.expira - agora < 700) continue;
+    if (agora - (capEsp.vistos.get(slot) || 0) < 1800) continue;
+    if ((m.tent || 0) >= 10) continue;                       // não insiste para sempre num que o jogo não aceita
+    const esp = !!cfg2.captura.beastEspecial && (m.shiny || (typeof window.__ateforpEhLendario === 'function' && m.nome && window.__ateforpEhLendario(m.nome)));
+    cand.push({ slot, m, esp, resta: m.expira || 0 });
+  }
+  if (!cand.length) return false;
+  cand.sort((a, b) => (b.esp - a.esp) || ((a.m.tent || 0) - (b.m.tent || 0)) || (a.resta - b.resta));   // shiny/lendário primeiro; depois quem ainda não foi tentado
+  const { slot, m, esp } = cand[0];
+  const ballId = esp ? ORDEM_BOLAS.find((id) => (Number(bolas[id]) || 0) > 0) : bolaNormal(bolas);
+  if (!ballId) return false;
+  if (!enviarJogo({ t: 'ball.throw', ballId, slot })) return false;
+  m.tent = (m.tent || 0) + 1;
+  ultSemTela = agora; capEsp.vistos.set(slot, agora); capSemTela.lancadas++; ultLancado.slot = slot; ultLancado.em = agora;
+  if (esp) {
+    capEsp.lancadas++;
+    const bn = ((dados.w && dados.w.catalogoBolas) || []).find((x) => x.id === ballId);
+    capEsp.info = (m.shiny ? 'Shiny' : 'Lendário') + ' ' + (m.nome || '') + ': ' + ((bn && (bn.nome || bn.name)) || 'bola ' + ballId) + ' · ' + hora();
+  }
+  sujo = true;
+  return true;
+}
+const capSemTela = { lancadas: 0 };
+// Quadro de recursos nos modos Economia/Ultra do jogo: a tela fica quase vazia, então mostra aqui quanto resta de cada bola,
+// se a captura está ligada e o que já foi lançado. Atualiza sozinho conforme o estoque muda.
+let hudEl = null, hudTxt = '';
+// o que os outros módulos (PvP e Mercado) mandam pela janela: guardado só para mostrar no quadro
+const hudPvp = { s: null }, hudMerc = { n: 0, gasto: 0, ult: '' };
+window.addEventListener('message', (ev) => {
+  const m = ev.data;
+  if (ev.source !== window || !m || typeof m !== 'object') return;
+  if (m.ch === 'ateforp-pvp' && m.from === 'pvp' && m.type === 'state') hudPvp.s = m.state;
+  else if (m.ch === 'pokeidle-auto' && m.from === 'engine' && m.type === 'state' && m.state && Array.isArray(m.state.compras)) {
+    const cs = m.state.compras; hudMerc.n = cs.length; hudMerc.gasto = cs.reduce((a, x) => a + (Number(x.total) || 0), 0);
+    const u = cs[cs.length - 1]; hudMerc.ult = u ? (u.qtd + '× ' + u.nome) : '';
+  }
+});
+function numeroDe(obj, chaves) { for (const k of Object.keys(obj || {})) if (chaves.test(k) && typeof obj[k] === 'number') return obj[k]; return null; }
+function limparMobs() {
+  const agora = Date.now();
+  for (const [slot, m] of mobsInfo) {
+    if (m.expira && m.expira < agora - 2000) { if (m.morto && m.doEvento) stats.escaparam++; mobsInfo.delete(slot); }
+  }
+}
+function atualizarHud() {
+  limparMobs();
+  const modo = document.documentElement.classList.contains('modo-ultra') || document.documentElement.classList.contains('modo-economia');
+  modoTela = modo;
+  if (!cfg2.captura.hudEco || !modo) { if (hudEl) { hudEl.remove(); hudEl = null; hudTxt = ''; } return; }
+  const sec = cfg2.captura.hudSec || {};
+  const fmt = (n) => Number(n).toLocaleString('pt-BR');
+  const e = eu(); const bolas = (e && e.balls) || {};
+  const blocos = [];
+  if (sec.recursos !== false) {
+    const cat = (dados.w && dados.w.catalogoBolas) || [];
+    const partes = cat.map((b) => ({ n: String(b.nome || b.name || 'Bola ' + b.id).replace(/\s*Ball$/i, ''), q: Number(bolas[b.id]) || 0 }));
+    const gold = numeroDe(e, /^(gold|ouro)$/i), diam = numeroDe(e, /^(diamantes|diamonds|gems|gemas)$/i);
+    const l = [];
+    l.push({ t: partes.length ? partes.map((p) => p.n + ' ' + fmt(p.q)).join('  ·  ') : 'aguardando dados do jogo…', alerta: partes.some((p) => p.q === 0) && partes.length > 0, forte: true });
+    const extra = [];
+    if (gold !== null) extra.push('Gold ' + fmt(gold)); if (diam !== null) extra.push('Diamantes ' + fmt(diam));
+    if (extra.length) l.push({ t: extra.join('  ·  ') });
+    blocos.push({ titulo: 'Recursos', linhas: l });
+  }
+  if (sec.captura !== false) {
+    const l = [{ t: 'Auto captura ' + (ativo ? 'LIGADA' : 'desligada') + (capSemTela.lancadas ? '  ·  lançadas sem a lista: ' + capSemTela.lancadas : '') + (capEsp.info ? '  ·  último especial: ' + capEsp.info : '') }];
+    const tent = stats.capturados + stats.fugiram;
+    const taxa = tent ? Math.round(stats.capturados / tent * 1000) / 10 : null;
+    if (cacando) l.push({ t: 'Caçando: ' + cacando.nome + (cacando.level ? ' · nível ' + fmt(cacando.level) : '') + (cacando.shiny ? ' ✨ shiny' : '') });
+    l.push({ t: 'Vistos ' + fmt(stats.vistos) + '  ·  derrotados ' + fmt(stats.derrotados) + '  ·  capturados ' + fmt(stats.capturados) + '  ·  fugiram ' + fmt(stats.fugiram) + '  ·  expiraram no chão ' + fmt(stats.escaparam) + (taxa !== null ? '  ·  taxa de captura ' + String(taxa).replace('.', ',') + '%' : '') });
+    l.push({ t: 'shiny vistos ' + fmt(stats.shinyVistos) + '  ·  lendários vistos ' + fmt(stats.lendariosVistos) + '  ·  contado pela extensão desde ' + new Date(stats.desde).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' (taxa de captura = capturados ÷ (capturados + fugiram); fugiu = a bola não segurou)' });
+    blocos.push({ titulo: 'Captura · contagem da extensão nesta sessão', linhas: l });
+  }
+  if (sec.pvp !== false) {
+    const p = hudPvp.s;
+    const l = [];
+    if (!p) l.push({ t: 'sem dados do PvP ainda' });
+    else {
+      const estado = !p.ativo ? 'desligado' : p.naFila ? 'na fila' + (p.tamanho ? ' (' + p.tamanho + ' jogadores)' : '') : 'ligado';
+      l.push({ t: 'PvP ' + estado + '  ·  partidas ' + fmt(p.partidas || 0) + '  ·  vitórias ' + fmt(p.vitorias || 0) + '  ·  derrotas ' + fmt(p.derrotas || 0) + (p.delta ? '  ·  saldo ' + (p.delta > 0 ? '+' : '') + fmt(p.delta) : '') });
+      const r = p.rank;
+      if (r && r.pontos != null) l.push({ t: 'Rank: ' + fmt(r.pontos) + ' pontos' + (r.posicao ? '  ·  posição ' + fmt(r.posicao) : '') + (p.ultima ? '  ·  última: ' + (p.ultima.venci ? 'vitória' : 'derrota') + (p.ultima.oponente ? ' vs ' + p.ultima.oponente : '') : '') });
+    }
+    blocos.push({ titulo: 'PvP', linhas: l });
+  }
+  if (sec.compras !== false) {
+    const l = [{ t: 'Reposição: ' + (cfg2.estoque.ativo ? (status.estoque || 'ligada') : 'desligada') }];
+    l.push({ t: 'Mercado: ' + fmt(hudMerc.n) + ' compras' + (hudMerc.gasto ? '  ·  gasto ' + fmt(hudMerc.gasto) : '') + (hudMerc.ult ? '  ·  última: ' + hudMerc.ult : '') });
+    blocos.push({ titulo: 'Compras', linhas: l });
+  }
+  const txt = JSON.stringify(blocos);
+  if (txt === hudTxt && hudEl) return;
+  hudTxt = txt;
+  if (!hudEl) {
+    hudEl = document.createElement('div');
+    hudEl.id = 'ateforp-hud-eco';
+    hudEl.style.cssText = 'position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:2147483000;width:min(94vw,680px);max-height:46vh;overflow:hidden;padding:8px 14px;border-radius:10px;background:rgba(18,26,40,.93);border:1px solid #3a557a;color:#e8eef8;font:600 12px/1.45 system-ui,sans-serif;text-align:left;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.5)';
+    document.documentElement.appendChild(hudEl);   // no <html>, porque o modo Ultra dá display:none em tudo que é filho direto do <body>
+  }
+  hudEl.innerHTML = '';
+  const topo = document.createElement('div'); topo.style.cssText = 'font-size:10px;letter-spacing:.06em;opacity:.7;text-transform:uppercase;text-align:center'; topo.textContent = 'PokeIdle Tools by Ateforp';
+  hudEl.append(topo);
+  for (const b of blocos) {
+    const cx = document.createElement('div'); cx.style.cssText = 'margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.1)';
+    const h = document.createElement('div'); h.style.cssText = 'font-size:10px;opacity:.65;text-transform:uppercase;letter-spacing:.05em'; h.textContent = b.titulo; cx.append(h);
+    for (const ln of b.linhas) { const d = document.createElement('div'); d.style.cssText = 'font-size:' + (ln.forte ? '13px' : '11.5px') + (ln.alerta ? ';color:#ffd27a' : ''); d.textContent = ln.t; cx.append(d); }
+    hudEl.append(cx);
+  }
+}
+setInterval(() => { try { atualizarHud(); } catch (err) { /* ignora */ } }, 1000);
+let timerEspecial = null;
+function iniciarCaptura() {
+  pararCaptura();
+  if (timerEspecial) { clearInterval(timerEspecial); timerEspecial = null; }
+  if (!ativo) return;
+  timerCaptura = setInterval(() => {
+    const linhas = Array.from(document.querySelectorAll('#caidos-lista .caido'));
+    const b = linhas[0];
+    if (!b || b.offsetParent === null) return;       // sem a lista visível, quem captura é a vigia rápida (por conexão)
+    if (cfg2.captura.beastEspecial) { try { if (tentarBolaEspecial(linhas)) return; } catch (err) { /* ignora e clica normal */ } }
+    b.click();
+  }, Math.max(500, PADRAO.intervaloMs));
+  // vigia rápida (0,2 s): shiny/lendário não esperam o ritmo normal; e, sem a lista na tela (modo Economia/Ultra), captura pela conexão
+  timerEspecial = setInterval(() => {
+    const linhas = Array.from(document.querySelectorAll('#caidos-lista .caido'));
+    const visivel = linhas.length && linhas[0].offsetParent !== null;
+    try {
+      if (visivel) { if (cfg2.captura.beastEspecial) tentarBolaEspecial(linhas); }
+      else capturarSemTela();
+    } catch (err) { /* ignora */ }
+  }, 200);
+}
+function definirCaptura(v) {
     ativo = !!v;
     salvarAtivo();
     iniciarCaptura();
@@ -1253,7 +1518,7 @@
     post({
       type: 'state',
       state: {
-        ativo, autoLigar: !!cfg2.autoLigar,
+        ativo, autoLigar: !!cfg2.autoLigar, capBeastEsp: !!cfg2.captura.beastEspecial, capBolaTela: cfg2.captura.bolaTela, capHud: !!cfg2.captura.hudEco, capHudSec: cfg2.captura.hudSec, capSemTela: capSemTela.lancadas, capInfo: capEsp.info, capDiag: capEsp.diag, capLancadas: capEsp.lancadas,
         conectado: !!(ws && ws.readyState === 1),
         pronto: pronto(),
         estoque: { ativo: cfg2.estoque.ativo, intervaloMin: cfg2.estoque.intervaloMin, itens: cfg2.estoque.itens, beast: cfg2.estoque.beast, status: status.estoque },
@@ -1273,6 +1538,10 @@
     switch (m.type) {
       case 'hello': sujo = true; ultSig = ''; break;
       case 'captura': definirCaptura(m.value); break;
+      case 'cap-beast': cfg2.captura.beastEspecial = !!m.value; capEsp.diagFeito = false; salvarCfg2(); sujo = true; break;
+      case 'cap-hud': cfg2.captura.hudEco = !!m.value; salvarCfg2(); sujo = true; atualizarHud(); break;
+      case 'cap-hud-sec': if (cfg2.captura.hudSec && m.chave in cfg2.captura.hudSec) { cfg2.captura.hudSec[m.chave] = !!m.value; salvarCfg2(); sujo = true; atualizarHud(); } break;
+      case 'cap-bola': cfg2.captura.bolaTela = Math.max(0, Math.floor(Number(m.value)) || 0); salvarCfg2(); sujo = true; break;
       case 'auto-ligar': cfg2.autoLigar = !!m.value; salvarCfg2(); sujo = true; break;
       case 'estoque-ativo': cfg2.estoque.ativo = !!m.value; ultEstoque = 0; salvarCfg2(); setStatus(m.value ? 'Ligado: confere já.' : 'Desligado.'); break;
       case 'estoque-intervalo': cfg2.estoque.intervaloMin = [1, 2, 5, 10, 30].includes(Number(m.value)) ? Number(m.value) : 5; salvarCfg2(); break;
@@ -1333,6 +1602,7 @@
   const LENDARIOS = 'Articuno Zapdos Moltres Mewtwo Mew Raikou Entei Suicune Lugia Ho-Oh Celebi Regirock Regice Registeel Latias Latios Kyogre Groudon Rayquaza Jirachi Deoxys Uxie Mesprit Azelf Dialga Palkia Heatran Regigigas Giratina Cresselia Phione Manaphy Darkrai Shaymin Arceus Victini Cobalion Terrakion Virizion Tornadus Thundurus Reshiram Zekrom Landorus Kyurem Keldeo Meloetta Genesect Xerneas Yveltal Zygarde Diancie Hoopa Volcanion Silvally Tapu-Koko Tapu-Lele Tapu-Bulu Tapu-Fini Cosmog Cosmoem Solgaleo Lunala Necrozma Magearna Marshadow Zeraora Meltan Melmetal Nihilego Buzzwole Pheromosa Xurkitree Celesteela Kartana Guzzlord Poipole Naganadel Stakataka Blacephalon Zacian Zamazenta Eternatus Kubfu Urshifu Zarude Regieleki Regidrago Glastrier Spectrier Calyrex Enamorus Chien-Pao Ting-Lu Chi-Yu Wo-Chien Koraidon Miraidon Okidogi Munkidori Fezandipiti Ogerpon Terapagos Pecharunt'.toLowerCase().split(' ').map((s) => s.replace(/-/g, ' '));
   const nomeNorm = (n) => String(n || '').toLowerCase().replace(/[-_]/g, ' ');
   let extras = [];
+  window.__ateforpEhLendario = (nome) => ehLendario({ nome });   // usado pela captura (Beast Ball em lendário)
   const ehLendario = (p) => { const n = nomeNorm(p.nome); return LENDARIOS.some((l) => n.indexOf(l) !== -1) || extras.some((l) => l && n.indexOf(l) !== -1); };
 
   const PADRAO = {
@@ -1525,7 +1795,7 @@
   const INTERVALO_MIN = 10000;        // nunca enviar "entrar" mais de 1 vez a cada 10 s
   const SEM_RESPOSTA = 8000;          // sem resposta da fila neste prazo => tenta de novo mais tarde
   const BACKOFF = 30000;
-  const MAX_FALHAS = 5;               // falhas seguidas => desliga
+  const BACKOFF_MAX = 300000;         // a espera cresce a cada falha seguida (30 s, 60 s, 2 min, 5 min), mas a busca NUNCA se desliga sozinha
 
   let ativo = false;                  // sempre começa desligado depois de recarregar a página
   let autoLigar = false;              // liga sozinho depois do login (opcional)
@@ -1544,6 +1814,17 @@
   function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify({ esperaPosS, ocultarLuta, autoLigar })); } catch (e) { /* ignora */ } }
 
   let jaLogou = false;
+  // "Ligar ao se logar": vigia que confere de 1 em 1 s e liga assim que o jogo está conectado e logado (também a cada reconexão)
+  let wsVisto = null, logado = false, autoFeito = false;
+  function sincronizarConexao() { const w = getWs(); if (w !== wsVisto) { wsVisto = w; logado = false; autoFeito = false; } }
+  setInterval(() => {
+    sincronizarConexao();
+    const w = getWs();
+    if (autoLigar && !autoFeito && logado && w && w.readyState === 1) {
+      autoFeito = true;
+      if (!ativo) { ligar(true); S.proximo = 0; console.log('[PokeIdle Tools by Ateforp] PvP ligado automaticamente ao logar'); }
+    }
+  }, 1000);
   function ligar(v) {
     ativo = !!v; S.falhas = 0; S.aguardandoResp = 0;
     if (ativo) { const w = getWs(); try { if (w && w.readyState === 1) w.send(JSON.stringify({ t: 'pvp.mensal', pagina: 0 })); } catch (e) { /* ignora */ } }
@@ -1556,10 +1837,8 @@
       const k = txt.indexOf('"servidorAgora":'); const n = parseInt(txt.slice(k + 16, k + 31), 10);
       if (n > 1e12) { offset = n - Date.now(); sujo = true; }
     }
-    if (typeof txt === 'string' && !jaLogou && txt.indexOf('"t":"welcome"') !== -1) {
-      jaLogou = true;
-      if (autoLigar && !ativo) { ligar(true); }
-    }
+    sincronizarConexao();
+    if (!logado && typeof txt === 'string' && /"t":"(welcome|estado|campo|campo\.init|pvp)"/.test(txt.slice(0, 200))) logado = true;
     if (typeof txt === 'string' && txt.indexOf('"t":"pvpMensal"') !== -1) {
       let mm; try { mm = JSON.parse(txt); } catch (e) { mm = null; }
       const eu = mm && mm.eu;
@@ -1572,9 +1851,8 @@
     if (typeof txt !== 'string' || txt.indexOf('"t":"pvp"') === -1) {
       if (ativo && typeof txt === 'string' && txt.indexOf('"t":"erro"') !== -1 && S.aguardandoResp) {
         let m; try { m = JSON.parse(txt); } catch (e) { return; }
-        S.aguardandoResp = 0; S.falhas++; S.proximo = Date.now() + BACKOFF;
-        S.msg = 'Servidor recusou: ' + String((m && (m.msg || m.erro || m.mensagem || m.texto)) || 'erro') + ' — tentando de novo em 30 s.';
-        if (S.falhas >= MAX_FALHAS) { ativo = false; S.msg = 'Desligado: ' + MAX_FALHAS + ' falhas seguidas.'; }
+        S.aguardandoResp = 0; S.falhas++; S.proximo = Date.now() + Math.min(BACKOFF_MAX, BACKOFF * Math.pow(2, Math.min(S.falhas - 1, 4)));
+        S.msg = 'Servidor recusou: ' + String((m && (m.msg || m.erro || m.mensagem || m.texto)) || 'erro') + ' — tentando de novo em ' + Math.round((S.proximo - Date.now()) / 1000) + ' s (falha ' + S.falhas + ').';
         sujo = true;
       }
       return;
@@ -1616,8 +1894,7 @@
     const ws = getWs();
     if (!ws || ws.readyState !== 1) { S.msg = 'Sem conexão com o jogo.'; sujo = true; return; }
     if (S.aguardandoResp && agora - S.aguardandoResp > SEM_RESPOSTA) {
-      S.aguardandoResp = 0; S.falhas++; S.proximo = agora + BACKOFF; S.msg = 'Sem resposta da fila; tentando de novo em 30 s.'; sujo = true;
-      if (S.falhas >= MAX_FALHAS) { ativo = false; S.msg = 'Desligado: ' + MAX_FALHAS + ' falhas seguidas.'; }
+      S.aguardandoResp = 0; S.falhas++; const esp = Math.min(BACKOFF_MAX, BACKOFF * Math.pow(2, Math.min(S.falhas - 1, 4))); S.proximo = agora + esp; S.msg = 'Sem resposta da fila; tentando de novo em ' + Math.round(esp / 1000) + ' s (falha ' + S.falhas + ').'; sujo = true;
       return;
     }
     if (S.naFila || S.aguardandoResp) return;
@@ -1912,6 +2189,7 @@
     .pixqr[hidden] { display: none; }
     .pixqr svg { width: 100%; height: auto; display: block; }
     .pixh { text-align: center; margin-bottom: 6px; }
+    
     `;
     
     (() => {
@@ -2132,6 +2410,12 @@
         if (!cs) return;
         $('capOn').checked = !!cs.ativo;
         $('capAuto').checked = !!cs.autoLigar;
+        $('capBeast').checked = !!cs.capBeastEsp;
+        if (root.activeElement !== $('capBolaTela')) $('capBolaTela').value = String(cs.capBolaTela || 0);
+        $('capHud').checked = cs.capHud !== false;
+        root.querySelectorAll('#hudSec input').forEach((i) => { i.checked = !cs.capHudSec || cs.capHudSec[i.dataset.hs] !== false; });
+        $('capTelaInfo').textContent = cs.capSemTela ? 'Capturas feitas sem a lista da tela: ' + cs.capSemTela : '';
+        $('capEspInfo').textContent = !cs.capBeastEsp ? '' : (cs.capInfo ? 'Último: ' + cs.capInfo + ' · lançadas: ' + (cs.capLancadas || 0) : 'Nenhum shiny/lendário ainda.') + (cs.capDiag ? ' · ' + cs.capDiag : '');
         $('ocultarSorteio').checked = !!cs.ocultarSorteio;
         $('capHint').textContent = cs.ativo ? 'ligada' : 'desligada';
         $('conHint').textContent = cs.conectado ? (cs.pronto ? 'conectado' : 'conectado, carregando…') : 'sem conexão';
@@ -2192,6 +2476,10 @@
       catchCmd({ type: 'hello' });
     
       $('ocultarSorteio').addEventListener('change', (e) => catchCmd({ type: 'sorteio-ocultar', value: e.target.checked }));
+      root.querySelectorAll('#hudSec input').forEach((i) => i.addEventListener('change', () => catchCmd({ type: 'cap-hud-sec', chave: i.dataset.hs, value: i.checked })));
+      $('capHud').addEventListener('change', (e) => catchCmd({ type: 'cap-hud', value: e.target.checked }));
+      $('capBolaTela').addEventListener('change', (e) => catchCmd({ type: 'cap-bola', value: Number(e.target.value) }));
+      $('capBeast').addEventListener('change', (e) => catchCmd({ type: 'cap-beast', value: e.target.checked }));
       $('capAuto').addEventListener('change', (e) => catchCmd({ type: 'auto-ligar', value: e.target.checked }));
       $('capOn').addEventListener('change', (e) => catchCmd({ type: 'captura', value: e.target.checked }));
       $('estOn').addEventListener('change', (e) => catchCmd({ type: 'estoque-ativo', value: e.target.checked }));
@@ -2711,6 +2999,28 @@
                 <span class="slider"></span>
                 <span class="lbl"><b>Ligar automaticamente ao se logar</b><small>desmarcado: a Auto Captura sempre começa desligada quando você entra no jogo</small></span>
               </label>
+              <label class="switch">
+                <input type="checkbox" id="capBeast">
+                <span class="slider"></span>
+                <span class="lbl"><b>Beast Ball em shiny e lendário</b><small>usa a melhor bola que você tiver (Beast → Ultra → Super → Great → Poke); nos demais, segue como hoje</small></span>
+              </label>
+              <div class="mut" id="capEspInfo"></div>
+              <label class="row" style="display:flex;align-items:center;gap:8px;margin-top:8px">
+                <span class="lbl"><b>Bola quando a tela do jogo está no modo Economia/Ultra</b><small>nesses modos a lista de caídos some e a captura é feita direto; escolha a bola (sem estoque, usa a primeira que tiver)</small></span>
+                <select id="capBolaTela"><option value="0">Automática (como o jogo)</option><option value="1">Poke Ball</option><option value="2">Great Ball</option><option value="3">Super Ball</option><option value="4">Ultra Ball</option><option value="5">Beast Ball</option></select>
+              </label>
+              <div class="mut" id="capTelaInfo"></div>
+              <label class="switch">
+                <input type="checkbox" id="capHud">
+                <span class="slider"></span>
+                <span class="lbl"><b>Mostrar meus dados nos modos Economia/Ultra</b><small>quadro na parte de baixo da tela, atualizado ao vivo</small></span>
+              </label>
+              <div class="hudsec" id="hudSec" style="display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 0 4px;font-size:12px">
+                <label><input type="checkbox" data-hs="recursos"> Bolas e gold</label>
+                <label><input type="checkbox" data-hs="captura"> Captura</label>
+                <label><input type="checkbox" data-hs="pvp"> PvP</label>
+                <label><input type="checkbox" data-hs="compras"> Compras</label>
+              </div>
             </div>
             </div>
             <div class="subp" data-g="pve" data-p="venda" hidden>

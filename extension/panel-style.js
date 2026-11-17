@@ -186,4 +186,5 @@ header button.icon { flex: none; }
 .pixqr[hidden] { display: none; }
 .pixqr svg { width: 100%; height: auto; display: block; }
 .pixh { text-align: center; margin-bottom: 6px; }
+
 `;
