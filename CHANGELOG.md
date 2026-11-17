@@ -1,6 +1,6 @@
 # Histórico de versões
 
-## v2.3.12 (a anterior publicada era a 2.3.10)
+## v2.3.13 (a anterior publicada era a 2.3.10; a 2.3.12 foi publicada sem o número ser trocado no pacote)
 - **Captura nos modos Economia e Ultra Economia:** a Auto Captura passa a funcionar mesmo sem a lista de Pokémon na tela, usando os avisos da batalha (derrotado, bola, fugiu, capturado).
 - Quem fugiu depois de uma bola que não segurou não é mais lançado de novo; os outros derrotados são tentados em rodízio (shiny e lendários primeiro).
 - **Quadro em tempo real nos modos Economia/Ultra:** recursos e bolas, gold, Pokémon sendo caçado, vistos/derrotados/capturados/fugiram/expiraram, PvP e compras. Pode ser ligado/desligado e por seções no painel (aba Captura).
