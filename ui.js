@@ -1,0 +1,673 @@
+'use strict';
+/*
+ * Interface do painel (roda no mundo isolado da extensão, dentro de um Shadow DOM criado pelo panel.js).
+ * Lê/grava a configuração no chrome.storage; o motor (engine.js) e a ponte (bridge.js) fazem o resto.
+ */
+
+// Itens do mercado já mapeados: id -> [nome, categoria]. Itens novos são aprendidos automaticamente
+// (o motor procura no mercado do jogo) e aparecem na categoria "Outros".
+const SEED = {
+  2: ['Ancient Stone', 'stone'], 23: ['Cocoon Stone', 'stone'], 31: ['Darkness Stone', 'stone'],
+  40: ['Earth Stone', 'stone'], 45: ['Enigma Stone', 'stone'], 49: ['Feather Stone', 'stone'],
+  53: ['Fire Stone', 'stone'], 66: ['Heart Stone', 'stone'], 71: ['Ice Stone', 'stone'],
+  76: ['Leaf Stone', 'stone'], 87: ['Metal Stone', 'stone'], 106: ['Punch Stone', 'stone'],
+  109: ['Rock Stone', 'stone'], 133: ['Thunder Stone', 'stone'], 139: ['Venom Stone', 'stone'],
+  142: ['Water Stone', 'stone'], 209: ['Sun Stone', 'stone'],
+  40530: ['AoE TM Disk Piece', 'fragment'], 59194: ['TM Disk Piece', 'fragment'],
+  70011: ['Key Fragment', 'fragment'], 70012: ['Shiny Stone Fragment', 'fragment'],
+  70013: ['', 'fragment'], 70014: ['Mega Stone Fragment', 'fragment'],
+  70015: ['Mega Shiny Stone Fragment', 'fragment'], 70017: ['', 'fragment'],
+  70000: ['Bronze Boss Token', 'boss'],
+  70040: ['Common House', 'casa'], 70041: ['', 'casa'], 70042: ['', 'casa'],
+  70080: ['', 'bicicleta'], 70081: ['Uncommon Bicycle', 'bicicleta'], 70082: ['', 'bicicleta'],
+  70095: ['Safari Ticket', 'ticket']
+};
+const CATS = [['stone', 'Pedras'], ['fragment', 'Fragmentos'], ['boss', 'Boss Tokens'], ['casa', 'Casas'],
+  ['bicicleta', 'Bicicletas'], ['ticket', 'Tickets'], ['outros', 'Outros']];
+
+const fmt = (n) => Number(n || 0).toLocaleString('pt-BR');
+function short(n) {
+  n = Number(n || 0);
+  const f = (v, s) => (Math.round(v * 10) / 10).toLocaleString('pt-BR') + s;
+  if (n >= 1e9) return f(n / 1e9, 'B');
+  if (n >= 1e6) return f(n / 1e6, 'M');
+  if (n >= 1e4) return f(n / 1e3, 'k');
+  return fmt(n);
+}
+const when = (ms) => new Date(ms).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+
+function parseNum(s) {
+  s = String(s).trim().toLowerCase().replace(/\s/g, '');
+  let mult = 1;
+  const suf = s.slice(-1);
+  if (suf === 'k' || suf === 'm' || suf === 'b') {
+    mult = { k: 1e3, m: 1e6, b: 1e9 }[suf];
+    s = s.slice(0, -1).replace(',', '.');
+  } else {
+    s = s.replace(/\./g, '').replace(',', '.');
+  }
+  const v = parseFloat(s);
+  return Number.isFinite(v) ? Math.round(v * mult) : 0;
+}
+
+function createUI(root) {
+  const $ = (id) => root.getElementById(id);
+  let cfg = { enabled: false, intervalMs: 5000, rules: [] };
+  let estado = null;
+  let saveTimer = null;
+  let storageDead = false;
+  let mismatchSince = 0;
+  let tab = 'captura';
+  let sub = 'compras';
+  let cs = null;            // estado do módulo de captura/estoque (catch.js)
+  const listeners = [];
+  const catchCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp', from: 'ui' }, o), '*');
+
+  function save() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      saveTimer = null;
+      try { chrome.storage.local.set({ cfg }); storageDead = false; } catch (err) { storageDead = true; renderStatus(); }
+    }, 250);
+  }
+  const cmd = (o) => chrome.storage.local.set({ cmd: Object.assign({ ts: Date.now() }, o) });
+
+  // ---------- catálogo ----------
+  function itemInfo(id) {
+    const learned = (estado && estado.catalog && estado.catalog[id] && estado.catalog[id].nome) || '';
+    const seed = SEED[id];
+    return { nome: learned || (seed && seed[0]) || '', cat: seed ? seed[1] : 'outros' };
+  }
+  const itemName = (id) => itemInfo(id).nome || ('Item #' + id);
+  const marketOf = (id) => (estado && estado.market && estado.market[id]) || null;
+
+  function allItemIds() {
+    const ids = new Set(Object.keys(SEED).map(Number));
+    if (estado) {
+      Object.keys(estado.catalog || {}).forEach((i) => ids.add(Number(i)));
+      Object.keys(estado.market || {}).forEach((i) => ids.add(Number(i)));
+    }
+    return [...ids];
+  }
+
+  function el(tag, props, ...kids) {
+    const e = document.createElement(tag);
+    Object.assign(e, props || {});
+    for (const k of kids) e.append(k);
+    return e;
+  }
+
+  // ---------- regras ----------
+  function infoText(itemId) {
+    const m = marketOf(itemId);
+    if (!m) return 'sem dados do mercado ainda (abra o jogo)';
+    if (m.minGold == null) return 'sem anúncios em coins agora' + (m.minOrb != null ? ' · só em gemas' : '');
+    return 'menor agora ' + fmt(m.minGold) + (m.mediaGold ? ' · média 7 dias ' + fmt(m.mediaGold) : '') + ' · ' + fmt(m.anuncios) + ' anúncios';
+  }
+
+  function numField(label, value, onChange, opts) {
+    const input = el('input', { type: 'text', value: opts && opts.raw ? String(value) : fmt(value) });
+    input.addEventListener('change', () => {
+      const v = parseNum(input.value);
+      onChange(v);
+      input.value = opts && opts.raw ? String(v) : fmt(v);
+      save();
+    });
+    return el('label', {}, label, input);
+  }
+
+  const cur = (id) => cfg.rules.find((x) => x.id === id);
+
+  function renderRules() {
+    const box = $('rules');
+    box.textContent = '';
+    if (!cfg.rules.length) {
+      box.append(el('div', { className: 'empty', textContent: 'Nenhum item configurado. Use "+ Adicionar item" abaixo.' }));
+      return;
+    }
+    for (const r of cfg.rules) {
+      const card = el('div', { className: 'rule', id: 'rule-' + r.id });
+      const act = el('input', { type: 'checkbox', checked: r.ativo !== false, title: 'Ativar este item' });
+      act.addEventListener('change', () => { const c = cur(r.id); if (c) c.ativo = act.checked; save(); });
+      const reset = el('button', { className: 'icon', textContent: '↺', title: 'Zerar contagem deste item' });
+      reset.addEventListener('click', () => cmd({ type: 'reset', ruleId: r.id }));
+      const del = el('button', { className: 'icon', textContent: '✕', title: 'Remover item' });
+      del.addEventListener('click', () => { cfg.rules = cfg.rules.filter((x) => x.id !== r.id); save(); renderRules(); renderPicker(); });
+
+      const name = el('span', { className: 'name' }, itemName(r.itemId), el('small', { textContent: '  #' + r.itemId }));
+      card.append(el('div', { className: 'top' }, act, name, reset, del));
+      card.append(el('div', { className: 'grid' },
+        numField('Preço mín.', r.min, (v) => { const c = cur(r.id); if (c) c.min = v; refreshRules(); }),
+        numField('Preço máx.', r.max, (v) => { const c = cur(r.id); if (c) c.max = v; refreshRules(); }),
+        numField('Quantidade', r.qtd, (v) => { const c = cur(r.id); if (c) c.qtd = v; refreshRules(); }),
+        numField('Sorteios simult. (0 = todos)', r.simult || 0, (v) => { const c = cur(r.id); if (c) { c.simult = Math.max(0, v); c.v = 2; } }, { raw: true })
+      ));
+      card.append(el('div', { className: 'info', textContent: infoText(r.itemId) }));
+      card.append(el('div', { className: 'bar' }, el('i', { className: 'fill' })));
+      card.append(el('div', { className: 'prog' }, el('span', { className: 'got' }), el('span', { className: 'range' })));
+      box.append(card);
+    }
+    refreshRules();
+  }
+
+  // atualiza barras, contagens e textos sem recriar os campos (não tira o foco de quem está digitando)
+  function refreshRules() {
+    const progress = (estado && estado.progress) || {};
+    for (const r of cfg.rules) {
+      const card = $('rule-' + r.id);
+      if (!card) continue;
+      const got = progress[r.id] || 0;
+      const pct = r.qtd > 0 ? Math.min(100, Math.round((got / r.qtd) * 100)) : 0;
+      card.classList.toggle('done', r.qtd > 0 && got >= r.qtd);
+      card.querySelector('.fill').style.width = pct + '%';
+      card.querySelector('.got').textContent = 'comprado ' + got + ' / ' + r.qtd;
+      card.querySelector('.range').textContent = r.max > 0 ? 'faixa ' + fmt(r.min) + ' – ' + fmt(r.max) : 'defina o preço máximo';
+      card.querySelector('.info').textContent = infoText(r.itemId);
+    }
+  }
+
+  // ---------- seletor de itens ----------
+  function addRule(itemId) {
+    if (!itemId || cfg.rules.some((r) => r.itemId === itemId)) return;
+    cfg.rules.push({ id: 'r' + Date.now().toString(36) + itemId, itemId, nome: itemInfo(itemId).nome, min: 0, max: 0, qtd: 1, simult: 0, v: 2, ativo: true });
+    save(); renderRules(); renderPicker();
+  }
+
+  function renderPicker() {
+    const q = $('search').value.trim().toLowerCase();
+    const box = $('pickList');
+    const keepScroll = box.scrollTop;
+    box.textContent = '';
+    const ids = allItemIds().filter((id) => !q || itemName(id).toLowerCase().includes(q) || String(id).includes(q));
+    $('pickerCount').textContent = '(' + allItemIds().length + ' itens no mercado)';
+    const added = new Set(cfg.rules.map((r) => r.itemId));
+    for (const [cat, label] of CATS) {
+      const inCat = ids.filter((id) => itemInfo(id).cat === cat).sort((a, b) => itemName(a).localeCompare(itemName(b)));
+      if (!inCat.length) continue;
+      box.append(el('div', { className: 'grp', textContent: label }));
+      for (const id of inCat) {
+        const m = marketOf(id);
+        const gems = m && m.minGold == null;
+        const btn = el('button', { className: 'it' + (added.has(id) ? ' added' : '') + (gems ? ' gems' : ''), type: 'button' },
+          el('span', { textContent: itemName(id) }),
+          el('span', { textContent: added.has(id) ? 'já adicionado' : m ? (gems ? 'só em gemas' : 'menor ' + short(m.minGold) + (m.mediaGold ? ' · média ' + short(m.mediaGold) : '')) : '#' + id }));
+        btn.addEventListener('click', () => { if (!added.has(id)) addRule(id); });
+        box.append(btn);
+      }
+    }
+    if (!box.children.length) box.append(el('div', { className: 'empty', textContent: 'Nenhum item encontrado.' }));
+    box.scrollTop = keepScroll;
+  }
+
+  // ---------- captura e estoque (módulo catch.js, por postMessage) ----------
+  const fmtNum = (n) => {
+    if (!Number.isFinite(n)) return '—';
+    const f = (v, s) => (Math.round(v * 10) / 10).toLocaleString('pt-BR') + s;
+    if (n >= 1e9) return f(n / 1e9, ' bi');
+    if (n >= 1e6) return f(n / 1e6, ' mi');
+    if (n >= 1e4) return f(n / 1e3, ' mil');
+    return Math.round(n).toLocaleString('pt-BR');
+  };
+  let estSig = '';
+
+  function renderCatch() {
+    if (!cs) return;
+    $('capOn').checked = !!cs.ativo;
+    $('capAuto').checked = !!cs.autoLigar;
+    $('ocultarSorteio').checked = !!cs.ocultarSorteio;
+    $('capHint').textContent = cs.ativo ? 'ligada' : 'desligada';
+    $('conHint').textContent = cs.conectado ? (cs.pronto ? 'conectado' : 'conectado, carregando…') : 'sem conexão';
+    const e = cs.estoque;
+    $('estOn').checked = !!e.ativo;
+    $('estHint').textContent = e.ativo ? 'ligado — confere a cada ' + e.intervaloMin + ' min' : 'desligado';
+    if (root.activeElement !== $('estInt')) $('estInt').value = String(e.intervaloMin);
+    $('estStatus').textContent = e.status || 'Parado.';
+    $('beastPk').textContent = cs.beastPorPacote; $('beastMax').textContent = cs.beastMax;
+    $('beastOn').checked = !!e.beast.ativo;
+    $('beastTem').textContent = cs.beastTem != null ? '(' + fmtNum(cs.beastTem) + ')' : '';
+    for (const [id, v] of [['beastBelow', e.beast.abaixo], ['beastUp', e.beast.ate]]) {
+      if (root.activeElement !== $(id)) $(id).value = v ? String(v) : '';
+    }
+    // lista de itens: reconstrói só quando a lista muda (não pode roubar o foco de quem está digitando)
+    const sig = (cs.lista || []).map((i) => i.chave).join(',');
+    const box = $('estList');
+    if (sig !== estSig) {
+      estSig = sig;
+      box.textContent = '';
+      if (!cs.lista.length) box.append(el('div', { className: 'mut', textContent: 'A lista de itens aparece quando o jogo conectar.' }));
+      let grupo = '';
+      const ORDEM = ['Bolas', 'Poções', 'Revives'];
+      const ordenada = cs.lista.map((x, i) => [x, i]).sort((a, b) => (ORDEM.indexOf(a[0].grupo) - ORDEM.indexOf(b[0].grupo)) || (a[1] - b[1])).map((x) => x[0]);
+      for (const it of ordenada) {
+        if (it.grupo !== grupo) {
+          grupo = it.grupo;
+          box.append(el('div', { className: 'grp', textContent: grupo }));
+          box.append(el('div', { className: 'est3 head' }, el('span'), el('span', { textContent: 'abaixo de' }), el('span', { textContent: 'compra até' })));
+        }
+        const c = e.itens[it.chave] || { abaixo: 0, ate: 0 };
+        const img = el('img', { alt: '' });
+        if (it.icone) { img.src = it.icone; img.addEventListener('error', () => { img.style.visibility = 'hidden'; }); } else img.style.visibility = 'hidden';
+        const below = el('input', { type: 'number', min: '0', max: '9999', step: '1', placeholder: '0', value: c.abaixo ? String(c.abaixo) : '' });
+        const up = el('input', { type: 'number', min: '0', max: '9999', step: '1', placeholder: '0', value: c.ate ? String(c.ate) : '' });
+        const lim = (inp) => { if (inp.value === '') return; const n = Math.min(9999, Math.max(0, Math.floor(Number(inp.value) || 0))); inp.value = String(n); };   // máximo 9999 por campo
+        const send = () => { lim(below); lim(up); catchCmd({ type: 'estoque-item', chave: it.chave, abaixo: below.value, ate: up.value }); };
+        below.addEventListener('change', send); up.addEventListener('change', send);
+        box.append(el('div', { className: 'est3' },
+          el('span', { className: 'nm' }, img, el('span', { textContent: it.nome }), el('small', { className: 'q', id: 'q-' + it.chave.replace(/\W/g, '_') })),
+          below, up));
+      }
+    }
+    for (const it of cs.lista) {
+      const q = root.getElementById('q-' + it.chave.replace(/\W/g, '_'));
+      if (q) q.textContent = it.tem != null ? '  (' + fmtNum(it.tem) + ')' : '';
+    }
+    listeners.forEach((f) => f());
+  }
+
+  window.addEventListener('message', (ev) => {
+    const m = ev.data;
+    if (ev.source !== window || !m || m.ch !== 'ateforp' || m.from !== 'catch' || m.type !== 'state') return;
+    cs = m.state;
+    renderCatch();
+  });
+  catchCmd({ type: 'hello' });
+
+  $('ocultarSorteio').addEventListener('change', (e) => catchCmd({ type: 'sorteio-ocultar', value: e.target.checked }));
+  $('capAuto').addEventListener('change', (e) => catchCmd({ type: 'auto-ligar', value: e.target.checked }));
+  $('capOn').addEventListener('change', (e) => catchCmd({ type: 'captura', value: e.target.checked }));
+  $('estOn').addEventListener('change', (e) => catchCmd({ type: 'estoque-ativo', value: e.target.checked }));
+  $('estInt').addEventListener('change', (e) => catchCmd({ type: 'estoque-intervalo', value: e.target.value }));
+  $('estRun').addEventListener('click', () => catchCmd({ type: 'estoque-run' }));
+  $('beastOn').addEventListener('change', (e) => {
+    if (e.target.checked) { e.target.checked = false; $('beastWarn').hidden = false; return; }   // pede confirmação aqui mesmo
+    catchCmd({ type: 'beast-ativo', value: false });
+  });
+  $('beastYes').addEventListener('click', () => { catchCmd({ type: 'beast-ativo', value: true }); $('beastWarn').hidden = true; $('beastOn').checked = true; });
+  $('beastNo').addEventListener('click', () => { $('beastWarn').hidden = true; });
+  const beastSend = () => { for (const id of ['beastBelow', 'beastUp']) { const i = $(id); if (i.value !== '') i.value = String(Math.min(9999, Math.max(0, Math.floor(Number(i.value) || 0)))); } catchCmd({ type: 'beast-cfg', abaixo: $('beastBelow').value, ate: $('beastUp').value }); };
+  $('beastBelow').addEventListener('change', beastSend);
+  $('beastUp').addEventListener('change', beastSend);
+
+  // ---------- tentativas ----------
+  const ST = { pendente: ['⏳', 'aguardando sorteio', 'pend'], ganhou: ['✔', 'GANHOU', 'win'], perdeu: ['✖', 'perdeu', 'lose'], erro: ['⚠', 'erro', 'err'] };
+  const openDet = new Set();   // tentativas com "detalhes" abertos (só o usuário abre/fecha)
+  let tentSig = '';
+  function renderTentativas() {
+    const list = ((estado && estado.tentativas) || []).slice().reverse();
+    // nada mudou: não redesenha (não fecha detalhes, não pula a rolagem)
+    const sig = JSON.stringify(list.map((a) => [a.n, a.status, a.motivo, a.vencedor, (a.frames || []).length]));
+    if (sig === tentSig && $('tentList').childElementCount === list.length) return;
+    tentSig = sig;
+    const c = { ganhou: 0, perdeu: 0, erro: 0, pendente: 0 };
+    list.forEach((a) => { c[a.status] = (c[a.status] || 0) + 1; });
+    const sum = $('tentSummary');
+    sum.textContent = '';
+    sum.append(list.length
+      ? el('span', {}, el('b', { textContent: list.length + (list.length === 1 ? ' tentativa' : ' tentativas') }), ' · ',
+          el('b', { textContent: c.ganhou + (c.ganhou === 1 ? ' ganha' : ' ganhas') }), ' · ' + c.perdeu + ' perdidas · ' + c.erro + ' com erro' + (c.pendente ? ' · ' + c.pendente + ' aguardando' : ''))
+      : el('span', { textContent: 'Nenhuma tentativa ainda. Cada vez que a extensão entrar num sorteio, aparece aqui com o resultado e o motivo.' }));
+    const box = $('tentList');
+    const rolagem = box.scrollTop;
+    box.textContent = '';
+    for (const a of list) {
+      const s = ST[a.status] || ST.pendente;
+      const det = el('details', { className: 's' }, el('summary', { textContent: 'detalhes' }),
+        el('div', { textContent: 'anúncio #' + a.anuncio + ' · enviado ' + new Date(a.t).toLocaleTimeString('pt-BR') + (a.fim ? ' · resolvido em ' + ((a.fim - a.t) / 1000).toFixed(1) + ' s' : '') }));
+      (a.frames || []).forEach((f) => det.append(el('div', { className: 'fr', textContent: '+' + (f.ms / 1000).toFixed(1) + ' s  ' + f.txt })));
+      if (!(a.frames || []).length) det.append(el('div', { className: 'fr', textContent: 'o jogo não mandou nenhuma mensagem de resultado além do estoque' }));
+      det.open = openDet.has(a.n);
+      det.addEventListener('toggle', () => { if (det.open) openDet.add(a.n); else openDet.delete(a.n); });
+      box.append(el('div', { className: 'r att ' + s[2] },
+        el('time', { textContent: when(a.t) }),
+        el('div', {}, a.qtd + '× ' + a.nome + ' a ' + fmt(a.preco),
+          el('div', { className: 's', textContent: 'vendedor ' + (a.vendedor || '?') + ' — ' + a.motivo }), det),
+        el('div', { className: 'v b ' + s[2], textContent: s[0] + ' ' + s[1] })));
+    }
+    box.scrollTop = rolagem;
+  }
+  $('clearTent').addEventListener('click', () => { openDet.clear(); tentSig = ''; cmd({ type: 'clearTentativas' }); });
+
+  // ---------- histórico ----------
+  function renderHistory() {
+    const compras = ((estado && estado.compras) || []).slice().reverse();
+    const totalGasto = compras.reduce((a, c) => a + (c.total || 0), 0);
+    const unid = compras.reduce((a, c) => a + (c.qtd || 0), 0);
+    const sum = $('summary');
+    sum.textContent = '';
+    sum.append(compras.length
+      ? el('span', {}, el('b', { textContent: unid + ' unidades' }), ' em ' + compras.length + ' compras · gasto total ', el('b', { textContent: fmt(totalGasto) + ' coins' }))
+      : el('span', { textContent: 'Nenhuma compra feita pela extensão ainda.' }));
+
+    const cl = $('comprasList');
+    cl.textContent = '';
+    if (!compras.length) cl.append(el('div', { className: 'none', textContent: 'Quando a extensão ganhar um sorteio, aparece aqui.' }));
+    for (const c of compras) {
+      cl.append(el('div', { className: 'r' },
+        el('time', { textContent: when(c.t) }),
+        el('div', {}, c.qtd + '× ' + c.nome, el('div', { className: 's', textContent: 'de ' + (c.vendedor || '?') + ' · ' + fmt(c.preco) + ' cada' })),
+        el('div', { className: 'v', textContent: fmt(c.total) })));
+    }
+
+    const h = (estado && estado.history) || { pages: {}, total: 0, porPagina: 30 };
+    const rows = [];
+    Object.keys(h.pages || {}).forEach((p) => rows.push(...h.pages[p]));
+    rows.sort((a, b) => (b.em || 0) - (a.em || 0));
+    const gl = $('gameHist');
+    gl.textContent = '';
+    if (!rows.length) gl.append(el('div', { className: 'none', textContent: h.updated ? 'Você ainda não tem compras no jogo.' : 'Ainda não carregou — clique em Atualizar.' }));
+    for (const r of rows) {
+      gl.append(el('div', { className: 'r' },
+        el('time', { textContent: when(r.em) }),
+        el('div', {}, r.desc || '', el('div', { className: 's', textContent: 'de ' + (r.vendedor || '?') })),
+        el('div', { className: 'v', textContent: fmt(r.pago) + (r.moeda === 'gold' ? '' : ' gemas') })));
+    }
+    let info = rows.length ? 'mostrando ' + rows.length + ' de ' + (h.total || rows.length) : '';
+    if (hWait && (h.updated || 0) > hWait) hWait = 0;
+    const esperando = !!hWait && Date.now() - hWait < 10000;
+    if (hWait && !esperando) { hWait = 0; info = 'sem resposta do jogo — tente de novo' + (info ? ' · ' + info : ''); }
+    else if (esperando) info = 'carregando…' + (info ? ' · ' + info : '');
+    $('hInfo').textContent = info;
+    $('hRefresh').disabled = esperando;
+    $('hMore').disabled = esperando || !(h.total && rows.length < h.total);
+  }
+
+  // ---------- status / registro / topo ----------
+  // o que o motor está usando de fato, comparado ao que o painel mostra
+  function appliedDiff() {
+    const a = estado && estado.aplicado;
+    if (!a) return '';
+    if (!!a.enabled !== !!cfg.enabled) return 'chave de ligar';
+    for (const r of cfg.rules) {
+      const x = (a.rules || []).find((y) => y.id === r.id);
+      if (!x) return 'item ' + itemName(r.itemId) + ' não chegou ao motor';
+      if (x.min !== r.min || x.max !== r.max || x.qtd !== r.qtd || (x.ativo !== false) !== (r.ativo !== false)) {
+        return itemName(r.itemId) + ': motor usa ' + fmt(x.min) + '–' + fmt(x.max) + ' qtd ' + x.qtd;
+      }
+    }
+    return '';
+  }
+
+  function renderStatus() {
+    const s = $('status');
+    let diff = appliedDiff();
+    if (diff && !saveTimer) { if (!mismatchSince) mismatchSince = Date.now(); } else mismatchSince = 0;
+    if (storageDead || (diff && Date.now() - mismatchSince > 5000)) {
+      s.className = 'pill warn';
+      s.textContent = 'NÃO APLICADO — recarregue a página (F5)';
+      s.title = storageDead ? 'A extensão foi atualizada: recarregue a aba do jogo.' : 'O motor está usando outra configuração: ' + diff;
+      root.host.dataset.status = 'warn';
+      listeners.forEach((f) => f());
+      return;
+    }
+    s.title = '';
+    const fresh = !!(estado && Date.now() - estado.updated < 6000);
+    const connected = fresh && estado.conectado;
+    if (!fresh) { s.className = 'pill off'; s.textContent = 'aguardando o jogo'; }
+    else if (!estado.conectado) { s.className = 'pill warn'; s.textContent = 'jogo desconectado'; }
+    else { s.className = 'pill on'; s.textContent = cfg.enabled ? 'ativo · comprando' : 'conectado · desligado'; }
+    root.host.dataset.status = cfg.enabled ? (connected ? 'on' : 'warn') : 'off';
+    listeners.forEach((f) => f());
+  }
+
+  function renderLog() {
+    const box = $('log');
+    const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 8;
+    box.textContent = '';
+    for (const l of ((estado && estado.log) || []).slice(-60)) {
+      box.append(el('div', { className: l.lvl }, el('time', { textContent: new Date(l.t).toLocaleTimeString('pt-BR') }), l.msg));
+    }
+    if (atBottom) box.scrollTop = box.scrollHeight;
+  }
+
+  function renderMaster() {
+    $('enabled').checked = !!cfg.enabled;
+    $('intervalS').value = String((cfg.intervalMs || 5000) / 1000);
+    $('enabledHint').textContent = cfg.enabled ? 'ligada — comprando de verdade' : 'desligada';
+  }
+
+  function renderMercadoSub() {
+    root.querySelectorAll('#subtabs button').forEach((b) => b.classList.toggle('on', b.dataset.sub === sub));
+    $('sub-compras').hidden = sub !== 'compras';
+    $('sub-hist').hidden = sub !== 'hist';
+    if (sub === 'hist') { renderHistory(); renderTentativas(); }
+  }
+
+
+  // ---------- PvP automático ----------
+  const pvpCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-pvp', from: 'ui' }, o), '*');
+  let pvp = null;
+  function renderPvp() {
+    if (!pvp) return;
+    $('pvpOn').checked = !!pvp.ativo;
+    $('pvpHint').textContent = pvp.ativo ? (pvp.naFila ? 'na fila' : 'ligado') : 'desligado';
+    const seg = Math.ceil((pvp.espera || 0) / 1000);
+    const fila = pvp.naFila && pvp.desde ? Math.max(0, Math.floor((Date.now() + (pvp.offset || 0) - pvp.desde) / 1000)) : 0;
+    const mmss = (s) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    $('pvpInfo').textContent = pvp.naFila ? 'Na fila há ' + mmss(fila) + ' · ' + (pvp.tamanho || 0) + ' jogadores' : (pvp.msg || '') + (pvp.ativo && seg > 0 ? ' Próxima busca em ' + seg + ' s.' : '');
+    $('pvpSair').disabled = !pvp.naFila;
+    $('pvpAuto').checked = !!pvp.autoLigar;
+    $('pvpOcultar').checked = pvp.ocultarLuta !== false;
+    if (document.activeElement !== $('pvpEspera') && root.activeElement !== $('pvpEspera')) $('pvpEspera').value = String(pvp.esperaPosS || 10);
+    const hb = $('pvpHist'); const hs = JSON.stringify((pvp.hist || []).map((x) => x.em));
+    if (hb.dataset.sig !== hs) {
+      hb.dataset.sig = hs; hb.textContent = '';
+      const ha = (ms) => { const s = Math.max(0, Math.floor((Date.now() - ms) / 1000)); return s < 60 ? 'agora' : s < 3600 ? Math.floor(s / 60) + ' min' : s < 86400 ? Math.floor(s / 3600) + ' h' : Math.floor(s / 86400) + ' d'; };
+      for (const x of (pvp.hist || []).slice(0, 15)) {
+        hb.append(el('div', { className: 'pv ' + (x.venci ? 'w' : 'l') },
+          el('b', { className: 'res', textContent: x.venci ? 'V' : 'D' }),
+          el('span', { className: 'op', textContent: (x.oponente || 'oponente') + (x.opPontos != null ? ' · ' + fmt(x.opPontos) : '') }),
+          el('span', { className: 'dl', textContent: (x.delta > 0 ? '+' : '') + x.delta }),
+          el('span', { className: 'pt', textContent: x.pontos != null ? fmt(x.pontos) + ' pts' : '' }),
+          el('time', { textContent: ha(x.em) })));
+      }
+      if (!(pvp.hist || []).length) hb.append(el('div', { className: 'mut', textContent: 'Nenhuma partida ainda.' }));
+    }
+    const r = pvp.rank;
+    const nomeTier = (t) => (t ? t.charAt(0).toUpperCase() + t.slice(1) : '—');
+    $('pvpRank').textContent = r ? (r.tier ? nomeTier(r.tier) + (r.div ? ' ' + r.div : '') + ' · ' : '') + fmt(r.pontos) + ' pts' + (r.ate ? ' (' + (r.pontos - (r.de || 0)) + '/' + (r.ate - (r.de || 0)) + ' na faixa)' : '') + (r.posicao ? ' · posição ' + fmt(r.posicao) : '') + (r.vitorias != null ? ' · ' + r.vitorias + 'V/' + (r.derrotas || 0) + 'D' : '') : 'Rank: ligue a chave para carregar.';
+    const u = pvp.ultima;
+    const seq = pvp.rank && pvp.rank.sequencia != null && !pvp.rank.doMensal ? pvp.rank.sequencia : (() => { let n = 0; for (const x of (pvp.hist || [])) { if (x.venci) n++; else break; } return n; })();
+    $('pvpStreak').textContent = '🔥 Sequência de vitórias: ' + seq;
+    $('pvpStreak').classList.toggle('hot', seq >= 3);
+    $('pvpStats').textContent = pvp.partidas ? pvp.partidas + ' partida(s) · ' + pvp.vitorias + 'V/' + pvp.derrotas + 'D · ' + (pvp.delta > 0 ? '+' : '') + pvp.delta + ' pts' + (u ? ' · última: ' + (u.venci ? 'ganhou' : 'perdeu') + (u.oponente ? ' de ' + u.oponente : '') : '') : '';
+  }
+  window.addEventListener('message', (ev) => {
+    const m = ev.data;
+    if (ev.source !== window || !m || m.ch !== 'ateforp-pvp' || m.from !== 'pvp' || m.type !== 'state') return;
+    pvp = m.state; renderPvp(); listeners.forEach((f) => { try { f(); } catch (e) { /* ignora */ } });
+  });
+  pvpCmd({ type: 'hello' });
+  $('pvpOn').addEventListener('change', (e) => pvpCmd({ type: 'ativo', value: e.target.checked }));
+  $('pvpAuto').addEventListener('change', (e) => pvpCmd({ type: 'auto-ligar', value: e.target.checked }));
+  $('pvpOcultar').addEventListener('change', (e) => pvpCmd({ type: 'ocultar-luta', value: e.target.checked }));
+  $('pvpEspera').addEventListener('change', (e) => pvpCmd({ type: 'espera', value: e.target.value }));
+  setInterval(() => { if (pvp && pvp.naFila) renderPvp(); }, 1000);
+  $('pvpSair').addEventListener('click', () => pvpCmd({ type: 'sair' }));
+  $('pvpReset').addEventListener('click', () => pvpCmd({ type: 'zerar' }));
+
+  // ---------- Venda automática de Pokémon (Depósito) ----------
+  const vdCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-venda', from: 'ui' }, o), '*');
+  let vd = null;
+  const vdNum = (id) => { const v = $(id).value.trim(); return v === '' ? null : Number(v); };
+  const vdCampos = ['vdColP', 'vdColIv', 'vdColQ', 'vdColN', 'vdVenP', 'vdVenIv', 'vdVenQ', 'vdVenN', 'vdMax'];
+  let extras = [];
+  const extrasDe = (s) => String(s || '').split(',').map((x) => x.trim()).filter(Boolean);
+  function renderExtras() {
+    const box = $('vdExtraLista'); box.textContent = '';
+    if (!extras.length) { box.append(el('span', { className: 'mut', textContent: 'Nenhum nome extra.' })); return; }
+    extras.forEach((n, i) => box.append(el('span', { className: 'chip' }, n, el('button', { className: 'x', title: 'Remover', textContent: '×', onclick: () => { extras.splice(i, 1); renderExtras(); enviarCfg(); } }))));
+  }
+  function addExtra() {
+    const v = $('vdExtraNovo').value.trim().replace(/,/g, ' ');
+    if (!v) return;
+    if (!extras.some((x) => x.toLowerCase() === v.toLowerCase())) extras.push(v);
+    $('vdExtraNovo').value = ''; renderExtras(); enviarCfg();
+  }
+  const emFoco = (id) => document.activeElement === $(id) || root.activeElement === $(id);
+  function renderVenda() {
+    if (!vd) return;
+    const c = vd.cfg || {};
+    $('vdOn').checked = !!vd.ativo;
+    $('vdSim').checked = c.simular !== false;
+    $('vdHint').textContent = vd.ativo ? (c.simular !== false ? 'simulando' : 'ligada — vendendo de verdade') : 'desligada';
+    const col = c.colecao || {}; const ven = c.venda || {};
+    $('vdColOn').checked = col.ligada !== false; $('vdColModo').value = col.modo || 'ou';
+    $('vdVenOn').checked = ven.ligada !== false; $('vdVenModo').value = ven.modo || 'e';
+    $('vdResto').checked = !!ven.resto;
+    $('vdShiny').value = c.shiny || 'colecao'; $('vdLend').value = c.lendario || 'colecao';
+    const val = { vdColP: col.p, vdColIv: col.iv, vdColQ: col.q, vdColN: col.n, vdVenP: ven.p, vdVenIv: ven.iv, vdVenQ: ven.q, vdVenN: ven.n, vdMax: c.maxPorMin };
+    if (JSON.stringify(extras) !== JSON.stringify(extrasDe(c.extras))) { extras = extrasDe(c.extras); renderExtras(); }
+    for (const id of vdCampos) if (!emFoco(id)) $(id).value = val[id] == null ? '' : String(val[id]);
+    $('vdInfo').textContent = !vd.conectado ? 'Sem conexão com o jogo.' : !vd.temLista ? 'Aguardando a lista de Pokémon do jogo…' : (vd.msg || '') + ((vd.vendidos ? ' · vendidos: ' + vd.vendidos : '') + (vd.coletados ? ' · enviados à Coleção: ' + vd.coletados : ''));
+    const k = vd.contagem || {};
+    $('vdResumo').textContent = vd.temLista ? 'Depósito: ' + vd.deposito + ' · vender: ' + (k.vender || 0) + ' · Coleção: ' + (k.colecao || 0) + ' · manter: ' + (k.manter || 0)  : '';
+    const box = $('vdPrevia'); box.textContent = '';
+    for (const x of (vd.previa || [])) {
+      const acao = x.acao === 'vender' ? 'VENDER' : 'COLEÇÃO';
+      box.append(el('div', { className: 'r att' }, el('b', { className: 'b', textContent: acao }),
+        el('span', { textContent: (x.shiny ? '✨ ' : '') + (x.lend ? '🌟 ' : '') + x.nome + ' Lv' + x.level }),
+        el('span', { className: 's', textContent: 'P' + x.p + ' IV' + x.iv + ' Q' + x.q + ' N' + x.n })));
+    }
+    if (!(vd.previa || []).length) box.append(el('div', { className: 'mut', textContent: 'Nada a fazer com as regras atuais.' }));
+  }
+  const haVd = (ms) => { const s = Math.max(0, Math.floor((Date.now() - ms) / 1000)); return s < 60 ? 'agora' : s < 3600 ? Math.floor(s / 60) + ' min' : s < 86400 ? Math.floor(s / 3600) + ' h' : Math.floor(s / 86400) + ' d'; };
+  const statsVd = (x) => 'P' + x.p + ' IV' + x.iv + ' Q' + x.q + ' N' + x.n;
+  const nomeVd = (x) => (x.shiny ? '✨ ' : '') + (x.lend ? '🌟 ' : '') + x.nome + ' Lv' + x.level;
+  function renderRegistroVenda() {
+    if (!vd) return;
+    const k = vd.contagem || {};
+    const sum = $('vrSum'); sum.textContent = '';
+    [['Vendidos', vd.vendidos || 0, 'v'], ['Enviados à Coleção', vd.coletados || 0, 'c'], ['Falhas', vd.falhas || 0, 'f'], ['No Depósito', vd.deposito || 0, ''], ['Vão ser vendidos', k.vender || 0, 'v'], ['Vão para a Coleção', k.colecao || 0, 'c'], ['Sobraram', k.manter || 0, '']]
+      .forEach(([t, n, c]) => sum.append(el('div', { className: 'vrbox ' + c }, el('b', { textContent: String(n) }), el('span', { textContent: t }))));
+    $('vrHint').textContent = vd.ativo ? (vd.cfg && vd.cfg.simular !== false ? 'simulando — nada é feito' : 'ligada') : 'desligada';
+    const sigH = JSON.stringify((vd.hist || []).map((x) => x.em + x.tipo));
+    const hb = $('vrHist');
+    if (hb.dataset.sig !== sigH) {
+      hb.dataset.sig = sigH; hb.textContent = '';
+      for (const x of (vd.hist || [])) {
+        const rot = x.tipo === 'vendido' ? 'VENDIDO' : x.tipo === 'colecao' ? 'COLEÇÃO' : 'FALHA';
+        hb.append(el('div', { className: 'vr ' + x.tipo, title: x.motivo || '' },
+          el('b', { className: 'res', textContent: rot }),
+          el('span', { className: 'op', textContent: nomeVd(x) }),
+          el('span', { className: 'pt', textContent: statsVd(x) }),
+          el('span', { className: 'mo', textContent: x.motivo || '' }),
+          el('time', { textContent: haVd(x.em) })));
+      }
+      if (!(vd.hist || []).length) hb.append(el('div', { className: 'mut', textContent: 'Nada foi vendido nem enviado ainda.' }));
+    }
+    const sobra = vd.sobra || [];
+    $('vrSobraN').textContent = (k.manter || 0) + ' no total';
+    const sb = $('vrSobra'); const sigS = JSON.stringify(sobra.map((x) => x.id));
+    if (sb.dataset.sig !== sigS) {
+      sb.dataset.sig = sigS; sb.textContent = '';
+      for (const x of sobra) sb.append(el('div', { className: 'vr manter' }, el('b', { className: 'res', textContent: 'FICA' }), el('span', { className: 'op', textContent: nomeVd(x) }), el('span', { className: 'pt', textContent: statsVd(x) }), el('span', { className: 'mo', textContent: x.motivo || '' })));
+      if (!sobra.length) sb.append(el('div', { className: 'mut', textContent: vd.temLista ? 'Nada sobrando: toda decisão foi tomada pelas regras.' : 'Aguardando a lista de Pokémon do jogo…' }));
+    }
+  }
+  setInterval(renderRegistroVenda, 15000);   // atualiza o "há X min"
+
+  window.addEventListener('message', (ev) => {
+    const m = ev.data;
+    if (ev.source !== window || !m || m.ch !== 'ateforp-venda' || m.from !== 'venda' || m.type !== 'state') return;
+    vd = m.state; renderVenda(); renderRegistroVenda();
+  });
+  vdCmd({ type: 'hello' });
+  function enviarCfg() {
+    vdCmd({ type: 'cfg', cfg: {
+      simular: $('vdSim').checked, shiny: $('vdShiny').value, lendario: $('vdLend').value, extras: extras.join(','),
+      maxPorMin: Math.max(1, Math.min(60, vdNum('vdMax') || 20)),
+      colecao: { ligada: $('vdColOn').checked, modo: $('vdColModo').value, p: vdNum('vdColP'), iv: vdNum('vdColIv'), q: vdNum('vdColQ'), n: vdNum('vdColN') },
+      venda: { ligada: $('vdVenOn').checked, modo: $('vdVenModo').value, p: vdNum('vdVenP'), iv: vdNum('vdVenIv'), q: vdNum('vdVenQ'), n: vdNum('vdVenN'), resto: $('vdResto').checked }
+    } });
+  }
+  ['vdShiny', 'vdLend', 'vdMax', 'vdColOn', 'vdColModo', 'vdVenOn', 'vdVenModo', 'vdResto', ...vdCampos].forEach((id) => $(id).addEventListener('change', enviarCfg));
+  $('vdExtraAdd').addEventListener('click', addExtra);
+  $('vdExtraNovo').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addExtra(); } });
+  renderExtras();
+  $('vdOn').addEventListener('change', (e) => {
+    if (e.target.checked && !$('vdSim').checked && !confirm('Ligar a venda automática DE VERDADE? Pokémon vendidos ao NPC não podem ser recuperados.')) { e.target.checked = false; return; }
+    vdCmd({ type: 'ativo', value: e.target.checked });
+  });
+  $('vdSim').addEventListener('change', (e) => { if (!e.target.checked && vd && vd.ativo && !confirm('Sair do modo simulação e vender de verdade?')) { e.target.checked = true; return; } enviarCfg(); });
+  $('vdZerar').addEventListener('click', () => vdCmd({ type: 'zerar' }));
+
+  // sub-abas genéricas (PvE e PvP)
+  root.querySelectorAll('nav.subg').forEach((nav) => {
+    const g = nav.dataset.g;
+    nav.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+      nav.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+      root.querySelectorAll('.subp[data-g="' + g + '"]').forEach((s) => { s.hidden = s.dataset.p !== b.dataset.p; });
+      listeners.forEach((f) => { try { f(); } catch (e) { /* ignora */ } });
+    }));
+  });
+
+  function showTab(t) {
+    tab = t;
+    root.querySelectorAll('#tabs button[data-tab]').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
+    ['captura', 'pvp', 'itens', 'registro'].forEach((n) => { $('tab-' + n).hidden = n !== t; });
+    if (t === 'itens') renderMercadoSub();
+    if (t === 'registro') renderLog();
+  }
+  function showSub(s) { sub = s; renderMercadoSub(); }
+  root.querySelectorAll('#subtabs button').forEach((b) => b.addEventListener('click', () => showSub(b.dataset.sub)));
+  root.querySelectorAll('#tabs button[data-tab]').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  $('enabled').addEventListener('change', (e) => { cfg.enabled = e.target.checked; save(); renderMaster(); renderStatus(); });
+  $('intervalS').addEventListener('change', (e) => {
+    const v = parseFloat(String(e.target.value).replace(',', '.'));
+    cfg.intervalMs = Math.max(4000, Math.round((Number.isFinite(v) ? v : 5) * 1000));
+    save(); renderMaster();
+  });
+  $('resetAll').addEventListener('click', () => cmd({ type: 'resetAll' }));
+  $('search').addEventListener('input', renderPicker);
+  $('scan').addEventListener('click', () => cmd({ type: 'scan' }));
+  $('addManual').addEventListener('click', () => {
+    const id = parseInt($('manualId').value, 10);
+    if (id > 0) { addRule(id); $('manualId').value = ''; }
+  });
+  let hWait = 0;                       // quando o usuário pediu; some quando chega resposta do jogo
+  const hPedir = (o) => { hWait = Date.now(); cmd(o); renderHistory(); };
+  $('hRefresh').addEventListener('click', () => hPedir({ type: 'history', pagina: 0, todas: true }));
+  $('hMore').addEventListener('click', () => {
+    const h = (estado && estado.history) || { pages: {} };
+    hPedir({ type: 'history', pagina: Object.keys(h.pages || {}).length });
+  });
+  setInterval(() => { if (hWait) renderHistory(); }, 1000);
+  $('clearCompras').addEventListener('click', () => cmd({ type: 'clearCompras' }));
+
+  chrome.storage.local.get(['cfg', 'estado'], (d) => {
+    if (d.cfg) cfg = Object.assign(cfg, d.cfg);
+    estado = d.estado || null;
+    renderMaster(); renderRules(); renderPicker(); renderStatus(); renderHistory(); renderLog();
+  });
+
+  chrome.storage.onChanged.addListener((ch, area) => {
+    if (area !== 'local') return;
+    if (ch.cfg && !saveTimer && ch.cfg.newValue && JSON.stringify(ch.cfg.newValue) !== JSON.stringify(cfg)) {
+      cfg = Object.assign({}, cfg, ch.cfg.newValue);
+      renderMaster(); renderStatus();
+      const focused = root.activeElement && root.activeElement.closest && root.activeElement.closest('#rules');
+      if (!focused) renderRules();
+    }
+    if (ch.estado) {
+      estado = ch.estado.newValue;
+      renderStatus();
+      refreshRules();
+      if (tab === 'itens' && sub === 'compras') renderPicker();
+      if (tab === 'itens' && sub === 'hist') { renderHistory(); renderTentativas(); }
+      if (tab === 'registro') renderLog();
+    }
+  });
+
+  setInterval(renderStatus, 2000);
+  showTab('captura');
+  return {
+    showSub,
+    showTab,
+    captura: () => !!(cs && cs.ativo),
+    conectado: () => !!(cs && cs.conectado),
+    setCaptura: (v) => { catchCmd({ type: 'captura', value: !!v }); if (cs) { cs.ativo = !!v; renderCatch(); } },
+    pvp: () => !!(pvp && pvp.ativo),
+    setPvp: (v) => pvpCmd({ type: 'ativo', value: !!v }),
+    onChange: (f) => listeners.push(f)
+  };
+}
