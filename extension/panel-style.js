@@ -152,6 +152,10 @@ header button.icon { flex: none; }
 .panel > header { flex: none; }
 .subp[hidden] { display: none; }
 .addn { display: flex; gap: 6px; margin: 6px 0; } .addn input { flex: 1; min-width: 0; }
+.vfil { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
+.vfil .vf { padding: 3px 10px; font-size: 12px; }
+.vfil .vf.on { border-color: var(--ouro); color: var(--ouro); background: #1c3156; }
+.vb-vender { color: #ff8a98; } .vb-colecao { color: #8fd0ff; } .vb-manter { color: var(--mut); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { display: inline-flex; align-items: center; gap: 4px; background: #0f1d30; border: 1px solid var(--line); border-radius: 99px; padding: 2px 4px 2px 10px; font-size: 12px; }
 .chip .x { background: none; border: none; color: var(--mut); cursor: pointer; font-size: 15px; line-height: 1; padding: 0 5px; }
@@ -168,6 +172,13 @@ header button.icon { flex: none; }
 .tabs .pixbtn:hover { background: #17294a; border-radius: 8px; }
 .pixbox { position: absolute; z-index: 5; right: 14px; top: 96px; width: min(320px, calc(100% - 28px)); background: #10213b; border: 1px solid #3f67a8; border-radius: 12px; padding: 12px 14px; box-shadow: 0 10px 30px #000a; }
 .pixbox[hidden] { display: none; }
+.dlg { position: absolute; inset: 0; z-index: 20; background: rgba(4,12,28,.72); display: flex; align-items: center; justify-content: center; padding: 14px; }
+.dlg[hidden] { display: none; }
+.dlgbox { width: min(340px, 100%); background: #10213b; border: 1px solid #3f67a8; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+.dlgbox .dlgt { font-weight: 800; color: var(--ouro); margin-bottom: 6px; }
+.dlgbox p { margin: 0 0 12px; font-size: 13px; line-height: 1.45; color: var(--txt); }
+.dlgbox .btns { display: flex; gap: 8px; justify-content: flex-end; }
+.dlgbox .dlgok { border-color: var(--ouro); color: var(--ouro); }
 .pixbox .pixt { font-weight: 800; color: var(--ouro); margin-bottom: 6px; }
 .pixbox p { margin: 0 0 8px; font-size: 12px; line-height: 1.45; color: var(--txt); }
 .pixbox .pixk { font-family: ui-monospace, monospace; font-size: 12px; background: #0a1527; border: 1px dashed #3f67a8; border-radius: 8px; padding: 8px; word-break: break-all; user-select: all; margin-bottom: 8px; }

@@ -1,6 +1,6 @@
 /*
- * PokeIdle Ateforp Tools — painel dentro do jogo.
- * Visual do Auto Captura: botão do Gyarados (liga/desliga a captura) + botão "Ateforp Tools" encaixados logo
+ * PokeIdle Tools by Ateforp — painel dentro do jogo.
+ * Visual do Auto Captura: botão do Gyarados (liga/desliga a captura) + botão "Tools" encaixados logo
  * acima do card do Pokémon em campo; abrem uma janela azul arrastável pelo cabeçalho.
  * Fica num Shadow DOM, então o CSS do jogo não mexe nele e a janela não fecha sozinha nem ao digitar.
  */
@@ -14,7 +14,7 @@
   <div class="panel" id="panel" hidden>
     <header id="hdr" title="Segure e arraste para mover a janela (duplo clique volta ao centro e ao tamanho padrão)">
       <span id="logo"></span>
-      <h1>PokeIdle Ateforp Tools</h1>
+      <h1>PokeIdle Tools by Ateforp</h1>
       <span id="status" class="pill off">aguardando o jogo</span>
       <button id="max" class="icon" title="Maximizar a janela (clique de novo para voltar)">⤢</button>
       <button id="pin" class="icon" title="Fixar a janela: não minimiza ao clicar fora (útil para usar o jogo e o Mercado ao mesmo tempo)">📌</button>
@@ -26,9 +26,16 @@
       <div class="pixt">🤲 Apoie o criador</div>
       <p>A ferramenta é gratuita e continua assim. Se ela foi útil para você e <b>se sentir no seu coração a vontade de ajudar, com qualquer valor</b>, fico muito agradecido. É totalmente opcional.</p>
       <div class="pixqr" id="pixQr"></div>
-      <div class="mut pixh">Aponte a câmera do app do seu banco para o QR code, ou use o Pix copia e cola.</div>
-      <div class="btns"><button id="pixCopy2" class="icon">Copiar Pix copia e cola</button><button id="pixClose" class="icon">Fechar</button></div>
+      <div class="mut pixh">Aponte a câmera do celular para o QR code ou abra o link.</div>
+      <div class="btns"><button id="pixAbrir" class="icon">Abrir LivePix</button><button id="pixCopy2" class="icon">Copiar link</button><button id="pixClose" class="icon">Fechar</button></div>
       <div class="mut" id="pixMsg"></div>
+    </div>
+    <div id="dlg" class="dlg" hidden>
+      <div class="dlgbox" role="alertdialog" aria-modal="true">
+        <div class="dlgt" id="dlgT">Confirmar</div>
+        <p id="dlgM"></p>
+        <div class="btns"><button id="dlgOk" class="icon dlgok">OK</button><button id="dlgNo" class="icon">Cancelar</button></div>
+      </div>
     </div>
     <div class="corpo">
       <nav class="tabs" id="tabs">
@@ -100,11 +107,6 @@
             <span class="slider"></span>
             <span class="lbl"><b>Vender / enviar para a Coleção sozinho</b><small>age nos Pokémon do Depósito (fora da equipe e fora da Coleção) segundo as regras abaixo, direto pelo servidor</small></span>
           </label>
-          <label class="switch">
-            <input type="checkbox" id="vdSim" checked>
-            <span class="slider"></span>
-            <span class="lbl"><b>Só simular</b><small>não vende nada: só mostra na prévia o que seria feito (recomendado até conferir as regras)</small></span>
-          </label>
           <div class="mut" id="vdInfo">Desligada.</div>
           <h3>Vai para a Coleção se…</h3>
           <div class="row inline"><label><input type="checkbox" id="vdColOn" checked> regra ligada</label>
@@ -129,6 +131,7 @@
           </div>
           <div class="row inline"><label>Máx. de ações por minuto <input id="vdMax" type="number" min="1" max="60" step="1" value="20"></label></div>
           <div class="mut" id="vdResumo"></div>
+          <div id="vdFiltro" class="vfil"></div>
           <div id="vdPrevia" class="list"></div>
           <div class="mut">Regras: P = potência, IV = soma dos IVs, Q = qualidade, N = nota. Campo vazio = ignorado. A Coleção vem primeiro; só depois a venda. A venda ao NPC é irreversível.</div>
         </div>
@@ -286,41 +289,24 @@
   const panel = $('panel');
   $('logo').append(window.__ATE.gyarados(false, 26));
 
-  // ---- apoio ao criador (Pix, opcional) ----
-  const PIX_CHAVE = 'd5a7fedd-5cea-4258-b2e3-afb460682ad7';       // chave Pix do criador
-  const PIX_NOME = 'Ateforp Tools';         // nome que aparece no QR (até 25 letras, sem acento)
-  const PIX_CIDADE = 'Brasil';     // cidade (até 15 letras, sem acento)
-  const pixOk = PIX_CHAVE.indexOf('@@') === -1 && PIX_CHAVE.trim() !== '';
-  const semAcento = (s, n) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9 .\-]/g, '').trim().toUpperCase().slice(0, n);
-  const tlv = (id, v) => id + String(v.length).padStart(2, '0') + v;
-  function crc16(s) {
-    let c = 0xFFFF;
-    for (let i = 0; i < s.length; i++) { c ^= s.charCodeAt(i) << 8; for (let k = 0; k < 8; k++) c = (c & 0x8000) ? ((c << 1) ^ 0x1021) & 0xFFFF : (c << 1) & 0xFFFF; }
-    return c.toString(16).toUpperCase().padStart(4, '0');
-  }
-  // Pix "copia e cola" estático (BR Code): sem valor, o pagador digita quanto quiser
-  function pixPayload() {
-    const nome = semAcento(PIX_NOME.indexOf('@@') === -1 ? PIX_NOME : '', 25) || 'APOIO';
-    const cidade = semAcento(PIX_CIDADE.indexOf('@@') === -1 ? PIX_CIDADE : '', 15) || 'BRASIL';
-    const base = tlv('00', '01') + tlv('01', '11') + tlv('26', tlv('00', 'br.gov.bcb.pix') + tlv('01', PIX_CHAVE.trim())) + tlv('52', '0000') + tlv('53', '986') + tlv('58', 'BR') + tlv('59', nome) + tlv('60', cidade) + tlv('62', tlv('05', '***')) + '6304';
-    return base + crc16(base);
-  }
-  window.__ateforpPixPayload = pixPayload;
-  $('pixCopy2').disabled = !pixOk;
+  // ---- apoio ao criador (opcional): link do LivePix ----
+  const APOIO_LINK = 'https://livepix.gg/ateforp';
+  window.__ateforpApoioLink = APOIO_LINK;
   function desenharQr() {
     const box = $('pixQr'); box.textContent = '';
-    if (!pixOk || typeof qrcode !== 'function') { box.hidden = true; return; }
-    try { const q = qrcode(0, 'M'); q.addData(pixPayload(), 'Byte'); q.make(); box.innerHTML = q.createSvgTag({ cellSize: 4, margin: 3, scalable: true }); box.hidden = false; } catch (e) { box.hidden = true; }
+    if (typeof qrcode !== 'function') { box.hidden = true; return; }
+    try { const q = qrcode(0, 'M'); q.addData(APOIO_LINK, 'Byte'); q.make(); box.innerHTML = q.createSvgTag({ cellSize: 4, margin: 3, scalable: true }); box.hidden = false; } catch (e) { box.hidden = true; }
   }
   $('pixBtn').addEventListener('click', () => { $('pixBox').hidden = !$('pixBox').hidden; $('pixMsg').textContent = ''; if (!$('pixBox').hidden) desenharQr(); });
   $('pixClose').addEventListener('click', () => { $('pixBox').hidden = true; });
+  $('pixAbrir').addEventListener('click', () => { try { window.open(APOIO_LINK, '_blank', 'noopener,noreferrer'); } catch (e) { /* ignora */ } });
   async function copiar(texto) {
     let ok = false;
     try { await navigator.clipboard.writeText(texto); ok = true; } catch (e) { /* tenta o plano B */ }
     if (!ok) { try { const t = document.createElement('textarea'); t.value = texto; t.style.cssText = 'position:fixed;opacity:0;left:-999px'; root.append(t); t.select(); ok = document.execCommand('copy'); t.remove(); } catch (e) { /* ignora */ } }
-    $('pixMsg').textContent = ok ? 'Pix copia e cola copiado. Obrigado! 💙' : 'Não consegui copiar sozinho; use o QR code.';
+    $('pixMsg').textContent = ok ? 'Link copiado. Obrigado! 💙' : 'Não consegui copiar sozinho; use o QR code.';
   }
-  $('pixCopy2').addEventListener('click', () => copiar(pixPayload()));
+  $('pixCopy2').addEventListener('click', () => copiar(APOIO_LINK));
 
   const api = createUI(root);
 
@@ -443,7 +429,7 @@
   $('close').addEventListener('click', () => setOpen(false));
   $('reload').addEventListener('click', () => location.reload());
   addEventListener('resize', () => { if (!panel.hidden) placePanel(); });
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden && !ui.fixa) setOpen(false); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden && !ui.fixa && $('dlg').hidden) setOpen(false); });
   // clicar fora da janela (e fora dos botões) minimiza
   document.addEventListener('pointerdown', (e) => {
     if (panel.hidden || !e.isTrusted || ui.fixa) return;   // cliques sintéticos (o "destravar" do jogo, o fechar do Discord) não contam
@@ -501,7 +487,6 @@
     wrap = document.createElement('div');
     wrap.id = 'ateforp-wrap';
     wrap.className = 'ate-dock toolbox';
-    wrap.style.zIndex = '99999';
 
     gyBtn = document.createElement('button');
     gyBtn.type = 'button';
@@ -516,7 +501,7 @@
     openBtn = document.createElement('button');
     openBtn.type = 'button';
     openBtn.className = 'at-btn at-gy at-open';
-    openBtn.title = 'Abrir/fechar o PokeIdle Ateforp Tools';
+    openBtn.title = 'Abrir/fechar o PokeIdle Tools by Ateforp';
     openBtn.append(toolIcon());
     openBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggle(); });
 
@@ -558,7 +543,7 @@
     openBtn.style.borderColor = cor;
     openBtn.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px ' + cor + ', 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 12px ' + cor + (panel.hidden ? '88' : 'ff');
     const tp = openBtn.querySelector('svg path'); if (tp) tp.setAttribute('fill', cor);
-    openBtn.title = 'Abrir/fechar o PokeIdle Ateforp Tools · ' + (st === 'on' ? 'compra automática ligada e conectado' : st === 'warn' ? 'aguardando o jogo / atenção' : 'compra automática desligada');
+    openBtn.title = 'Abrir/fechar o PokeIdle Tools by Ateforp · ' + (st === 'on' ? 'compra automática ligada e conectado' : st === 'warn' ? 'aguardando o jogo / atenção' : 'compra automática desligada');
     openBtn.classList.toggle('on', !panel.hidden);
   }
 
@@ -570,18 +555,20 @@
       if (wrap.parentElement !== td || td.lastElementChild !== wrap || wrap.dataset.local !== 'docado') {
         td.appendChild(wrap);
         wrap.dataset.local = 'docado';
-        Object.assign(wrap.style, { position: 'relative', left: '', top: '', right: '' });
+        Object.assign(wrap.style, { position: 'relative', left: '', top: '', right: '', zIndex: '' });   // docada no cartão: sem camada própria, então menus e janelas do jogo ficam por cima
       }
     } else if (Date.now() - INICIO > 8000 && (!wrap.isConnected || wrap.dataset.local === 'docado')) {
       (document.body || document.documentElement).appendChild(wrap);
       wrap.dataset.local = 'flutuante';
       Object.assign(wrap.style, { position: 'fixed', top: '18px', right: '12px', left: '', margin: '0' });
+      wrap.style.zIndex = '99999';
     }
     syncDock();
   }
 
   api.onChange(syncDock);
   setInterval(() => { try { ensureDock(); } catch (e) { /* ignora */ } }, 1500);
+
   ensureDock();
   window.__pmPanelApi = { toggle, setOpen, isOpen: () => !panel.hidden };
 })();

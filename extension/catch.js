@@ -1,5 +1,5 @@
 /*
- * PokeIdle Ateforp Tools — módulo Auto Captura + Reposição de estoque (roda na página, junto do jogo).
+ * PokeIdle Tools by Ateforp — módulo Auto Captura + Reposição de estoque (roda na página, junto do jogo).
  * Portado do userscript "Pokeidle Auto Captura (Gyarados)": clica nos Pokémon caídos, fecha o popup do
  * Discord, repõe bolas/poções/revives pela API do jogo (shop.buy) e destrava o jogo quando ele trava.
  * Usa a mesma conexão do jogo que o Mercador (window.__PM_BUS, criado pelo engine.js).
@@ -80,7 +80,7 @@
       dados.campos = null;
       mesclar(m.estado);
       dados.welcomeEm = Date.now();
-      if (!jaLogou) { jaLogou = true; if (cfg2.autoLigar && !ativo) { ativo = true; sujo = true; } }   // opcional: liga ao logar
+      if (!jaLogou) { jaLogou = true; if (cfg2.autoLigar && !ativo) { definirCaptura(true); } }   // opcional: liga ao logar
       montarListaEstoque();
     } else if (m.t === 'estado') {
       mesclar(m.estado);
@@ -100,7 +100,7 @@
   const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
   const status = { estoque: 'Parado.' };
-  function setStatus(txt) { status.estoque = txt; sujo = true; console.log('[Ateforp Tools] estoque: ' + txt); }
+  function setStatus(txt) { status.estoque = txt; sujo = true; console.log('[PokeIdle Tools by Ateforp] estoque: ' + txt); }
 
   // ---------- auto captura (clica no Pokémon caído) ----------
   let timerCaptura = null;
@@ -343,7 +343,7 @@
   function clicarNoX(el, origem) {
     tentativas++;
     ultimoFechar = Date.now();
-    console.log('[Ateforp Tools] Fechando popup do Discord (' + origem + ', tentativa ' + tentativas + ')');
+    console.log('[PokeIdle Tools by Ateforp] Fechando popup do Discord (' + origem + ', tentativa ' + tentativas + ')');
     clicarDeVerdade(el);
     if (tentativas >= 2) enviarEsc();
   }
@@ -378,7 +378,7 @@
       try { alvo.dispatchEvent(new Ctor(t, { ...base, pointerId: 1, pointerType: 'mouse', isPrimary: true })); } catch (e) { /* ignora */ }
     }
     try { window.dispatchEvent(new Event('focus')); } catch (e) { /* ignora */ }
-    console.log('[Ateforp Tools] destravar: clique no fundo da página (' + motivo + ')');
+    console.log('[PokeIdle Tools by Ateforp] destravar: clique no fundo da página (' + motivo + ')');
   }
 
   function conferirTravamento() {
@@ -464,11 +464,13 @@
 
   function iniciarObservadorSorteio() {
     const alvo = document.body || document.documentElement;
-    // observa só nós novos e agrupa o trabalho (no máximo 1 varredura a cada 400 ms) para não pesar com a tela do jogo mudando toda hora
-    let fila = [], agendado = false;
+    // junta os nós novos/alterados e confere no próximo quadro (antes de a tela ser pintada, então a janela não aparece);
+    // cada nó entra uma vez só por quadro, o que mantém o custo baixo mesmo com a página mudando toda hora
+    const fila = new Set();
+    let agendado = false;
     const processar = () => {
       agendado = false;
-      const lote = fila; fila = [];
+      const lote = Array.from(fila).slice(0, 150); fila.clear();
       if (!ocultarSorteio) return;
       for (const n of lote) {
         const el = n.nodeType === 1 ? n : n.parentElement;
@@ -480,11 +482,13 @@
     };
     new MutationObserver((muts) => {
       if (!ocultarSorteio) return;
-      for (const m of muts) for (const n of m.addedNodes) if (n.nodeType === 1 || n.nodeType === 3) fila.push(n);
-      if (fila.length > 200) fila = fila.slice(-200);
-      if (!agendado && fila.length) { agendado = true; setTimeout(processar, 400); }
-    }).observe(alvo, { childList: true, subtree: true });
-    setInterval(cuidarSorteios, 500);
+      for (const m of muts) {
+        if (m.type === 'attributes') fila.add(m.target);
+        else for (const n of m.addedNodes) if (n.nodeType === 1 || n.nodeType === 3) fila.add(n);
+      }
+      if (!agendado && fila.size) { agendado = true; requestAnimationFrame(processar); }
+    }).observe(alvo, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'hidden', 'style'] });
+    setInterval(cuidarSorteios, 300);
   }
 
   // ---------- agendador (leve) ----------
@@ -495,7 +499,7 @@
   }
   function tarefas() {
     for (const passo of [fecharPopupDiscord, ciclo]) {
-      try { passo(); } catch (e) { console.error('[Ateforp Tools] erro em ' + passo.name + ':', e); }
+      try { passo(); } catch (e) { console.error('[PokeIdle Tools by Ateforp] erro em ' + passo.name + ':', e); }
     }
   }
 

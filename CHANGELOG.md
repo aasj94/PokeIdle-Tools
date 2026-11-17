@@ -1,0 +1,22 @@
+# Histórico de versões
+
+## v2.3.10 (a anterior publicada era a 2.3.9)
+- O painel da extensão fica com prioridade sobre o jogo; só a caixa de botões (Gyarados, PvP, Tools) fica atrás das janelas do jogo (ex.: Mercado).
+- **Correção na Venda automática:** Q (qualidade) e N (nota) agora são comparados em milésimos, como o jogo mostra (Q 1.445 = 1445). Antes quase tudo "batia" a regra de venda.
+- Venda automática: a lista mostra Vender, Coleção e Sem ação, com filtros, contagem e o motivo ao passar o mouse.
+- Apoio ao criador: o código Pix foi trocado pelo link https://livepix.gg/ateforp.
+- Ícone da ferramenta (chave inglesa) na extensão e no userscript.
+
+## Versões anteriores
+- v1.5.0
+- v1.6.1 - A borda da caixa de ferramentas agora indica a conexao com o jogo (verde = conectado, vermelho = sem conexao). A chave inglesa segue a regra verde/amarelo/vermelho do status.
+- v1.6.2 - Reposicao de estoque: cada campo (abaixo de / compra ate) limitado a 9999; valores antigos maiores sao reduzidos. Desempenho: a analise do Deposito (venda automatica) so e refeita quando os dados mudam, os estados so sao enviados ao painel quando mudam (menos redesenho da tela), e os observadores de tela (sorteio, luta PvP) agrupam o trabalho em vez de rodar a cada mudanca da pagina.
+- v1.6.3 - Corrigido: a Auto Captura ligada sozinha ao logar agora de fato clica no Pokemon caido (antes so aparecia como ligada). PvP conferido: ao logar entra na fila normalmente.
+- v1.6.4 - Reposicao de estoque: ao digitar um valor acima de 9999 o campo ja vira 9999 na hora (nao precisa clicar fora) e nao passa disso.
+- v1.6.5 - Removido o botao "So simular" da Venda automatica (agora a venda ligada vende de verdade; ao ligar ainda pede confirmacao).
+- v1.6.6 - Corrigido: a janela do sorteio voltava a aparecer durante a disputa mesmo com "Ocultar" ligado (regressao da otimizacao da v1.6.2). O observador volta a vigiar mudancas de classe/estilo e confere antes de a tela ser pintada.
+- v1.6.7 - A confirmacao ao ligar a Venda automatica agora aparece dentro da propria janela da extensao (Esc/Cancelar mantem desligada) em vez do alerta do navegador. Revisao geral: todos os testes passam.
+- v2.3.5 - Versao 2.3.5; nome oficial "PokeIdle Tools by Ateforp"; nova descricao: Configuracoes de PvE, PvP, compras, tudo automatico e num painel so.
+- v2.3.7 - Icone da ferramenta (chave inglesa, desenho proprio): na extensao (icons/) e no userscript (@icon).
+- v2.3.8 - As janelas e menus do jogo ficam na frente da extensao: com uma janela do jogo aberta, a extensao desce para logo abaixo dela; sem janela aberta, volta ao topo.
+- v2.3.9 - Os botoes (Gyarados, PvP, Tools) nao aparecem mais por cima das janelas do jogo (ex.: Mercado da Comunidade): a caixa nao tem mais camada propria.

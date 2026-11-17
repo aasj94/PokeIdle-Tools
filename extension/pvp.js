@@ -1,5 +1,5 @@
 /*
- * PokeIdle Ateforp Tools - busca contínua de partida no PvP (mundo da página).
+ * PokeIdle Tools by Ateforp - busca contínua de partida no PvP (mundo da página).
  * Protocolo observado no jogo:
  *   envia   {"t":"pvp.fila.entrar"}
  *   recebe  {"t":"pvp","fila":{"na":bool,"desde":ts,"tamanho":n,"cooldownMs":n}}   (estado da fila / espera)

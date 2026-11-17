@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """Gera o userscript único (Tampermonkey/Violentmonkey) a partir dos mesmos arquivos da extensão."""
 import json, os, sys
-d = os.path.dirname(os.path.abspath(__file__))
+root = os.path.dirname(os.path.abspath(__file__))
+d = os.path.join(root, 'extension')
 rd = lambda n: open(os.path.join(d, n), encoding='utf-8').read()
 ver = json.load(open(os.path.join(d, 'manifest.json')))['version']
-out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(d, '..', 'pokeidle-ateforp-tools.user.js')
+out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(root, 'userscript', 'pokeidle-tools-by-ateforp.user.js')
+
+import base64
+icon = 'data:image/png;base64,' + base64.b64encode(open(os.path.join(d, 'icons', 'icon64.png'), 'rb').read()).decode()
 
 head = f"""// ==UserScript==
-// @name         PokeIdle Ateforp Tools
+// @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
 // @version      {ver}
-// @description  Auto captura (Gyarados), reposição automática de estoque e compra automática no Mercado da Comunidade, num painel só.
+// @icon         {icon}
+// @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
 // @run-at       document-start
 // @noframes

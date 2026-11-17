@@ -25,6 +25,7 @@ const SEED = {
 const CATS = [['stone', 'Pedras'], ['fragment', 'Fragmentos'], ['boss', 'Boss Tokens'], ['casa', 'Casas'],
   ['bicicleta', 'Bicicletas'], ['ticket', 'Tickets'], ['outros', 'Outros']];
 
+const mil = (v) => { v = Number(v) || 0; return Math.round(v < 50 ? v * 1000 : v).toLocaleString('pt-BR'); };   // Q/N em milésimos, como o jogo mostra
 const fmt = (n) => Number(n || 0).toLocaleString('pt-BR');
 function short(n) {
   n = Number(n || 0);
@@ -252,6 +253,7 @@ function createUI(root) {
         const lim = (inp) => { if (inp.value === '') return; const n = Math.min(9999, Math.max(0, Math.floor(Number(inp.value) || 0))); inp.value = String(n); };   // máximo 9999 por campo
         const send = () => { lim(below); lim(up); catchCmd({ type: 'estoque-item', chave: it.chave, abaixo: below.value, ate: up.value }); };
         below.addEventListener('change', send); up.addEventListener('change', send);
+        for (const inp of [below, up]) inp.addEventListener('input', () => { if (Number(inp.value) > 9999) inp.value = '9999'; });   // passou de 9999: já fica no máximo na hora
         box.append(el('div', { className: 'est3' },
           el('span', { className: 'nm' }, img, el('span', { textContent: it.nome }), el('small', { className: 'q', id: 'q-' + it.chave.replace(/\W/g, '_') })),
           below, up));
@@ -285,6 +287,7 @@ function createUI(root) {
   $('beastYes').addEventListener('click', () => { catchCmd({ type: 'beast-ativo', value: true }); $('beastWarn').hidden = true; $('beastOn').checked = true; });
   $('beastNo').addEventListener('click', () => { $('beastWarn').hidden = true; });
   const beastSend = () => { for (const id of ['beastBelow', 'beastUp']) { const i = $(id); if (i.value !== '') i.value = String(Math.min(9999, Math.max(0, Math.floor(Number(i.value) || 0)))); } catchCmd({ type: 'beast-cfg', abaixo: $('beastBelow').value, ate: $('beastUp').value }); };
+  for (const id of ['beastBelow', 'beastUp']) $(id).addEventListener('input', (e) => { if (Number(e.target.value) > 9999) e.target.value = '9999'; });
   $('beastBelow').addEventListener('change', beastSend);
   $('beastUp').addEventListener('change', beastSend);
 
@@ -504,12 +507,12 @@ function createUI(root) {
     $('vdExtraNovo').value = ''; renderExtras(); enviarCfg();
   }
   const emFoco = (id) => document.activeElement === $(id) || root.activeElement === $(id);
+  let vdFiltro = 'todos';
   function renderVenda() {
     if (!vd) return;
     const c = vd.cfg || {};
     $('vdOn').checked = !!vd.ativo;
-    $('vdSim').checked = c.simular !== false;
-    $('vdHint').textContent = vd.ativo ? (c.simular !== false ? 'simulando' : 'ligada — vendendo de verdade') : 'desligada';
+    $('vdHint').textContent = vd.ativo ? 'ligada' : 'desligada';
     const col = c.colecao || {}; const ven = c.venda || {};
     $('vdColOn').checked = col.ligada !== false; $('vdColModo').value = col.modo || 'ou';
     $('vdVenOn').checked = ven.ligada !== false; $('vdVenModo').value = ven.modo || 'e';
@@ -521,17 +524,27 @@ function createUI(root) {
     $('vdInfo').textContent = !vd.conectado ? 'Sem conexão com o jogo.' : !vd.temLista ? 'Aguardando a lista de Pokémon do jogo…' : (vd.msg || '') + ((vd.vendidos ? ' · vendidos: ' + vd.vendidos : '') + (vd.coletados ? ' · enviados à Coleção: ' + vd.coletados : ''));
     const k = vd.contagem || {};
     $('vdResumo').textContent = vd.temLista ? 'Depósito: ' + vd.deposito + ' · vender: ' + (k.vender || 0) + ' · Coleção: ' + (k.colecao || 0) + ' · manter: ' + (k.manter || 0)  : '';
-    const box = $('vdPrevia'); box.textContent = '';
-    for (const x of (vd.previa || [])) {
-      const acao = x.acao === 'vender' ? 'VENDER' : 'COLEÇÃO';
-      box.append(el('div', { className: 'r att' }, el('b', { className: 'b', textContent: acao }),
-        el('span', { textContent: (x.shiny ? '✨ ' : '') + (x.lend ? '🌟 ' : '') + x.nome + ' Lv' + x.level }),
-        el('span', { className: 's', textContent: 'P' + x.p + ' IV' + x.iv + ' Q' + x.q + ' N' + x.n })));
+    // lista dos Pokémon do Depósito por destino: vender / Coleção / sem ação
+    const fil = $('vdFiltro'); fil.textContent = '';
+    const grupos = [['todos', 'Todos', (k.vender || 0) + (k.colecao || 0) + (k.manter || 0)], ['vender', 'Vender', k.vender || 0], ['colecao', 'Coleção', k.colecao || 0], ['manter', 'Sem ação', k.manter || 0]];
+    for (const [id, nome, qtd] of grupos) {
+      fil.append(el('button', { className: 'icon vf' + (vdFiltro === id ? ' on' : ''), type: 'button', textContent: nome + ' (' + qtd + ')', onclick: () => { vdFiltro = id; renderVenda(); } }));
     }
-    if (!(vd.previa || []).length) box.append(el('div', { className: 'mut', textContent: 'Nada a fazer com as regras atuais.' }));
+    const box = $('vdPrevia'); box.textContent = '';
+    const ROT = { vender: 'VENDER', colecao: 'COLEÇÃO', manter: 'SEM AÇÃO' };
+    const lista = (vd.previa || []).filter((x) => vdFiltro === 'todos' || x.acao === vdFiltro);
+    for (const x of lista) {
+      box.append(el('div', { className: 'r' + (x.acao === 'manter' ? '' : ' att'), title: x.motivo || '' }, el('b', { className: 'b vb-' + x.acao, textContent: ROT[x.acao] || x.acao }),
+        el('span', { textContent: (x.shiny ? '✨ ' : '') + (x.lend ? '🌟 ' : '') + x.nome + ' Lv' + x.level }),
+        el('span', { className: 's', textContent: 'P' + x.p + ' IV' + x.iv + ' Q' + mil(x.q) + ' N' + mil(x.n) })));
+    }
+    const totalGrupo = vdFiltro === 'todos' ? null : (k[vdFiltro] || 0);
+    if (!lista.length) box.append(el('div', { className: 'mut', textContent: vdFiltro === 'manter' ? 'Nenhum Pokémon sem ação.' : 'Nada nesta lista com as regras atuais.' }));
+    else if (totalGrupo != null && totalGrupo > lista.length) box.append(el('div', { className: 'mut', textContent: 'Mostrando ' + lista.length + ' de ' + totalGrupo + '.' }));
+    else if (totalGrupo == null) box.append(el('div', { className: 'mut', textContent: 'Mostrando até 40 de cada grupo. Passe o mouse para ver o motivo.' }));
   }
   const haVd = (ms) => { const s = Math.max(0, Math.floor((Date.now() - ms) / 1000)); return s < 60 ? 'agora' : s < 3600 ? Math.floor(s / 60) + ' min' : s < 86400 ? Math.floor(s / 3600) + ' h' : Math.floor(s / 86400) + ' d'; };
-  const statsVd = (x) => 'P' + x.p + ' IV' + x.iv + ' Q' + x.q + ' N' + x.n;
+  const statsVd = (x) => 'P' + x.p + ' IV' + x.iv + ' Q' + mil(x.q) + ' N' + mil(x.n);
   const nomeVd = (x) => (x.shiny ? '✨ ' : '') + (x.lend ? '🌟 ' : '') + x.nome + ' Lv' + x.level;
   function renderRegistroVenda() {
     if (!vd) return;
@@ -539,7 +552,7 @@ function createUI(root) {
     const sum = $('vrSum'); sum.textContent = '';
     [['Vendidos', vd.vendidos || 0, 'v'], ['Enviados à Coleção', vd.coletados || 0, 'c'], ['Falhas', vd.falhas || 0, 'f'], ['No Depósito', vd.deposito || 0, ''], ['Vão ser vendidos', k.vender || 0, 'v'], ['Vão para a Coleção', k.colecao || 0, 'c'], ['Sobraram', k.manter || 0, '']]
       .forEach(([t, n, c]) => sum.append(el('div', { className: 'vrbox ' + c }, el('b', { textContent: String(n) }), el('span', { textContent: t }))));
-    $('vrHint').textContent = vd.ativo ? (vd.cfg && vd.cfg.simular !== false ? 'simulando — nada é feito' : 'ligada') : 'desligada';
+    $('vrHint').textContent = vd.ativo ? 'ligada' : 'desligada';
     const sigH = JSON.stringify((vd.hist || []).map((x) => x.em + x.tipo));
     const hb = $('vrHist');
     if (hb.dataset.sig !== sigH) {
@@ -574,7 +587,7 @@ function createUI(root) {
   vdCmd({ type: 'hello' });
   function enviarCfg() {
     vdCmd({ type: 'cfg', cfg: {
-      simular: $('vdSim').checked, shiny: $('vdShiny').value, lendario: $('vdLend').value, extras: extras.join(','),
+      simular: false, shiny: $('vdShiny').value, lendario: $('vdLend').value, extras: extras.join(','),
       maxPorMin: Math.max(1, Math.min(60, vdNum('vdMax') || 20)),
       colecao: { ligada: $('vdColOn').checked, modo: $('vdColModo').value, p: vdNum('vdColP'), iv: vdNum('vdColIv'), q: vdNum('vdColQ'), n: vdNum('vdColN') },
       venda: { ligada: $('vdVenOn').checked, modo: $('vdVenModo').value, p: vdNum('vdVenP'), iv: vdNum('vdVenIv'), q: vdNum('vdVenQ'), n: vdNum('vdVenN'), resto: $('vdResto').checked }
@@ -584,11 +597,27 @@ function createUI(root) {
   $('vdExtraAdd').addEventListener('click', addExtra);
   $('vdExtraNovo').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addExtra(); } });
   renderExtras();
-  $('vdOn').addEventListener('change', (e) => {
-    if (e.target.checked && !$('vdSim').checked && !confirm('Ligar a venda automática DE VERDADE? Pokémon vendidos ao NPC não podem ser recuperados.')) { e.target.checked = false; return; }
-    vdCmd({ type: 'ativo', value: e.target.checked });
+  // confirmação dentro da própria janela da extensão (no lugar do alerta do navegador)
+  function confirmar(msg, titulo, okTxt) {
+    return new Promise((resolve) => {
+      const dlg = $('dlg');
+      $('dlgT').textContent = titulo || 'Confirmar'; $('dlgM').textContent = msg; $('dlgOk').textContent = okTxt || 'OK';
+      const fim = (v) => { dlg.hidden = true; $('dlgOk').onclick = $('dlgNo').onclick = null; window.removeEventListener('keydown', tecla, true); resolve(v); };
+      const tecla = (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); fim(false); } else if (e.key === 'Enter') { e.preventDefault(); e.stopImmediatePropagation(); fim(true); } };
+      $('dlgOk').onclick = () => fim(true); $('dlgNo').onclick = () => fim(false);
+      window.addEventListener('keydown', tecla, true);
+      dlg.hidden = false; $('dlgNo').focus();
+    });
+  }
+  $('vdOn').addEventListener('change', async (e) => {
+    const box = e.target;
+    if (box.checked) {
+      box.checked = false;   // só marca depois de confirmar
+      if (!(await confirmar('Ligar a venda automática DE VERDADE? Pokémon vendidos ao NPC não podem ser recuperados.', 'Venda automática', 'Ligar'))) return;
+      box.checked = true;
+    }
+    vdCmd({ type: 'ativo', value: box.checked });
   });
-  $('vdSim').addEventListener('change', (e) => { if (!e.target.checked && vd && vd.ativo && !confirm('Sair do modo simulação e vender de verdade?')) { e.target.checked = true; return; } enviarCfg(); });
   $('vdZerar').addEventListener('click', () => vdCmd({ type: 'zerar' }));
 
   // sub-abas genéricas (PvE e PvP)
