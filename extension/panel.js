@@ -92,6 +92,28 @@
             <span class="slider"></span>
             <span class="lbl"><b>Ligar automaticamente ao se logar</b><small>desmarcado: a Auto Captura sempre começa desligada quando você entra no jogo</small></span>
           </label>
+          <label class="switch">
+            <input type="checkbox" id="capBeast">
+            <span class="slider"></span>
+            <span class="lbl"><b>Beast Ball em shiny e lendário</b><small>usa a melhor bola que você tiver (Beast → Ultra → Super → Great → Poke); nos demais, segue como hoje</small></span>
+          </label>
+          <div class="mut" id="capEspInfo"></div>
+          <label class="row" style="display:flex;align-items:center;gap:8px;margin-top:8px">
+            <span class="lbl"><b>Bola quando a tela do jogo está no modo Economia/Ultra</b><small>nesses modos a lista de caídos some e a captura é feita direto; escolha a bola (sem estoque, usa a primeira que tiver)</small></span>
+            <select id="capBolaTela"><option value="0">Automática (como o jogo)</option><option value="1">Poke Ball</option><option value="2">Great Ball</option><option value="3">Super Ball</option><option value="4">Ultra Ball</option><option value="5">Beast Ball</option></select>
+          </label>
+          <div class="mut" id="capTelaInfo"></div>
+          <label class="switch">
+            <input type="checkbox" id="capHud">
+            <span class="slider"></span>
+            <span class="lbl"><b>Mostrar meus dados nos modos Economia/Ultra</b><small>quadro na parte de baixo da tela, atualizado ao vivo</small></span>
+          </label>
+          <div class="hudsec" id="hudSec" style="display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 0 4px;font-size:12px">
+            <label><input type="checkbox" data-hs="recursos"> Bolas e gold</label>
+            <label><input type="checkbox" data-hs="captura"> Captura</label>
+            <label><input type="checkbox" data-hs="pvp"> PvP</label>
+            <label><input type="checkbox" data-hs="compras"> Compras</label>
+          </div>
         </div>
         </div>
         <div class="subp" data-g="pve" data-p="venda" hidden>

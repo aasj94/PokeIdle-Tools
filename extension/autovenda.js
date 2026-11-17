@@ -24,6 +24,7 @@
   const LENDARIOS = 'Articuno Zapdos Moltres Mewtwo Mew Raikou Entei Suicune Lugia Ho-Oh Celebi Regirock Regice Registeel Latias Latios Kyogre Groudon Rayquaza Jirachi Deoxys Uxie Mesprit Azelf Dialga Palkia Heatran Regigigas Giratina Cresselia Phione Manaphy Darkrai Shaymin Arceus Victini Cobalion Terrakion Virizion Tornadus Thundurus Reshiram Zekrom Landorus Kyurem Keldeo Meloetta Genesect Xerneas Yveltal Zygarde Diancie Hoopa Volcanion Silvally Tapu-Koko Tapu-Lele Tapu-Bulu Tapu-Fini Cosmog Cosmoem Solgaleo Lunala Necrozma Magearna Marshadow Zeraora Meltan Melmetal Nihilego Buzzwole Pheromosa Xurkitree Celesteela Kartana Guzzlord Poipole Naganadel Stakataka Blacephalon Zacian Zamazenta Eternatus Kubfu Urshifu Zarude Regieleki Regidrago Glastrier Spectrier Calyrex Enamorus Chien-Pao Ting-Lu Chi-Yu Wo-Chien Koraidon Miraidon Okidogi Munkidori Fezandipiti Ogerpon Terapagos Pecharunt'.toLowerCase().split(' ').map((s) => s.replace(/-/g, ' '));
   const nomeNorm = (n) => String(n || '').toLowerCase().replace(/[-_]/g, ' ');
   let extras = [];
+  window.__ateforpEhLendario = (nome) => ehLendario({ nome });   // usado pela captura (Beast Ball em lendário)
   const ehLendario = (p) => { const n = nomeNorm(p.nome); return LENDARIOS.some((l) => n.indexOf(l) !== -1) || extras.some((l) => l && n.indexOf(l) !== -1); };
 
   const PADRAO = {
