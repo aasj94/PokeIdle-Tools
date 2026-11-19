@@ -106,7 +106,7 @@
           <label class="switch">
             <input type="checkbox" id="capHud">
             <span class="slider"></span>
-            <span class="lbl"><b>Mostrar meus dados nos modos Economia/Ultra</b><small>quadro na parte de baixo da tela, atualizado ao vivo</small></span>
+            <span class="lbl"><b>Estatísticas para modo economia</b><small>quadro ao vivo nos modos Economia/Ultra (recursos, captura, PvP, compras). Dá para mover, redimensionar, minimizar e fixar</small></span>
           </label>
           <div class="hudsec" id="hudSec" style="display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 0 4px;font-size:12px">
             <label><input type="checkbox" data-hs="recursos"> Bolas e gold</label>
