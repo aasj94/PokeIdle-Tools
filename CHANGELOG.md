@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v2.3.18
+- **Reposição de estoque:** corrigido o caso em que a reposição passava a comprar de 1 em 1. Um ganho parcial (por exemplo, falta de ouro naquele momento) não é mais tratado como limite por compra; o limite só é aprendido quando o jogo avisa por mensagem. Depois de cada compra, a extensão espera o estoque do jogo assentar antes de medir o que entrou.
+- Ao atingir o mínimo, a compra continua sendo um único pedido até o valor de "compra até".
+
 ## v2.3.17 (a anterior publicada era a 2.3.13)
 - **Estatísticas para modo economia:** o quadro dos modos Economia/Ultra virou uma opção na aba Captura (ligar/desligar, com escolha das seções: bolas e gold, captura, PvP e compras).
 - O quadro abre à esquerda da tela, pode ser movido, redimensionado por todas as bordas e cantos, minimizado (vai para o canto inferior direito) e fixado (trava posição e tamanho). Tudo fica salvo.
