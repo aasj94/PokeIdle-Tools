@@ -585,12 +585,18 @@ function definirCaptura(v) {
       dados.ultErro = null;
       if (!enviarJogo({ t: 'shop.buy', kind: it.kind, id: it.id, qty: qtd })) return { erroConexao: true, ganhou: tem - inicio };
       lotes++;
-      await esperar(lotes === 1 ? 1200 : 700);
-      const novo = quantidade(it);
+      await esperar(lotes === 1 ? 1000 : 600);
+      let novo = quantidade(it);
+      for (let k = 0; k < 6; k++) {    // espera o estado do jogo assentar (chega aos poucos); só então mede o quanto entrou
+        await esperar(450);
+        const n2 = quantidade(it);
+        if (n2 === novo && (novo > tem || k >= 1)) break;
+        novo = n2;
+      }
       const ganho = novo - tem;
       if (ganho >= qtd) { tem = novo; tentativa = null; continue; }
       if (ganho > 0) {                 // o servidor aceitou menos do que o pedido: aprende o lote
-        tem = novo; capLote[it.chave] = ganho; tentativa = null; semGanho = 0;
+        tem = novo; tentativa = null; semGanho = 0;   // não aprende o lote aqui: ganho parcial pode ser só falta de ouro (aprender isso travaria as compras de 1 em 1)
         if (ganho < qtd && c.ate - tem > 0 && (!dados.ultErro || /ouro|gold|moeda|coin|dinheiro|saldo|insuficiente/i.test(dados.ultErro.txt))) { nota = 'ouro acabou?'; }
         continue;
       }
