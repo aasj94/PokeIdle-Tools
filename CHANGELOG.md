@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## v2.3.17 (a anterior publicada era a 2.3.13)
+- **Estatísticas para modo economia:** o quadro dos modos Economia/Ultra virou uma opção na aba Captura (ligar/desligar, com escolha das seções: bolas e gold, captura, PvP e compras).
+- O quadro abre à esquerda da tela, pode ser movido, redimensionado por todas as bordas e cantos, minimizado (vai para o canto inferior direito) e fixado (trava posição e tamanho). Tudo fica salvo.
+- Mostra o Pokémon que está sendo caçado.
+- (2.3.14 a 2.3.16 foram versões internas deste mesmo ajuste.)
+
 ## v2.3.13 (a anterior publicada era a 2.3.10; a 2.3.12 foi publicada sem o número ser trocado no pacote)
 - **Captura nos modos Economia e Ultra Economia:** a Auto Captura passa a funcionar mesmo sem a lista de Pokémon na tela, usando os avisos da batalha (derrotado, bola, fugiu, capturado).
 - Quem fugiu depois de uma bola que não segurou não é mais lançado de novo; os outros derrotados são tentados em rodízio (shiny e lendários primeiro).

@@ -340,21 +340,127 @@ function atualizarHud() {
   const txt = JSON.stringify(blocos);
   if (txt === hudTxt && hudEl) return;
   hudTxt = txt;
-  if (!hudEl) {
-    hudEl = document.createElement('div');
-    hudEl.id = 'ateforp-hud-eco';
-    hudEl.style.cssText = 'position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:2147483000;width:min(94vw,680px);max-height:46vh;overflow:hidden;padding:8px 14px;border-radius:10px;background:rgba(18,26,40,.93);border:1px solid #3a557a;color:#e8eef8;font:600 12px/1.45 system-ui,sans-serif;text-align:left;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.5)';
-    document.documentElement.appendChild(hudEl);   // no <html>, porque o modo Ultra dá display:none em tudo que é filho direto do <body>
-  }
-  hudEl.innerHTML = '';
-  const topo = document.createElement('div'); topo.style.cssText = 'font-size:10px;letter-spacing:.06em;opacity:.7;text-transform:uppercase;text-align:center'; topo.textContent = 'PokeIdle Tools by Ateforp';
-  hudEl.append(topo);
+  if (!hudEl) criarHud();
+  const corpo = hudEl.__corpo;
+  corpo.innerHTML = '';
   for (const b of blocos) {
     const cx = document.createElement('div'); cx.style.cssText = 'margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.1)';
     const h = document.createElement('div'); h.style.cssText = 'font-size:10px;opacity:.65;text-transform:uppercase;letter-spacing:.05em'; h.textContent = b.titulo; cx.append(h);
     for (const ln of b.linhas) { const d = document.createElement('div'); d.style.cssText = 'font-size:' + (ln.forte ? '13px' : '11.5px') + (ln.alerta ? ';color:#ffd27a' : ''); d.textContent = ln.t; cx.append(d); }
-    hudEl.append(cx);
+    corpo.append(cx);
   }
+  if (hudEl.__semAltura && !hudEl.__min) { const alvo = Math.min(Math.round(innerHeight * 0.8), hudEl.__corpo.scrollHeight + 8 + 32); hudEl.style.height = alvo + 'px'; hudEl.__hAntes = alvo; hudEl.__semAltura = false; }
+}
+// quadro movível / redimensionável / minimizável; nasce no canto esquerdo para não cobrir a tela do jogo
+const HUD_POS_KEY = 'ateforp-hud-pos';
+function hudLerPos() { try { const o = JSON.parse(localStorage.getItem(HUD_POS_KEY) || 'null'); if (o && typeof o === 'object') return o; } catch (e) { /* ignora */ } return {}; }
+function hudSalvarPos() {
+  if (!hudEl) return;
+  try {
+    const o = hudLerPos(); const r = hudEl.getBoundingClientRect();
+    o.x = Math.round(r.left); o.y = Math.round(r.top); o.min = !!hudEl.__min; o.fix = !!hudEl.__fix;
+    if (hudEl.__min) { const q = hudEl.__pre; if (q) { o.pre = { x: Math.round(q.x), y: Math.round(q.y), w: Math.round(q.w), h: Math.round(q.h) }; o.w = o.pre.w; o.h = o.pre.h; } }
+    else { o.w = Math.round(r.width); o.h = Math.round(r.height); delete o.pre; }
+    localStorage.setItem(HUD_POS_KEY, JSON.stringify(o));
+  } catch (e) { /* ignora */ }
+}
+function hudAjustar() {   // mantém o quadro inteiro dentro da janela
+  if (!hudEl) return;
+  const r = hudEl.getBoundingClientRect();
+  const x = Math.max(0, Math.min(r.left, innerWidth - Math.min(r.width, 80)));
+  const y = Math.max(0, Math.min(r.top, innerHeight - 30));
+  hudEl.style.left = x + 'px'; hudEl.style.top = y + 'px';
+}
+function criarHud() {
+  const p = hudLerPos();
+  hudEl = document.createElement('div');
+  hudEl.id = 'ateforp-hud-eco';
+  const temH = Number(p.h) > 0;
+  const LARG_MIN = 230;
+  const w = p.min ? LARG_MIN : Math.max(220, Math.min(Number(p.w) || 400, innerWidth - 16));
+  const h = temH ? Math.max(90, Math.min(Number(p.h), innerHeight - 16)) : 0;   // sem altura salva: ajusta ao conteúdo
+  const x0 = Number.isFinite(p.x) ? p.x : Math.max(10, Math.round(innerWidth * 0.04));
+  const y0 = Number.isFinite(p.y) ? p.y : Math.max(10, Math.round(innerHeight * 0.27));
+  hudEl.style.cssText = 'position:fixed;left:' + x0 + 'px;top:' + y0 + 'px;z-index:2147483000;width:' + w + 'px;' + (h ? 'height:' + h + 'px;' : '') + 'min-width:200px;min-height:34px;max-width:96vw;max-height:96vh;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box;border-radius:10px;background:rgba(18,26,40,.95);border:1px solid #3a557a;color:#e8eef8;font:600 12px/1.45 system-ui,sans-serif;text-align:left;pointer-events:auto;box-shadow:0 4px 14px rgba(0,0,0,.5)';
+  const topo = document.createElement('div');
+  topo.style.cssText = 'flex:none;display:flex;align-items:center;gap:6px;padding:6px 8px 4px 12px;background:rgba(18,26,40,.98);cursor:move;touch-action:none;user-select:none';
+  const tit = document.createElement('div'); tit.style.cssText = 'flex:1;font-size:10px;letter-spacing:.06em;opacity:.75;text-transform:uppercase'; tit.textContent = 'PokeIdle Tools by Ateforp';
+  const bt = document.createElement('button'); bt.type = 'button'; bt.title = 'Minimizar / restaurar';
+  bt.style.cssText = 'cursor:pointer;width:22px;height:20px;border:1px solid #3a557a;border-radius:5px;background:#1f3150;color:#e8eef8;font:700 12px/1 system-ui;padding:0';
+  const pin = document.createElement('button'); pin.type = 'button'; pin.title = 'Fixar: trava a posição e o tamanho';
+  pin.style.cssText = bt.style.cssText;
+  topo.append(tit, pin, bt);
+  const rolagem = document.createElement('div'); rolagem.style.cssText = 'flex:1 1 auto;min-height:0;overflow:auto;padding:0 12px 8px';
+  const corpo = document.createElement('div'); rolagem.append(corpo);
+  hudEl.append(topo, rolagem);
+  hudEl.__corpo = corpo; hudEl.__rolagem = rolagem; hudEl.__min = !!p.min; hudEl.__fix = !!p.fix; hudEl.__hAntes = h || (p.pre && p.pre.h) || 0; hudEl.__semAltura = !h && !p.min; hudEl.__pre = (p.min && p.pre) ? p.pre : null;
+  // alças de redimensionamento: 4 lados + 4 cantos
+  const alcas = [];
+  const defs = { n: 'top:-3px;left:10px;right:10px;height:7px;cursor:ns-resize', s: 'bottom:-3px;left:10px;right:10px;height:7px;cursor:ns-resize', w: 'left:-3px;top:10px;bottom:10px;width:7px;cursor:ew-resize', e: 'right:-3px;top:10px;bottom:10px;width:7px;cursor:ew-resize', nw: 'left:-3px;top:-3px;width:12px;height:12px;cursor:nwse-resize', ne: 'right:-3px;top:-3px;width:12px;height:12px;cursor:nesw-resize', sw: 'left:-3px;bottom:-3px;width:12px;height:12px;cursor:nesw-resize', se: 'right:-3px;bottom:-3px;width:12px;height:12px;cursor:nwse-resize' };
+  for (const k in defs) {
+    const a = document.createElement('div'); a.dataset.alca = k; a.style.cssText = 'position:absolute;z-index:2;touch-action:none;' + defs[k];
+    let st = null;
+    a.addEventListener('pointerdown', (e) => {
+      if (hudEl.__fix || hudEl.__min || (e.button !== undefined && e.button !== 0)) return;
+      const r = hudEl.getBoundingClientRect(); st = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, w: r.width, h: r.height };
+      try { a.setPointerCapture(e.pointerId); } catch (x) { /* ignora */ }
+      e.preventDefault(); e.stopPropagation();
+    });
+    a.addEventListener('pointermove', (e) => {
+      if (!st) return;
+      const dx = e.clientX - st.x, dy = e.clientY - st.y, MW = 200, MH = 90;
+      let l = st.l, t = st.t, w = st.w, h = st.h;
+      if (k.includes('e')) w = Math.max(MW, st.w + dx);
+      if (k.includes('s')) h = Math.max(MH, st.h + dy);
+      if (k.includes('w')) { w = Math.max(MW, st.w - dx); l = st.l + (st.w - w); }
+      if (k.includes('n')) { h = Math.max(MH, st.h - dy); t = st.t + (st.h - h); }
+      hudEl.style.left = l + 'px'; hudEl.style.top = t + 'px'; hudEl.style.width = w + 'px'; hudEl.style.height = h + 'px';
+      hudEl.__semAltura = false;
+    });
+    const fim = () => { if (!st) return; st = null; hudAjustar(); hudSalvarPos(); };
+    a.addEventListener('pointerup', fim); a.addEventListener('pointercancel', fim);
+    hudEl.append(a); alcas.push(a);
+  }
+  hudEl.__alcas = alcas;
+  const aplicarFix = () => {
+    pin.textContent = '📌'; pin.style.opacity = hudEl.__fix ? '1' : '.45'; pin.style.background = hudEl.__fix ? '#3a557a' : '#1f3150';
+    topo.style.cursor = hudEl.__fix ? 'default' : 'move';
+    for (const a of alcas) a.style.display = (hudEl.__fix || hudEl.__min) ? 'none' : '';
+  };
+  pin.addEventListener('click', (e) => { e.stopPropagation(); hudEl.__fix = !hudEl.__fix; aplicarFix(); hudSalvarPos(); });
+  pin.addEventListener('pointerdown', (e) => e.stopPropagation());
+  const aplicarMin = (inicio) => {
+    rolagem.style.display = hudEl.__min ? 'none' : '';
+    bt.textContent = hudEl.__min ? '▢' : '–';
+    if (hudEl.__min) {
+      if (!hudEl.__pre) { const r = hudEl.getBoundingClientRect(); hudEl.__pre = { x: r.left, y: r.top, w: r.width, h: r.height }; if (r.height > 60) hudEl.__hAntes = r.height; }
+      hudEl.style.height = 'auto'; hudEl.style.width = LARG_MIN + 'px';
+      if (!inicio) {   // minimizou agora: vai para o canto inferior direito da tela
+        const bh = hudEl.getBoundingClientRect().height || 34;
+        hudEl.style.left = Math.max(0, innerWidth - LARG_MIN - 12) + 'px'; hudEl.style.top = Math.max(0, innerHeight - bh - 12) + 'px';
+      }
+    } else {
+      const q = hudEl.__pre; hudEl.__pre = null;
+      if (q) { hudEl.style.left = q.x + 'px'; hudEl.style.top = q.y + 'px'; hudEl.style.width = q.w + 'px'; hudEl.__hAntes = q.h; }
+      if (hudEl.__hAntes) hudEl.style.height = Math.max(90, hudEl.__hAntes) + 'px'; else hudEl.style.height = '';
+    }
+    aplicarFix();
+  };
+  bt.addEventListener('click', (e) => { e.stopPropagation(); hudEl.__min = !hudEl.__min; aplicarMin(); hudAjustar(); hudSalvarPos(); });
+  bt.addEventListener('pointerdown', (e) => e.stopPropagation());
+  let arr = null;
+  topo.addEventListener('pointerdown', (e) => {
+    if (hudEl.__fix || (e.button !== undefined && e.button !== 0)) return;
+    const r = hudEl.getBoundingClientRect(); arr = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+    try { topo.setPointerCapture(e.pointerId); } catch (x) { /* ignora */ }
+  });
+  topo.addEventListener('pointermove', (e) => { if (!arr) return; hudEl.style.left = (e.clientX - arr.dx) + 'px'; hudEl.style.top = (e.clientY - arr.dy) + 'px'; });
+  const solta = () => { if (!arr) return; arr = null; hudAjustar(); hudSalvarPos(); };
+  topo.addEventListener('pointerup', solta); topo.addEventListener('pointercancel', solta);
+  topo.addEventListener('dblclick', () => bt.click());
+  addEventListener('resize', () => { try { hudAjustar(); } catch (x) { /* ignora */ } });
+  document.documentElement.appendChild(hudEl);   // no <html>, porque o modo Ultra dá display:none em tudo que é filho direto do <body>
+  aplicarMin(true); aplicarFix(); hudAjustar();
 }
 setInterval(() => { try { atualizarHud(); } catch (err) { /* ignora */ } }, 1000);
 let timerEspecial = null;

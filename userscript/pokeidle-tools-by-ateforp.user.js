@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.13
+// @version      2.3.17
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -1074,21 +1074,127 @@ function atualizarHud() {
   const txt = JSON.stringify(blocos);
   if (txt === hudTxt && hudEl) return;
   hudTxt = txt;
-  if (!hudEl) {
-    hudEl = document.createElement('div');
-    hudEl.id = 'ateforp-hud-eco';
-    hudEl.style.cssText = 'position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:2147483000;width:min(94vw,680px);max-height:46vh;overflow:hidden;padding:8px 14px;border-radius:10px;background:rgba(18,26,40,.93);border:1px solid #3a557a;color:#e8eef8;font:600 12px/1.45 system-ui,sans-serif;text-align:left;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.5)';
-    document.documentElement.appendChild(hudEl);   // no <html>, porque o modo Ultra dá display:none em tudo que é filho direto do <body>
-  }
-  hudEl.innerHTML = '';
-  const topo = document.createElement('div'); topo.style.cssText = 'font-size:10px;letter-spacing:.06em;opacity:.7;text-transform:uppercase;text-align:center'; topo.textContent = 'PokeIdle Tools by Ateforp';
-  hudEl.append(topo);
+  if (!hudEl) criarHud();
+  const corpo = hudEl.__corpo;
+  corpo.innerHTML = '';
   for (const b of blocos) {
     const cx = document.createElement('div'); cx.style.cssText = 'margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.1)';
     const h = document.createElement('div'); h.style.cssText = 'font-size:10px;opacity:.65;text-transform:uppercase;letter-spacing:.05em'; h.textContent = b.titulo; cx.append(h);
     for (const ln of b.linhas) { const d = document.createElement('div'); d.style.cssText = 'font-size:' + (ln.forte ? '13px' : '11.5px') + (ln.alerta ? ';color:#ffd27a' : ''); d.textContent = ln.t; cx.append(d); }
-    hudEl.append(cx);
+    corpo.append(cx);
   }
+  if (hudEl.__semAltura && !hudEl.__min) { const alvo = Math.min(Math.round(innerHeight * 0.8), hudEl.__corpo.scrollHeight + 8 + 32); hudEl.style.height = alvo + 'px'; hudEl.__hAntes = alvo; hudEl.__semAltura = false; }
+}
+// quadro movível / redimensionável / minimizável; nasce no canto esquerdo para não cobrir a tela do jogo
+const HUD_POS_KEY = 'ateforp-hud-pos';
+function hudLerPos() { try { const o = JSON.parse(localStorage.getItem(HUD_POS_KEY) || 'null'); if (o && typeof o === 'object') return o; } catch (e) { /* ignora */ } return {}; }
+function hudSalvarPos() {
+  if (!hudEl) return;
+  try {
+    const o = hudLerPos(); const r = hudEl.getBoundingClientRect();
+    o.x = Math.round(r.left); o.y = Math.round(r.top); o.min = !!hudEl.__min; o.fix = !!hudEl.__fix;
+    if (hudEl.__min) { const q = hudEl.__pre; if (q) { o.pre = { x: Math.round(q.x), y: Math.round(q.y), w: Math.round(q.w), h: Math.round(q.h) }; o.w = o.pre.w; o.h = o.pre.h; } }
+    else { o.w = Math.round(r.width); o.h = Math.round(r.height); delete o.pre; }
+    localStorage.setItem(HUD_POS_KEY, JSON.stringify(o));
+  } catch (e) { /* ignora */ }
+}
+function hudAjustar() {   // mantém o quadro inteiro dentro da janela
+  if (!hudEl) return;
+  const r = hudEl.getBoundingClientRect();
+  const x = Math.max(0, Math.min(r.left, innerWidth - Math.min(r.width, 80)));
+  const y = Math.max(0, Math.min(r.top, innerHeight - 30));
+  hudEl.style.left = x + 'px'; hudEl.style.top = y + 'px';
+}
+function criarHud() {
+  const p = hudLerPos();
+  hudEl = document.createElement('div');
+  hudEl.id = 'ateforp-hud-eco';
+  const temH = Number(p.h) > 0;
+  const LARG_MIN = 230;
+  const w = p.min ? LARG_MIN : Math.max(220, Math.min(Number(p.w) || 400, innerWidth - 16));
+  const h = temH ? Math.max(90, Math.min(Number(p.h), innerHeight - 16)) : 0;   // sem altura salva: ajusta ao conteúdo
+  const x0 = Number.isFinite(p.x) ? p.x : Math.max(10, Math.round(innerWidth * 0.04));
+  const y0 = Number.isFinite(p.y) ? p.y : Math.max(10, Math.round(innerHeight * 0.27));
+  hudEl.style.cssText = 'position:fixed;left:' + x0 + 'px;top:' + y0 + 'px;z-index:2147483000;width:' + w + 'px;' + (h ? 'height:' + h + 'px;' : '') + 'min-width:200px;min-height:34px;max-width:96vw;max-height:96vh;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box;border-radius:10px;background:rgba(18,26,40,.95);border:1px solid #3a557a;color:#e8eef8;font:600 12px/1.45 system-ui,sans-serif;text-align:left;pointer-events:auto;box-shadow:0 4px 14px rgba(0,0,0,.5)';
+  const topo = document.createElement('div');
+  topo.style.cssText = 'flex:none;display:flex;align-items:center;gap:6px;padding:6px 8px 4px 12px;background:rgba(18,26,40,.98);cursor:move;touch-action:none;user-select:none';
+  const tit = document.createElement('div'); tit.style.cssText = 'flex:1;font-size:10px;letter-spacing:.06em;opacity:.75;text-transform:uppercase'; tit.textContent = 'PokeIdle Tools by Ateforp';
+  const bt = document.createElement('button'); bt.type = 'button'; bt.title = 'Minimizar / restaurar';
+  bt.style.cssText = 'cursor:pointer;width:22px;height:20px;border:1px solid #3a557a;border-radius:5px;background:#1f3150;color:#e8eef8;font:700 12px/1 system-ui;padding:0';
+  const pin = document.createElement('button'); pin.type = 'button'; pin.title = 'Fixar: trava a posição e o tamanho';
+  pin.style.cssText = bt.style.cssText;
+  topo.append(tit, pin, bt);
+  const rolagem = document.createElement('div'); rolagem.style.cssText = 'flex:1 1 auto;min-height:0;overflow:auto;padding:0 12px 8px';
+  const corpo = document.createElement('div'); rolagem.append(corpo);
+  hudEl.append(topo, rolagem);
+  hudEl.__corpo = corpo; hudEl.__rolagem = rolagem; hudEl.__min = !!p.min; hudEl.__fix = !!p.fix; hudEl.__hAntes = h || (p.pre && p.pre.h) || 0; hudEl.__semAltura = !h && !p.min; hudEl.__pre = (p.min && p.pre) ? p.pre : null;
+  // alças de redimensionamento: 4 lados + 4 cantos
+  const alcas = [];
+  const defs = { n: 'top:-3px;left:10px;right:10px;height:7px;cursor:ns-resize', s: 'bottom:-3px;left:10px;right:10px;height:7px;cursor:ns-resize', w: 'left:-3px;top:10px;bottom:10px;width:7px;cursor:ew-resize', e: 'right:-3px;top:10px;bottom:10px;width:7px;cursor:ew-resize', nw: 'left:-3px;top:-3px;width:12px;height:12px;cursor:nwse-resize', ne: 'right:-3px;top:-3px;width:12px;height:12px;cursor:nesw-resize', sw: 'left:-3px;bottom:-3px;width:12px;height:12px;cursor:nesw-resize', se: 'right:-3px;bottom:-3px;width:12px;height:12px;cursor:nwse-resize' };
+  for (const k in defs) {
+    const a = document.createElement('div'); a.dataset.alca = k; a.style.cssText = 'position:absolute;z-index:2;touch-action:none;' + defs[k];
+    let st = null;
+    a.addEventListener('pointerdown', (e) => {
+      if (hudEl.__fix || hudEl.__min || (e.button !== undefined && e.button !== 0)) return;
+      const r = hudEl.getBoundingClientRect(); st = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, w: r.width, h: r.height };
+      try { a.setPointerCapture(e.pointerId); } catch (x) { /* ignora */ }
+      e.preventDefault(); e.stopPropagation();
+    });
+    a.addEventListener('pointermove', (e) => {
+      if (!st) return;
+      const dx = e.clientX - st.x, dy = e.clientY - st.y, MW = 200, MH = 90;
+      let l = st.l, t = st.t, w = st.w, h = st.h;
+      if (k.includes('e')) w = Math.max(MW, st.w + dx);
+      if (k.includes('s')) h = Math.max(MH, st.h + dy);
+      if (k.includes('w')) { w = Math.max(MW, st.w - dx); l = st.l + (st.w - w); }
+      if (k.includes('n')) { h = Math.max(MH, st.h - dy); t = st.t + (st.h - h); }
+      hudEl.style.left = l + 'px'; hudEl.style.top = t + 'px'; hudEl.style.width = w + 'px'; hudEl.style.height = h + 'px';
+      hudEl.__semAltura = false;
+    });
+    const fim = () => { if (!st) return; st = null; hudAjustar(); hudSalvarPos(); };
+    a.addEventListener('pointerup', fim); a.addEventListener('pointercancel', fim);
+    hudEl.append(a); alcas.push(a);
+  }
+  hudEl.__alcas = alcas;
+  const aplicarFix = () => {
+    pin.textContent = '📌'; pin.style.opacity = hudEl.__fix ? '1' : '.45'; pin.style.background = hudEl.__fix ? '#3a557a' : '#1f3150';
+    topo.style.cursor = hudEl.__fix ? 'default' : 'move';
+    for (const a of alcas) a.style.display = (hudEl.__fix || hudEl.__min) ? 'none' : '';
+  };
+  pin.addEventListener('click', (e) => { e.stopPropagation(); hudEl.__fix = !hudEl.__fix; aplicarFix(); hudSalvarPos(); });
+  pin.addEventListener('pointerdown', (e) => e.stopPropagation());
+  const aplicarMin = (inicio) => {
+    rolagem.style.display = hudEl.__min ? 'none' : '';
+    bt.textContent = hudEl.__min ? '▢' : '–';
+    if (hudEl.__min) {
+      if (!hudEl.__pre) { const r = hudEl.getBoundingClientRect(); hudEl.__pre = { x: r.left, y: r.top, w: r.width, h: r.height }; if (r.height > 60) hudEl.__hAntes = r.height; }
+      hudEl.style.height = 'auto'; hudEl.style.width = LARG_MIN + 'px';
+      if (!inicio) {   // minimizou agora: vai para o canto inferior direito da tela
+        const bh = hudEl.getBoundingClientRect().height || 34;
+        hudEl.style.left = Math.max(0, innerWidth - LARG_MIN - 12) + 'px'; hudEl.style.top = Math.max(0, innerHeight - bh - 12) + 'px';
+      }
+    } else {
+      const q = hudEl.__pre; hudEl.__pre = null;
+      if (q) { hudEl.style.left = q.x + 'px'; hudEl.style.top = q.y + 'px'; hudEl.style.width = q.w + 'px'; hudEl.__hAntes = q.h; }
+      if (hudEl.__hAntes) hudEl.style.height = Math.max(90, hudEl.__hAntes) + 'px'; else hudEl.style.height = '';
+    }
+    aplicarFix();
+  };
+  bt.addEventListener('click', (e) => { e.stopPropagation(); hudEl.__min = !hudEl.__min; aplicarMin(); hudAjustar(); hudSalvarPos(); });
+  bt.addEventListener('pointerdown', (e) => e.stopPropagation());
+  let arr = null;
+  topo.addEventListener('pointerdown', (e) => {
+    if (hudEl.__fix || (e.button !== undefined && e.button !== 0)) return;
+    const r = hudEl.getBoundingClientRect(); arr = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+    try { topo.setPointerCapture(e.pointerId); } catch (x) { /* ignora */ }
+  });
+  topo.addEventListener('pointermove', (e) => { if (!arr) return; hudEl.style.left = (e.clientX - arr.dx) + 'px'; hudEl.style.top = (e.clientY - arr.dy) + 'px'; });
+  const solta = () => { if (!arr) return; arr = null; hudAjustar(); hudSalvarPos(); };
+  topo.addEventListener('pointerup', solta); topo.addEventListener('pointercancel', solta);
+  topo.addEventListener('dblclick', () => bt.click());
+  addEventListener('resize', () => { try { hudAjustar(); } catch (x) { /* ignora */ } });
+  document.documentElement.appendChild(hudEl);   // no <html>, porque o modo Ultra dá display:none em tudo que é filho direto do <body>
+  aplicarMin(true); aplicarFix(); hudAjustar();
 }
 setInterval(() => { try { atualizarHud(); } catch (err) { /* ignora */ } }, 1000);
 let timerEspecial = null;
@@ -3013,7 +3119,7 @@ function definirCaptura(v) {
               <label class="switch">
                 <input type="checkbox" id="capHud">
                 <span class="slider"></span>
-                <span class="lbl"><b>Mostrar meus dados nos modos Economia/Ultra</b><small>quadro na parte de baixo da tela, atualizado ao vivo</small></span>
+                <span class="lbl"><b>Estatísticas para modo economia</b><small>quadro ao vivo nos modos Economia/Ultra (recursos, captura, PvP, compras). Dá para mover, redimensionar, minimizar e fixar</small></span>
               </label>
               <div class="hudsec" id="hudSec" style="display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 0 4px;font-size:12px">
                 <label><input type="checkbox" data-hs="recursos"> Bolas e gold</label>
