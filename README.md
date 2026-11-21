@@ -2,13 +2,14 @@
 
 Configurações de PvE, PvP, compras, tudo automático e num painel só, para o [PokeIdle](https://pokeidle.io/).
 
-Versão atual: **2.3.10**
+Versão atual: **2.3.18**
 
 ## O que faz
-- **Reposição de itens:** compra automática de bolas, poções e revives até o limite que você definir (máx. 9999 por item).
-- **Captura:** Auto Captura (liga/desliga e "ligar ao se logar").
+- **Reposição de itens:** compra automática de bolas, poções e revives. Ao cair abaixo do mínimo, compra **de uma vez** até o valor de "compra até" (máx. 9999 por item). Se o jogo limitar a quantidade por compra ou o estoque, a extensão se adapta.
+- **Captura:** Auto Captura (liga/desliga e "ligar ao se logar"). Funciona também nos modos **Economia** e **Ultra Economia** do jogo, sem precisar da lista de Pokémon na tela, e tenta todos os Pokémon derrotados em rodízio. Opções: bola usada nesses modos e **Beast Ball** opcional para shiny e lendários.
+- **Estatísticas para modo economia:** quadro ao vivo nos modos Economia/Ultra com bolas e gold, Pokémon sendo caçado, vistos/derrotados/capturados/fugiram, PvP e compras. Pode ser ligado ou desligado, escolhendo as seções, e dá para **mover, redimensionar (por todas as bordas), minimizar e fixar**; a posição fica salva.
 - **Venda de Pokémon:** vende ou envia para a Coleção, sozinho, segundo regras de P, IV, Q e N, com prévia (Vender / Coleção / Sem ação) e registro.
-- **PvP:** entra na fila automaticamente, com histórico de partidas.
+- **PvP:** entra na fila automaticamente (também ao logar), com histórico de partidas. Não se desliga sozinho após falhas: tenta de novo com espera crescente.
 - **Mercado RMT:** compra automática e histórico.
 - Painel redimensionável e maximizável, com caixa de ferramentas no cartão do jogador.
 
