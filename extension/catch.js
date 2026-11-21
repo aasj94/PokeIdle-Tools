@@ -14,7 +14,7 @@
   const CHAVE = 'autocaptura_ativo';
   const CHAVE_CFG = 'autocaptura_cfg3';
   const PADRAO = { ativo: true, intervaloMs: 2000 };
-  const CFG_PADRAO = { autoLigar: false, captura: { beastEspecial: false, bolaTela: 0, hudEco: true, hudSec: { recursos: true, captura: true, pvp: true, compras: true } }, estoque: { ativo: false, intervaloMin: 5, itens: {}, beast: { ativo: false, abaixo: 0, ate: 0 } } };
+  const CFG_PADRAO = { autoLigar: false, captura: { bolaTela: 0, hudEco: true, hudSec: { recursos: true, captura: true, pvp: true, compras: true } }, estoque: { ativo: false, intervaloMin: 5, itens: {}, beast: { ativo: false, abaixo: 0, ate: 0 } } };
   const INICIO = Date.now();
 
   // ---------- configuração ----------
@@ -26,7 +26,7 @@
       const s = JSON.parse(localStorage.getItem(CHAVE_CFG) || 'null') || {};
       return {
         autoLigar: !!s.autoLigar,
-        captura: { beastEspecial: !!(s.captura && s.captura.beastEspecial), bolaTela: Number(s.captura && s.captura.bolaTela) || 0, hudEco: !(s.captura && s.captura.hudEco === false), hudSec: { recursos: !(s.captura && s.captura.hudSec && s.captura.hudSec.recursos === false), captura: !(s.captura && s.captura.hudSec && s.captura.hudSec.captura === false), pvp: !(s.captura && s.captura.hudSec && s.captura.hudSec.pvp === false), compras: !(s.captura && s.captura.hudSec && s.captura.hudSec.compras === false) } },
+        captura: { bolaTela: Number(s.captura && s.captura.bolaTela) || 0, hudEco: !(s.captura && s.captura.hudEco === false), hudSec: { recursos: !(s.captura && s.captura.hudSec && s.captura.hudSec.recursos === false), captura: !(s.captura && s.captura.hudSec && s.captura.hudSec.captura === false), pvp: !(s.captura && s.captura.hudSec && s.captura.hudSec.pvp === false), compras: !(s.captura && s.captura.hudSec && s.captura.hudSec.compras === false) } },
         estoque: {
           ...CFG_PADRAO.estoque, ...(s.estoque || {}),
           itens: { ...((s.estoque && s.estoque.itens) || {}) },
@@ -87,7 +87,7 @@
       try { const e = JSON.parse(txt); dados.ultErro = { em: Date.now(), txt: String((e && (e.msg || e.erro || e.mensagem || e.texto || e.message)) || '') }; } catch (err) { /* ignora */ }
     }
     // eventos de batalha (é por onde o jogo avisa quando um Pokémon aparece, cai ou é capturado): alimenta a contagem e a captura direta
-    if ((cfg2.captura.beastEspecial || ativo || cfg2.captura.hudEco) && txt.indexOf('"t":"batalha"') === 1 && txt.length < 60000
+    if ((ativo || cfg2.captura.hudEco) && txt.indexOf('"t":"batalha"') === 1 && txt.length < 60000
         && (txt.indexOf('"k":"spawn"') !== -1 || txt.indexOf('"k":"morte"') !== -1 || txt.indexOf('"k":"capturado"') !== -1 || txt.indexOf('"k":"bola"') !== -1 || txt.indexOf('"k":"fugiu"') !== -1)) {
       try {
         const f = JSON.parse(txt);
@@ -121,7 +121,7 @@
         }
       } catch (err) { /* ignora */ }
     }
-    if ((cfg2.captura.beastEspecial || ativo || cfg2.captura.hudEco) && txt.indexOf('"t":"campo') === 1) {   // quadros do campo (campo / campo.init): guarda quem é shiny, pois o jogo manda isso só uma vez (delta)
+    if ((ativo || cfg2.captura.hudEco) && txt.indexOf('"t":"campo') === 1) {   // quadros do campo (campo / campo.init): guarda quem é shiny, pois o jogo manda isso só uma vez (delta)
       if (txt.length < 80000 && (txt.indexOf('"mobs"') !== -1 || txt.indexOf('"fora"') !== -1)) {
         try {
           const f = JSON.parse(txt);
@@ -195,40 +195,7 @@
   // ---------- auto captura (clica no Pokémon caído) ----------
   let timerCaptura = null;
   function pararCaptura() { if (timerCaptura) clearInterval(timerCaptura); timerCaptura = null; if (typeof timerEspecial !== 'undefined' && timerEspecial) { clearInterval(timerEspecial); timerEspecial = null; } }
-  // Beast Ball em shiny e lendário (opcional): lança a melhor bola que você tiver (Beast → Ultra → Super → Great → Poke)
-const ORDEM_BOLAS = [5, 4, 3, 2, 1];
-const capEsp = { info: '', diag: '', lancadas: 0, vistos: new Map(), diagFeito: false };
-function tentarBolaEspecial(linhas) {
-  const e = eu();
-  const bolas = (e && e.balls) || {};
-  for (const linha of linhas) {
-    if (linha.offsetParent === null) continue;
-    const slot = linha.dataset ? linha.dataset.slot : null;
-    if (slot == null || slot === '') continue;
-    const quem = linha.querySelector('.caido-quem');
-    const nome = String(quem ? quem.textContent : linha.textContent).replace(/\s*Nv\s*\d+.*$/i, '').replace(/[✨⭐]/g, '').trim();
-    const no = mobsInfo.get(Number(slot)) || mobsInfo.get(slot) || null;
-    if (!capEsp.diagFeito) {
-      capEsp.diagFeito = true;
-      capEsp.diag = no ? 'detecção de shiny ativa (dados do Pokémon caído lidos do jogo)' : 'não achei os dados deste Pokémon caído; só reconheço lendário pelo nome (a opção precisa estar ligada antes de o Pokémon aparecer)';
-      console.log('[PokeIdle Tools by Ateforp] captura especial: ' + capEsp.diag); sujo = true;
-    }
-    const shiny = !!(no && no.shiny) || /shiny|✨/i.test(linha.textContent);
-    const lend = typeof window.__ateforpEhLendario === 'function' && window.__ateforpEhLendario(nome);
-    if (!shiny && !lend) continue;
-    const ult = capEsp.vistos.get(slot) || 0;
-    if (Date.now() - ult < 1800) return true;                    // já lançou agora há pouco: espera o resultado
-    const ballId = ORDEM_BOLAS.find((id) => (Number(bolas[id]) || 0) > 0);
-    if (!ballId) return false;                                    // sem nenhuma bola: deixa o jogo avisar
-    if (!enviarJogo({ t: 'ball.throw', ballId, slot: Number.isNaN(Number(slot)) ? slot : Number(slot) })) return false;
-    capEsp.vistos.set(slot, Date.now()); capEsp.lancadas++; ultLancado.slot = Number.isNaN(Number(slot)) ? slot : Number(slot); ultLancado.em = Date.now();
-    const bolaNome = ((dados.w && dados.w.catalogoBolas) || []).find((b) => b.id === ballId);
-    capEsp.info = (shiny ? 'Shiny' : 'Lendário') + ' ' + nome + ': ' + ((bolaNome && (bolaNome.nome || bolaNome.name)) || 'bola ' + ballId) + ' · ' + hora();
-    console.log('[PokeIdle Tools by Ateforp] captura especial: ' + capEsp.info); sujo = true;
-    return true;
-  }
-  return false;
-}
+const capEsp = { vistos: new Map() };   // último lançamento por slot (evita lançar duas vezes seguidas)
 // Sem a lista da tela (modo Economia / Ultra do jogo escondem ou não desenham os caídos): captura direto pela conexão,
 // com os dados do campo que o próprio jogo envia. A bola é a que você escolheu aqui (ou a 1ª com estoque, como o jogo faz).
 let ultSemTela = 0;
@@ -250,22 +217,16 @@ function capturarSemTela() {
     if (m.expira && m.expira - agora < 700) continue;
     if (agora - (capEsp.vistos.get(slot) || 0) < 1800) continue;
     if ((m.tent || 0) >= 10) continue;                       // não insiste para sempre num que o jogo não aceita
-    const esp = !!cfg2.captura.beastEspecial && (m.shiny || (typeof window.__ateforpEhLendario === 'function' && m.nome && window.__ateforpEhLendario(m.nome)));
-    cand.push({ slot, m, esp, resta: m.expira || 0 });
+    cand.push({ slot, m, resta: m.expira || 0 });
   }
   if (!cand.length) return false;
-  cand.sort((a, b) => (b.esp - a.esp) || ((a.m.tent || 0) - (b.m.tent || 0)) || (a.resta - b.resta));   // shiny/lendário primeiro; depois quem ainda não foi tentado
-  const { slot, m, esp } = cand[0];
-  const ballId = esp ? ORDEM_BOLAS.find((id) => (Number(bolas[id]) || 0) > 0) : bolaNormal(bolas);
+  cand.sort((a, b) => ((a.m.tent || 0) - (b.m.tent || 0)) || (a.resta - b.resta));   // quem ainda não foi tentado primeiro; depois quem some antes
+  const { slot, m } = cand[0];
+  const ballId = bolaNormal(bolas);
   if (!ballId) return false;
   if (!enviarJogo({ t: 'ball.throw', ballId, slot })) return false;
   m.tent = (m.tent || 0) + 1;
   ultSemTela = agora; capEsp.vistos.set(slot, agora); capSemTela.lancadas++; ultLancado.slot = slot; ultLancado.em = agora;
-  if (esp) {
-    capEsp.lancadas++;
-    const bn = ((dados.w && dados.w.catalogoBolas) || []).find((x) => x.id === ballId);
-    capEsp.info = (m.shiny ? 'Shiny' : 'Lendário') + ' ' + (m.nome || '') + ': ' + ((bn && (bn.nome || bn.name)) || 'bola ' + ballId) + ' · ' + hora();
-  }
   sujo = true;
   return true;
 }
@@ -312,7 +273,7 @@ function atualizarHud() {
     blocos.push({ titulo: 'Recursos', linhas: l });
   }
   if (sec.captura !== false) {
-    const l = [{ t: 'Auto captura ' + (ativo ? 'LIGADA' : 'desligada') + (capSemTela.lancadas ? '  ·  lançadas sem a lista: ' + capSemTela.lancadas : '') + (capEsp.info ? '  ·  último especial: ' + capEsp.info : '') }];
+    const l = [{ t: 'Auto captura ' + (ativo ? 'LIGADA' : 'desligada') + (capSemTela.lancadas ? '  ·  lançadas sem a lista: ' + capSemTela.lancadas : '') }];
     const tent = stats.capturados + stats.fugiram;
     const taxa = tent ? Math.round(stats.capturados / tent * 1000) / 10 : null;
     if (cacando) l.push({ t: 'Caçando: ' + cacando.nome + (cacando.level ? ' · nível ' + fmt(cacando.level) : '') + (cacando.shiny ? ' ✨ shiny' : '') });
@@ -472,16 +433,14 @@ function iniciarCaptura() {
     const linhas = Array.from(document.querySelectorAll('#caidos-lista .caido'));
     const b = linhas[0];
     if (!b || b.offsetParent === null) return;       // sem a lista visível, quem captura é a vigia rápida (por conexão)
-    if (cfg2.captura.beastEspecial) { try { if (tentarBolaEspecial(linhas)) return; } catch (err) { /* ignora e clica normal */ } }
     b.click();
   }, Math.max(500, PADRAO.intervaloMs));
-  // vigia rápida (0,2 s): shiny/lendário não esperam o ritmo normal; e, sem a lista na tela (modo Economia/Ultra), captura pela conexão
+  // vigia rápida (0,2 s): sem a lista na tela (modo Economia/Ultra), captura pela conexão
   timerEspecial = setInterval(() => {
     const linhas = Array.from(document.querySelectorAll('#caidos-lista .caido'));
     const visivel = linhas.length && linhas[0].offsetParent !== null;
     try {
-      if (visivel) { if (cfg2.captura.beastEspecial) tentarBolaEspecial(linhas); }
-      else capturarSemTela();
+      if (!visivel) capturarSemTela();
     } catch (err) { /* ignora */ }
   }, 200);
 }
@@ -896,7 +855,7 @@ function definirCaptura(v) {
     post({
       type: 'state',
       state: {
-        ativo, autoLigar: !!cfg2.autoLigar, capBeastEsp: !!cfg2.captura.beastEspecial, capBolaTela: cfg2.captura.bolaTela, capHud: !!cfg2.captura.hudEco, capHudSec: cfg2.captura.hudSec, capSemTela: capSemTela.lancadas, capInfo: capEsp.info, capDiag: capEsp.diag, capLancadas: capEsp.lancadas,
+        ativo, autoLigar: !!cfg2.autoLigar, capBolaTela: cfg2.captura.bolaTela, capHud: !!cfg2.captura.hudEco, capHudSec: cfg2.captura.hudSec, capSemTela: capSemTela.lancadas,
         conectado: !!(ws && ws.readyState === 1),
         pronto: pronto(),
         estoque: { ativo: cfg2.estoque.ativo, intervaloMin: cfg2.estoque.intervaloMin, itens: cfg2.estoque.itens, beast: cfg2.estoque.beast, status: status.estoque },
@@ -916,7 +875,6 @@ function definirCaptura(v) {
     switch (m.type) {
       case 'hello': sujo = true; ultSig = ''; break;
       case 'captura': definirCaptura(m.value); break;
-      case 'cap-beast': cfg2.captura.beastEspecial = !!m.value; capEsp.diagFeito = false; salvarCfg2(); sujo = true; break;
       case 'cap-hud': cfg2.captura.hudEco = !!m.value; salvarCfg2(); sujo = true; atualizarHud(); break;
       case 'cap-hud-sec': if (cfg2.captura.hudSec && m.chave in cfg2.captura.hudSec) { cfg2.captura.hudSec[m.chave] = !!m.value; salvarCfg2(); sujo = true; atualizarHud(); } break;
       case 'cap-bola': cfg2.captura.bolaTela = Math.max(0, Math.floor(Number(m.value)) || 0); salvarCfg2(); sujo = true; break;

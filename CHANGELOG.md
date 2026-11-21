@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.19
+- Removida a opção "Beast Ball em shiny e lendário" da aba Captura. A captura nos modos Economia/Ultra continua igual, usando a bola escolhida. (A reposição de Beast Ball da loja VIP é outra função e continua.)
+
 ## v2.3.18
 - **Reposição de estoque:** corrigido o caso em que a reposição passava a comprar de 1 em 1. Um ganho parcial (por exemplo, falta de ouro naquele momento) não é mais tratado como limite por compra; o limite só é aprendido quando o jogo avisa por mensagem. Depois de cada compra, a extensão espera o estoque do jogo assentar antes de medir o que entrou.
 - Ao atingir o mínimo, a compra continua sendo um único pedido até o valor de "compra até".

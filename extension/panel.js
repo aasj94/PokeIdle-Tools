@@ -92,15 +92,9 @@
             <span class="slider"></span>
             <span class="lbl"><b>Ligar automaticamente ao se logar</b><small>desmarcado: a Auto Captura sempre começa desligada quando você entra no jogo</small></span>
           </label>
-          <label class="switch">
-            <input type="checkbox" id="capBeast">
-            <span class="slider"></span>
-            <span class="lbl"><b>Beast Ball em shiny e lendário</b><small>usa a melhor bola que você tiver (Beast → Ultra → Super → Great → Poke); nos demais, segue como hoje</small></span>
-          </label>
-          <div class="mut" id="capEspInfo"></div>
           <label class="row" style="display:flex;align-items:center;gap:8px;margin-top:8px">
             <span class="lbl"><b>Bola quando a tela do jogo está no modo Economia/Ultra</b><small>nesses modos a lista de caídos some e a captura é feita direto; escolha a bola (sem estoque, usa a primeira que tiver)</small></span>
-            <select id="capBolaTela"><option value="0">Automática (como o jogo)</option><option value="1">Poke Ball</option><option value="2">Great Ball</option><option value="3">Super Ball</option><option value="4">Ultra Ball</option><option value="5">Beast Ball</option></select>
+            <select id="capBolaTela"><option value="0">Automática (como o jogo)</option><option value="1">Poke Ball</option><option value="2">Great Ball</option><option value="3">Super Ball</option><option value="4">Ultra Ball</option></select>
           </label>
           <div class="mut" id="capTelaInfo"></div>
           <label class="switch">
