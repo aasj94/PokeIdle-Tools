@@ -17,7 +17,6 @@
 - **Captura nos modos Economia e Ultra Economia:** a Auto Captura passa a funcionar mesmo sem a lista de Pokémon na tela, usando os avisos da batalha (derrotado, bola, fugiu, capturado).
 - Quem fugiu depois de uma bola que não segurou não é mais lançado de novo; os outros derrotados são tentados em rodízio (shiny e lendários primeiro).
 - **Quadro em tempo real nos modos Economia/Ultra:** recursos e bolas, gold, Pokémon sendo caçado, vistos/derrotados/capturados/fugiram/expiraram, PvP e compras. Pode ser ligado/desligado e por seções no painel (aba Captura).
-- Beast Ball opcional para shiny e lendários.
 - Ligar automaticamente ao logar (Captura e PvP) mais confiável; o PvP automático não se desliga mais sozinho após falhas (tenta de novo com espera crescente).
 - Contagem de "vistos" corrigida.
 
