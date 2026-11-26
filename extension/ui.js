@@ -1014,15 +1014,21 @@ function createUI(root) {
   const VERSAO = RELS[0] ? RELS[0].v : '';
   const cmpV = (a, b) => { const x = String(a).split('.').map(Number), y = String(b).split('.').map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) - (y[i] || 0); } return 0; };
   let nova = null, novaErro = '', novaVerif = 0, novaVerificando = false;
+  const URL_USERSCRIPT = 'https://raw.githubusercontent.com/aasj94/PokeIdle-Tools/main/userscript/pokeidle-tools-by-ateforp.user.js';
+  const ehExtensao = () => { try { return !!(chrome.runtime && chrome.runtime.id && chrome.runtime.sendMessage); } catch (e) { return false; } };
   function renderNovidades() {
     $('novVer').textContent = VERSAO ? 'versão instalada: ' + VERSAO : '';
     const av = $('novAviso');
     const quando = novaVerif ? ' Última verificação: ' + new Date(novaVerif).toLocaleTimeString('pt-BR') + '.' : '';
-    if (novaVerificando) av.textContent = 'Verificando…';
+    if (!ehExtensao()) {
+      av.textContent = 'Você está usando o userscript (versão ' + VERSAO + '). A página do jogo não deixa o script consultar o GitHub, então ele não sabe sozinho se há versão nova. Para atualizar com 1 clique: toque em "Atualizar userscript"; o Tampermonkey abre a tela de instalação, e você confirma em "Atualizar". (Também dá para usar "Verificar atualizações" no próprio Tampermonkey.)';
+      const dl2 = $('novBaixar'); if (dl2) { dl2.hidden = false; dl2.href = URL_USERSCRIPT; dl2.textContent = '⬇ Atualizar userscript'; }
+      const bt2 = $('novChecar'); if (bt2) bt2.hidden = true;
+    } else if (novaVerificando) av.textContent = 'Verificando…';
     else if (nova) av.textContent = 'Nova versão disponível: ' + nova.version + ' (a sua é a ' + VERSAO + '). A extensão não se atualiza sozinha: clique em "Baixar atualização", extraia o ZIP por cima da pasta da extensão e recarregue em chrome://extensions. No userscript, use "Atualizar script agora" no Tampermonkey/Greasy Fork.' + quando;
     else av.textContent = novaErro ? 'Não consegui verificar agora (' + novaErro + ').' + quando : 'Você está na versão mais recente (' + VERSAO + ').' + quando;
-    const dl = $('novBaixar'); if (dl) { dl.hidden = !nova; if (nova) dl.href = nova.download || 'https://github.com/aasj94/PokeIdle-Tools/raw/main/download/pokeidle-tools-by-ateforp.zip'; }
-    const bt = $('novChecar'); if (bt) bt.disabled = novaVerificando;
+    const dl = ehExtensao() ? $('novBaixar') : null; if (dl) { dl.textContent = '⬇ Baixar atualização'; dl.hidden = !nova; if (nova) dl.href = nova.download || 'https://github.com/aasj94/PokeIdle-Tools/raw/main/download/pokeidle-tools-by-ateforp.zip'; }
+    const bt = ehExtensao() ? $('novChecar') : null; if (bt) { bt.hidden = false; bt.disabled = novaVerificando; }
     const box = $('novLista'); box.textContent = '';
     RELS.forEach((r, i) => {
       const ul = el('ul', {}); for (const t of r.itens) ul.append(el('li', { textContent: t }));
@@ -1036,7 +1042,7 @@ function createUI(root) {
   function checarAtualizacao() {
     let canal = null;
     try { canal = chrome.runtime && chrome.runtime.id && chrome.runtime.sendMessage; } catch (e) { canal = null; }
-    if (!canal || !VERSAO) { novaErro = 'userscript: o Tampermonkey/Greasy Fork avisa sozinho'; renderNovidades(); return; }
+    if (!canal || !VERSAO) { renderNovidades(); return; }
     novaVerificando = true; renderNovidades();
     const fim = () => { novaVerificando = false; novaVerif = Date.now(); renderNovidades(); };
     const limite = setTimeout(() => { if (novaVerificando) { novaErro = 'sem resposta'; fim(); } }, 12000);

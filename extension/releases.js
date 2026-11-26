@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.29", "itens": ["Userscript: botão Atualizar userscript na aba Novidades (abre a tela de instalação do Tampermonkey: 1 clique para atualizar)."]},
  {"v": "2.3.28", "itens": ["Corrigido o botão Baixar atualização: agora baixa direto o ZIP da extensão (antes apontava para uma página de releases inexistente)."]},
  {"v": "2.3.27", "itens": ["Shiny Monitor: textos mais claros (resumo em linhas com legenda: desde quando monitora, quantos Pokémon apareceram, shinies, quantos seguidos sem shiny e média)."]},
  {"v": "2.3.26", "itens": ["Novidades: o botão Verificar atualização agora mostra \"Verificando…\", o resultado e a hora da última checagem, e aparece o botão Baixar atualização quando há versão nova."]},

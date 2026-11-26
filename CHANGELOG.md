@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.29
+- Userscript: botão **Atualizar userscript** na aba Novidades; abre a tela de instalação do Tampermonkey (1 clique para atualizar).
+
 ## v2.3.28
 - Corrigido o botão **Baixar atualização**: agora baixa direto o ZIP da extensão (pasta `download/`), em vez de uma página de releases inexistente.
 
