@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.31", "itens": ["Regras de Pokémon: novo botão \"Ver o que casa agora\" em cada regra. Abre a Consulta já com os filtros da regra e mostra os anúncios que ela compraria, sem comprar nada. Quando a compra automática está desligada, o painel avisa que nem a simulação avalia anúncios."]},
  {"v": "2.3.30", "itens": ["Regras de compra de Pokémon: dá para recolher cada regra (fica só nome, botão ligada, resumo do que compra e quantos já comprou); o estado de aberta/fechada é lembrado. Corrigido o contador \"Comprados\" que não acompanhava a quantidade digitada."]},
  {"v": "2.3.29", "itens": ["Userscript: botão Atualizar userscript na aba Novidades (abre a tela de instalação do Tampermonkey: 1 clique para atualizar)."]},
  {"v": "2.3.28", "itens": ["Corrigido o botão Baixar atualização: agora baixa direto o ZIP da extensão (antes apontava para uma página de releases inexistente)."]},

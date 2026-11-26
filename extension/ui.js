@@ -549,10 +549,22 @@ function createUI(root) {
     const aplicaCol = () => { const c = colapsada(); corpo.hidden = c; seta.textContent = c ? '▸ editar' : '▾ fechar'; };
     seta.addEventListener('click', () => { rpCol[r.id] = !colapsada(); try { localStorage.setItem('ateforp-rp-col', JSON.stringify(rpCol)); } catch (e) { /* ignora */ } aplicaCol(); });
     aplicaCol();
+    const ver = el('button', { className: 'icon', textContent: '🔍 Ver o que casa agora', title: 'Faz uma consulta (sem comprar nada) com os filtros desta regra e mostra os anúncios que ela compraria', onclick: () => {
+      const iv = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) iv[k] = r.ivs[k] == null ? null : r.ivs[k];
+      navTop = 'pokemon'; navPk = 'auto'; navAu = 'cons'; renderMercadoSub();
+      const set = (id, v) => { const x = $(id); if (x) x.value = v == null ? '' : String(v); };
+      set('csEsp', r.especie || ''); set('csPreco', r.precoMax ? short(r.precoMax) : ''); set('csOutl', r.outland || 'omitir'); set('csLim', 50);
+      if ($('csShiny')) $('csShiny').checked = !!r.shiny;
+      for (const k of ['p', 'iv', 'q', 'n']) set('cs_' + k, r[k]);
+      for (const k of Object.keys(iv)) set('csiv_' + k, iv[k]);
+      csSig = '';
+      rpCmd({ type: 'consultar', filtros: { ordem: 'baratos', limite: 50, especie: r.especie || '', precoMax: r.precoMax || 0, shiny: !!r.shiny, outland: r.outland || 'omitir', modo: r.modo === 'ou' ? 'ou' : 'e', p: r.p, iv: r.iv, q: r.q, n: r.n, ivs: iv, paginas: 15 } });
+    } });
     const cardEl = el('div', { className: 'card' + (valida ? '' : ' warn') },
       el('div', { className: 'row inline rcab' }, el('label', {}, ativo, ' ligada'), tituloEl, seta),
       resumoEl,
       compEl,
+      el('div', { className: 'btns' }, ver),
       corpo);
     const refaz = () => { textoComp(); tituloEl.textContent = titulo(); const x = resumoDe(r); resumoEl.textContent = x.txt; resumoEl.className = 'resumo' + (x.ok ? '' : ' bad'); };
     cardEl.addEventListener('input', refaz); cardEl.addEventListener('change', refaz);
@@ -562,7 +574,7 @@ function createUI(root) {
     if (!rp && !rpRegras) return;
     if (rp) {
       $('pkOn').checked = !!rp.ativo;
-      $('pkHint').textContent = rp.ativo ? (rp.cfg.simular ? 'ligada — SIMULAÇÃO (não compra)' : 'ligada — comprando de verdade') : 'desligada';
+      $('pkHint').textContent = rp.ativo ? (rp.cfg.simular ? 'ligada — SIMULAÇÃO (não compra)' : 'ligada — comprando de verdade') : 'desligada — nada é avaliado, nem em simulação';
       $('pkSim').checked = rp.cfg.simular !== false; $('pkSimHint').textContent = rp.cfg.simular !== false ? 'só avisa no registro o que compraria, sem comprar nada' : 'DESLIGADO: as regras compram de verdade';
       $('pkInfo').textContent = !rp.conectado ? 'Sem conexão com o jogo.' : !rp.lider ? 'Outra aba do jogo está cuidando das compras.' : (rp.msg || '') + (rp.stats && rp.stats.comprados ? ' · comprados: ' + rp.stats.comprados : '') + (rp.stats && rp.stats.falhas ? ' · falhas: ' + rp.stats.falhas : '');
       if (!emFocoRp() && root.activeElement !== $('pkInt')) $('pkInt').value = String(rp.cfg.intervaloS || 5);
