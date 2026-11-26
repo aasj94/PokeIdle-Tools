@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v2.3.34
+- Consulta sem resultados (ex.: shiny inexistente) agora termina e avisa "Nenhum Pokémon disponível com esses filtros", em vez de consultar para sempre (o jogo responde páginas vazias e a extensão as ignorava).
+- A quantidade máxima de resultados só limita o que é mostrado; a busca percorre até 30 páginas.
+
 ## v2.3.33
 - **Correção importante:** o mercado do jogo conta as páginas a partir de 0 e a extensão pedia a partir de 1, então nunca via a primeira página (mais baratos/mais novos). Corrigido na Consulta, nas regras e na Compra Imediata.
 

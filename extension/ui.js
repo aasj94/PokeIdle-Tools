@@ -561,7 +561,7 @@ function createUI(root) {
       for (const k of ['p', 'iv', 'q', 'n']) set('cs_' + k, r[k]); set('cs_nivMin', r.nivMin); set('cs_nivMax', r.nivMax);
       for (const k of Object.keys(iv)) set('csiv_' + k, iv[k]);
       csSig = '';
-      rpCmd({ type: 'consultar', filtros: { ordem: 'baratos', limite: 50, especie: r.especie || '', precoMax: r.precoMax || 0, shiny: !!r.shiny, outland: r.outland || 'omitir', modo: r.modo === 'ou' ? 'ou' : 'e', nivMin: r.nivMin, nivMax: r.nivMax, p: r.p, iv: r.iv, q: r.q, n: r.n, ivs: iv, paginas: 15 } });
+      rpCmd({ type: 'consultar', filtros: { ordem: 'baratos', limite: 50, especie: r.especie || '', precoMax: r.precoMax || 0, shiny: !!r.shiny, outland: r.outland || 'omitir', modo: r.modo === 'ou' ? 'ou' : 'e', nivMin: r.nivMin, nivMax: r.nivMax, p: r.p, iv: r.iv, q: r.q, n: r.n, ivs: iv, paginas: 30 } });
     } });
     const cardEl = el('div', { className: 'card' + (valida ? '' : ' warn') },
       el('div', { className: 'row inline rcab' }, el('label', {}, ativo, ' ligada'), tituloEl, seta),
@@ -730,7 +730,7 @@ function createUI(root) {
       $('csGo').addEventListener('click', () => {
         const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
         const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
-        rpCmd({ type: 'consultar', filtros: { ordem: $('csOrdem').value, limite: Number($('csLim').value) || 20, especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', nivMin: v('cs_nivMin'), nivMax: v('cs_nivMax'), p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: 15 } });
+        rpCmd({ type: 'consultar', filtros: { ordem: $('csOrdem').value, limite: Number($('csLim').value) || 20, especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', nivMin: v('cs_nivMin'), nivMax: v('cs_nivMax'), p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: 30 } });
       });
     }
     const c = rp && rp.cons; if (!c) return;

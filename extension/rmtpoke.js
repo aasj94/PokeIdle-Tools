@@ -269,7 +269,7 @@
       }
     }
     // consulta de disponibilidade (aba Consulta): lista tudo que bate nos filtros, sem comprar
-    if (pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em < 10000) {
+    if (pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em < 10000 && (m.ordem === undefined || m.ordem === cons.extra.ordem) && (m.pagina === undefined || Number(m.pagina) === cons.pag - 1)) {
       pendConsulta = null; cons.tent = 0;
       const ids = new Set(cons.rows.map((r) => r.id));
       for (const a of linhas) if (a.estado === 'aberto' && !ids.has(a.id) && casa(cons.regra, a)) cons.rows.push(a);
@@ -278,7 +278,7 @@
       const cheio = cons.rows.length >= cons.limite; if (cheio) cons.rows.length = cons.limite;
       const tot = Number(m.total) || 0, pp = Number(m.porPagina) || 24;
       if (!cheio && cons.pag < cons.pags && cons.pag * pp < tot && linhas.length) cons.msg = 'Consultando… página ' + cons.pag + ' · ' + cons.rows.length + ' encontrado(s).';
-      else { cons.carregando = false; cons.msg = cons.rows.length + ' Pokémon encontrado(s)' + (cheio ? ' (parei no limite de ' + cons.limite + ')' : '') + ' · ' + cons.total + ' anúncios vistos' + (tot > cons.total ? ' de ' + tot : '') + '.'; log('Consulta concluída: ' + cons.msg, 'info'); }
+      else { cons.carregando = false; cons.msg = !cons.rows.length ? (tot === 0 ? 'Nenhum Pokémon disponível com esses filtros no mercado agora.' : 'Nenhum Pokémon disponível com esses filtros (olhei ' + cons.total + ' anúncios' + (tot > cons.total ? ' de ' + tot : '') + ').') : cons.rows.length + ' Pokémon encontrado(s)' + (cheio ? ' (parei no limite de ' + cons.limite + ')' : '') + ' · ' + cons.total + ' anúncios vistos' + (tot > cons.total ? ' de ' + tot : '') + '.'; log('Consulta concluída: ' + cons.msg, 'info'); }
       sujo = true; return;
     }
     // resultados da busca da tela
@@ -324,7 +324,7 @@
     if (m6.indexOf('"t":"market"') === 1 || d.indexOf('"t":"market"') === 1) {
       if (/turnstile|captcha/i.test(d)) { ativo = false; S.msg = 'O jogo pediu verificação (anti-bot). Compra automática DESLIGADA — resolva no jogo e ligue de novo.'; log(S.msg, 'erro'); sujo = true; return; }
       if (d.indexOf('"aba":"meus"') !== -1) { try { aoMeus(JSON.parse(d)); } catch (e) { /* ignora */ } return; }
-      if (d.indexOf('"linhas"') !== -1 && d.indexOf('"pokemonId"') !== -1) { try { tratarLista(JSON.parse(d)); } catch (e) { /* ignora */ } }
+      if (d.indexOf('"linhas"') !== -1 && (d.indexOf('"pokemonId"') !== -1 || d.indexOf('"linhas":[]') !== -1)) { try { tratarLista(JSON.parse(d)); } catch (e) { /* ignora */ } }
       else if (emVoo.size) for (const v of emVoo.values()) { if (d.indexOf(String(v.alvo.id)) !== -1) v.alvo.frame = d.slice(0, 200); }
       return;
     }
@@ -501,7 +501,7 @@
     if (r.precoMax < 1e15) extra.precoMax = String(r.precoMax);
     if (r.shiny) extra.soShiny = true;
     extra.semOutland = r.outland === 'omitir'; extra.ordem = ordemOk(o.ordem);
-    cons = { rows: [], carregando: true, total: 0, msg: 'Consultando…', em: Date.now(), regra: r, pag: 0, pags: Math.max(1, Math.min(20, Math.floor(num(o.paginas) || 10))), limite: Math.max(1, Math.min(500, Math.floor(num(o.limite) || 20))), extra };
+    cons = { rows: [], carregando: true, total: 0, msg: 'Consultando…', em: Date.now(), regra: r, pag: 0, pags: Math.max(1, Math.min(40, Math.floor(num(o.paginas) || 10))), limite: Math.max(1, Math.min(500, Math.floor(num(o.limite) || 20))), extra };
     pendConsulta = null; fila = [];
     log('Consulta iniciada: ' + (r.especie || 'todas as espécies') + (r.precoMax < 1e15 ? ' até ' + fmtN(r.precoMax) : '') + ', até ' + cons.pags + ' página(s)', 'info');
     sujo = true;
