@@ -35,7 +35,7 @@
   const REFRESCO_MS = 9000;           // antes da liberação, confere de novo o preço do anúncio escolhido
 
   // ---------- configuração ----------
-  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [] };
+  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], simular: true };
   let cfg = JSON.parse(JSON.stringify(PADRAO));
   const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
   function normRegra(r) {
@@ -71,6 +71,7 @@
     if (num(c.intervaloS) >= INTERVALO_MIN && num(c.intervaloS) <= 600) o.intervaloS = num(c.intervaloS);
     if (num(c.antecipaMs) >= 0 && num(c.antecipaMs) <= 1000) o.antecipaMs = Math.floor(num(c.antecipaMs));
     if (Array.isArray(c.regras)) o.regras = c.regras.slice(0, 20).map(normRegra);
+    if (c.simular === false) o.simular = false;
     if (Array.isArray(c.renova)) o.renova = c.renova.slice(0, 30).map(normRen);
     return o;
   }
@@ -94,6 +95,7 @@
   }
   setInterval(() => { if (logSujo) { logSujo = false; try { localStorage.setItem(CHAVE + '_log', JSON.stringify(logs)); } catch (e) { /* ignora */ } } }, 3000);
   const alvos = new Map();            // id do anúncio -> alvo agendado (Compra Imediata ou regra)
+  const simVistos = new Set();
   const tentado = new Map();          // id do anúncio -> quando foi pedido
   let busca = { rows: [], em: 0, carregando: false, total: 0, msg: '' };
   let cons = { rows: [], carregando: false, total: 0, msg: '', em: 0, regra: null, pag: 0, pags: 0, extra: null };
@@ -120,6 +122,9 @@
       p: Number(f.potencia) || 0, iv: Number(f.ivTotal) || 0, q: milesimos(f.quality), n: milesimos(f.nota)
     };
   }
+
+  const ordemOk = (v) => (v === 'baratos' || v === 'caros' ? v : 'recentes');
+  const IMED = { ativo: false, limite: 5, comprados: 0 };
 
   // ---------- regras ----------
   const IVS = ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'];
@@ -207,7 +212,7 @@
     const a = v.alvo;
     a.status = status === 'comprado' ? 'comprado' : 'falhou'; a.msg = motivo || (status === 'comprado' ? 'comprado!' : '');
     if (status === 'comprado') {
-      S.comprados++;
+      S.comprados++; if (a.origem === 'imediata') IMED.comprados++;
       if (a.regraId) { const r = cfg.regras.find((x) => x.id === a.regraId); if (r) { r.comprados++; salvar(); } }
     } else S.falhas++;
     salvarHist(); sujo = true;
@@ -228,6 +233,8 @@
       if (alvo.status === 'agendado') {
         if (alvo.estado && alvo.estado !== 'aberto') { alvo.status = 'falhou'; alvo.msg = 'anúncio não está mais aberto'; log('Cancelado ' + alvo.nome + ' (anúncio ' + alvo.id + '): não está mais aberto (' + alvo.estado + ')', 'erro'); sujo = true; continue; }
         const falta = alvo.compravelEm - t;
+        if (alvo.origem === 'imediata' && !IMED.ativo) { if (alvo.msg !== 'Compra Imediata desligada: não vou comprar') { alvo.msg = 'Compra Imediata desligada: não vou comprar'; sujo = true; } continue; }
+        if (alvo.origem === 'imediata' && IMED.comprados >= IMED.limite) { alvo.status = 'falhou'; alvo.msg = 'limite de ' + IMED.limite + ' compra(s) atingido'; log('Cancelado ' + alvo.nome + ' (anúncio ' + alvo.id + '): ' + alvo.msg, 'info'); sujo = true; continue; }
         if (falta <= cfg.antecipaMs) {
           if (alvo.preco > alvo.precoMax) { alvo.status = 'falhou'; alvo.msg = 'preço subiu acima do máximo (' + fmtN(alvo.preco) + ')'; log('Cancelado ' + alvo.nome + ' (anúncio ' + alvo.id + '): ' + alvo.msg, 'erro'); sujo = true; continue; }
           dispararCompra(alvo, falta > 0 ? 'liberação em ' + Math.max(0, Math.round(falta)) + ' ms' : 'liberado');
@@ -265,10 +272,11 @@
       const ids = new Set(cons.rows.map((r) => r.id));
       for (const a of linhas) if (a.estado === 'aberto' && !ids.has(a.id) && casa(cons.regra, a)) cons.rows.push(a);
       cons.total += linhas.length;
-      cons.rows.sort((x, y) => x.preco - y.preco);
+      if (cons.extra.ordem === 'caros') cons.rows.sort((x, y) => y.preco - x.preco); else if (cons.extra.ordem === 'baratos') cons.rows.sort((x, y) => x.preco - y.preco);
+      const cheio = cons.rows.length >= cons.limite; if (cheio) cons.rows.length = cons.limite;
       const tot = Number(m.total) || 0, pp = Number(m.porPagina) || 24;
-      if (cons.pag < cons.pags && cons.pag * pp < tot && linhas.length) cons.msg = 'Consultando… página ' + cons.pag + ' · ' + cons.rows.length + ' encontrado(s).';
-      else { cons.carregando = false; cons.msg = cons.rows.length + ' Pokémon encontrado(s) (' + cons.total + ' anúncios vistos' + (tot > cons.total ? ' de ' + tot : '') + ').'; log('Consulta concluída: ' + cons.msg, 'info'); }
+      if (!cheio && cons.pag < cons.pags && cons.pag * pp < tot && linhas.length) cons.msg = 'Consultando… página ' + cons.pag + ' · ' + cons.rows.length + ' encontrado(s).';
+      else { cons.carregando = false; cons.msg = cons.rows.length + ' Pokémon encontrado(s)' + (cheio ? ' (parei no limite de ' + cons.limite + ')' : '') + ' · ' + cons.total + ' anúncios vistos' + (tot > cons.total ? ' de ' + tot : '') + '.'; log('Consulta concluída: ' + cons.msg, 'info'); }
       sujo = true; return;
     }
     // resultados da busca da tela
@@ -276,7 +284,8 @@
       pendConsulta = null;
       const ret = linhas.filter((a) => a.estado === 'aberto' && a.compravelEm > t && !(busca.outland === 'so' && a.speciesId < 2001) && !(busca.outland === 'omitir' && a.speciesId >= 2001));
       const ids = new Set(busca.rows.map((r) => r.id));
-      for (const a of ret) if (!ids.has(a.id)) busca.rows.push(a);
+      for (const a of ret) if (!ids.has(a.id) && busca.rows.length < busca.limite) busca.rows.push(a);
+      if (busca.rows.length >= busca.limite) fila = [];
       busca.total = (busca.total || 0) + linhas.length;
       if (fila.length) busca.msg = 'Buscando… ' + busca.rows.length + ' em retenção até agora.';
       else { busca.carregando = false; busca.em = Date.now(); busca.msg = busca.rows.length ? busca.rows.length + ' anúncio(s) em retenção (de ' + busca.total + ' vistos).' : 'Nenhum anúncio em retenção nas páginas olhadas (' + busca.total + ' vistos).'; }
@@ -285,11 +294,16 @@
     // compra automática por regras
     if (ativo && lider) {
       for (const a of linhas) {
-        if (a.estado !== 'aberto' || alvos.has(a.id) || (tentado.get(a.id) || 0) > Date.now() - COOLDOWN_ANUNCIO) continue;
+        if (a.estado !== 'aberto' || alvos.has(a.id) || (tentado.get(a.id) || 0) > Date.now() - COOLDOWN_ANUNCIO || simVistos.has(a.id)) continue;
         const r = cfg.regras.find((x) => regraValida(x) && casa(x, a));
         if (!r) continue;
         const pendentes = [...alvos.values()].filter((x) => x.regraId === r.id && (x.status === 'agendado' || x.status === 'pedido')).length;
         if (r.comprados + pendentes >= r.qtd) continue;
+        if (cfg.simular) {
+          simVistos.add(a.id);
+          log('SIMULAÇÃO (não comprei): a regra ' + (r.nome || r.especie || 'sem nome') + ' compraria ' + a.nome + ' Nv ' + a.level + ' P' + a.p + ' IV ' + a.iv + ' [' + IVS.map((k) => a.ivs[k]).join('/') + '] Q ' + a.q + ' N ' + a.n + ' por ' + fmtN(a.preco) + ' (máx. ' + fmtN(r.precoMax) + ')', 'ok');
+          S.simulados = (S.simulados || 0) + 1; S.msg = 'SIMULAÇÃO: acharia ' + a.nome + ' por ' + fmtN(a.preco) + ' (nada foi comprado)'; sujo = true; continue;
+        }
         const alvo = agendar(a, 'regra', { regraId: r.id, regraNome: r.nome || r.especie || 'regra', precoMax: r.precoMax });
         alvo.msg = a.compravelEm > t ? 'bateu na regra; compra na liberação' : 'bateu na regra';
         S.msg = 'Achei: ' + a.nome + ' Nv ' + a.level + ' por ' + fmtN(a.preco) + ' (' + resumoRegra(r) + ')';
@@ -462,7 +476,7 @@
     window.postMessage({
       ch: CH, from: 'rmtpoke', type: 'state', state: {
         ativo, lider, conectado: !!(getWs() && getWs().readyState === 1), offset, cfg, msg: S.msg, stats: S,
-        hist: hist.slice(0, 40), log: logs.slice(-80), busca, ren: { ativo: ren.ativo, msg: ren.msg, em: ren.em, meus: ren.meus.slice(0, 60), renovadas: ren.renovadas }, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
+        hist: hist.slice(0, 40), log: logs.slice(-80), busca, imed: { ativo: IMED.ativo, limite: IMED.limite, comprados: IMED.comprados }, ren: { ativo: ren.ativo, msg: ren.msg, em: ren.em, meus: ren.meus.slice(0, 60), renovadas: ren.renovadas }, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
         alvos: [...alvos.values()].map((a) => ({ id: a.id, nome: a.nome, level: a.level, shiny: a.shiny, vendedor: a.vendedor, preco: a.preco, precoMax: a.precoMax, compravelEm: a.compravelEm, p: a.p, iv: a.iv, q: a.q, n: a.n, origem: a.origem, regraNome: a.regraNome || '', status: a.status, msg: a.msg || '' }))
       }
     }, '*');
@@ -476,8 +490,8 @@
     if (r.especie) extra.busca = r.especie;
     if (r.precoMax < 1e15) extra.precoMax = String(r.precoMax);
     if (r.shiny) extra.soShiny = true;
-    extra.semOutland = r.outland === 'omitir';
-    cons = { rows: [], carregando: true, total: 0, msg: 'Consultando…', em: Date.now(), regra: r, pag: 0, pags: Math.max(1, Math.min(10, Math.floor(num(o.paginas) || 4))), extra };
+    extra.semOutland = r.outland === 'omitir'; extra.ordem = ordemOk(o.ordem);
+    cons = { rows: [], carregando: true, total: 0, msg: 'Consultando…', em: Date.now(), regra: r, pag: 0, pags: Math.max(1, Math.min(20, Math.floor(num(o.paginas) || 10))), limite: Math.max(1, Math.min(500, Math.floor(num(o.limite) || 20))), extra };
     pendConsulta = null; fila = [];
     log('Consulta iniciada: ' + (r.especie || 'todas as espécies') + (r.precoMax < 1e15 ? ' até ' + fmtN(r.precoMax) : '') + ', até ' + cons.pags + ' página(s)', 'info');
     sujo = true;
@@ -486,13 +500,14 @@
     o = o || {};
     if (busca.carregando) return;
     busca = { rows: [], em: Date.now(), carregando: true, total: 0, msg: 'Buscando…' };
+    busca.limite = Math.max(1, Math.min(100, Math.floor(num(o.limite) || 5))); IMED.comprados = 0; IMED.limite = busca.limite;
     fila = []; busca.outland = o.outland === 'incluir' || o.outland === 'so' ? o.outland : 'omitir';
     const pags = Math.max(1, Math.min(4, Math.floor(num(o.paginas) || 2)));
     for (let p = 1; p <= pags; p++) {
       const extra = { pagina: p };
       if (o.nome) extra.busca = String(o.nome).slice(0, 40);
       if (num(o.precoMax) > 0) extra.precoMax = String(Math.floor(num(o.precoMax)));
-      extra.semOutland = o.outland !== 'incluir' && o.outland !== 'so';
+      extra.semOutland = o.outland !== 'incluir' && o.outland !== 'so'; extra.ordem = ordemOk(o.ordem);
       fila.push(pedidoLista(extra));
     }
     sujo = true;
@@ -504,12 +519,15 @@
     else if (m.type === 'ativo') {
       ativo = !!m.value; S.msg = ativo ? 'Ligado.' : 'Desligado.'; log(ativo ? 'Compra automática de Pokémon LIGADA (' + cfg.regras.filter(regraValida).length + ' regra(s) válida(s))' : 'Compra automática de Pokémon desligada', 'info'); if (ativo) ultReq = 0; sujo = true;
     } else if (m.type === 'cfg') {
-      { const rv = cfg.renova; cfg = normCfg(m.cfg); if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; }
+      { const rv = cfg.renova, sm = cfg.simular; cfg = normCfg(m.cfg); if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; if (!m.cfg || m.cfg.simular === undefined) cfg.simular = sm; }
       // preserva a contagem de comprados que a tela não conhece
       salvar(); sujo = true;
     } else if (m.type === 'zerar-contagens') { cfg.regras.forEach((r) => { r.comprados = 0; }); salvar(); sujo = true; }
     else if (m.type === 'buscar') buscar(m);
     else if (m.type === 'consultar') consultar(m.filtros);
+    else if (m.type === 'imed-ativo') { IMED.ativo = !!m.value; if (num(m.limite) > 0) IMED.limite = Math.floor(num(m.limite)); log(IMED.ativo ? 'Compra Imediata LIGADA (até ' + IMED.limite + ' compra(s))' : 'Compra Imediata desligada', 'info'); sujo = true; }
+    else if (m.type === 'imed-limite') { if (num(m.limite) > 0) IMED.limite = Math.floor(num(m.limite)); sujo = true; }
+    else if (m.type === 'simular') { cfg.simular = !!m.value; salvar(); log(cfg.simular ? 'Modo SIMULAÇÃO ligado: as regras só avisam, não compram' : 'Modo SIMULAÇÃO desligado: as regras COMPRAM de verdade', 'info'); sujo = true; }
     else if (m.type === 'ren-ativo') { ren.ativo = !!m.value; ren.msg = ren.ativo ? 'Ligada.' : 'Desligada.'; if (ren.ativo) { ren.forcar = true; cfg.renova.forEach((r) => { r.sumiu = false; }); } log(ren.ativo ? 'Renovação automática LIGADA (' + cfg.renova.filter(renValida).length + ' anúncio(s))' : 'Renovação automática desligada', 'info'); sujo = true; }
     else if (m.type === 'ren-carregar') { ren.forcar = true; ren.em = 0; if (!ren.ativo) { const ws = getWs(); if (ws && ws.readyState === 1 && podeConsultar(true) && enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); } } sujo = true; }
     else if (m.type === 'ren-cfg') { cfg.renova = (Array.isArray(m.regras) ? m.regras : []).slice(0, 30).map(normRen); salvar(); sujo = true; }

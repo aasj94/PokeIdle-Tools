@@ -435,9 +435,16 @@ function createUI(root) {
     $('enabledHint').textContent = cfg.enabled ? 'ligada — comprando de verdade' : 'desligada';
   }
 
+  let navTop = 'compras', navPk = 'auto', navAu = 'cons';
+  const calcSub = () => (navTop === 'pokemon' ? (navPk === 'ren' ? 'ren' : navAu) : navTop);
   function renderMercadoSub() {
-    root.querySelectorAll('#subtabs button').forEach((b) => b.classList.toggle('on', b.dataset.sub === sub));
-    $('sub-compras').hidden = sub !== 'compras';
+    sub = calcSub();
+    root.querySelectorAll('#subtabs button').forEach((b) => b.classList.toggle('on', b.dataset.sub === navTop));
+    root.querySelectorAll('#pknav button').forEach((b) => b.classList.toggle('on', b.dataset.pk === navPk));
+    root.querySelectorAll('#autonav button').forEach((b) => b.classList.toggle('on', b.dataset.au === navAu));
+    $('sub-compras').hidden = navTop !== 'compras';
+    $('sub-pokemon').hidden = navTop !== 'pokemon';
+    $('pk-auto').hidden = navPk !== 'auto';
     $('sub-poke').hidden = sub !== 'poke';
     $('sub-imed').hidden = sub !== 'imed';
     $('sub-cons').hidden = sub !== 'cons';
@@ -473,12 +480,27 @@ function createUI(root) {
     inp.addEventListener('input', () => { r[k] = inp.value.trim() === '' ? null : Number(inp.value); rpEnviarCfg(); });
     return [el('span', { textContent: rotulo }), inp];
   }
+  function resumoDe(r) {
+    const rotIv = { hp: 'HP', atk: 'Atk', def: 'Def', spAtk: 'SpAtk', spDef: 'SpDef', speed: 'Spd' };
+    const crit = [];
+    if (r.p != null) crit.push('Potência ≥ ' + r.p);
+    if (r.iv != null) crit.push('IV total ≥ ' + r.iv);
+    for (const k of Object.keys(rotIv)) if (r.ivs[k] != null) crit.push('IV ' + rotIv[k] + ' ≥ ' + r.ivs[k]);
+    if (r.q != null) crit.push('Qualidade ≥ ' + fmt(r.q));
+    if (r.n != null) crit.push('Nota ≥ ' + fmt(r.n));
+    const outT = r.outland === 'so' ? 'somente Outland' : r.outland === 'incluir' ? 'com ou sem Outland' : 'sem Outland';
+    const txt = !(r.precoMax > 0) ? 'Falta o preço máximo.' : !(crit.length || r.especie || r.shiny) ? 'Falta pelo menos um filtro.' :
+      'Vai comprar até ' + (r.qtd || 1) + ' ' + (r.especie || 'Pokémon de qualquer espécie') + (r.shiny ? ' shiny' : '') + ' (' + outT + ', só coins) ' +
+      (crit.length ? (r.modo === 'ou' ? 'quando QUALQUER UM destes bater: ' : 'quando TODOS estes critérios baterem: ') + crit.join(' · ') + ' ' : '') +
+      'por no máximo ' + fmt(r.precoMax) + ' coins cada. Gasto máximo: ' + fmt(r.precoMax * (r.qtd || 1)) + ' coins.';
+    return { txt, ok: r.precoMax > 0 && (crit.length > 0 || !!r.especie || !!r.shiny) };
+  }
   function cartaoRegra(r, i) {
-    const nome = el('input', { type: 'text', placeholder: 'nome da regra (opcional)', value: r.nome || '' });
+    const nome = el('input', { type: 'text', placeholder: 'ex.: Snorlax perfeito', value: r.nome || '' });
     nome.addEventListener('input', () => { r.nome = nome.value; rpEnviarCfg(); });
     const ativo = el('input', { type: 'checkbox', checked: r.ativo !== false });
     ativo.addEventListener('change', () => { r.ativo = ativo.checked; rpEnviarCfg(); });
-    const esp = el('input', { type: 'text', placeholder: 'espécie (opcional), ex.: Dragonite', value: r.especie || '' });
+    const esp = el('input', { type: 'text', placeholder: 'ex.: Dragonite', value: r.especie || '' });
     esp.addEventListener('input', () => { r.especie = esp.value; rpEnviarCfg(); });
     const modo = el('select', {}, el('option', { value: 'e', textContent: 'todos os critérios (E)' }), el('option', { value: 'ou', textContent: 'qualquer um dos critérios (OU)' }));
     modo.value = r.modo === 'ou' ? 'ou' : 'e';
@@ -503,20 +525,31 @@ function createUI(root) {
     }
     const rem = el('button', { className: 'link', textContent: 'remover', onclick: () => { rpRegras.splice(i, 1); rpSig = ''; renderPoke(true); rpEnviarCfg(); } });
     const valida = r.precoMax > 0 && (['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].some((k) => r.ivs[k] != null) || r.p != null || r.iv != null || r.q != null || r.n != null || r.especie || r.shiny);
-    return el('div', { className: 'card' + (valida ? '' : ' warn') },
-      el('div', { className: 'row inline' }, el('label', {}, ativo, ' ligada'), nome, rem),
-      el('div', { className: 'row inline' }, el('label', {}, 'Espécie ', esp)),
-      el('div', { className: 'row inline' }, el('label', {}, 'Comprar se bater ', modo), el('label', {}, 'Outland ', outl)),
+    const rs0 = resumoDe(r); const resumoEl = el('div', { className: 'resumo' + (rs0.ok ? '' : ' bad'), textContent: rs0.txt });
+    const fld = (rot, ...x) => el('div', { className: 'fld' }, el('label', {}, rot), ...x);
+    const cardEl = el('div', { className: 'card' + (valida ? '' : ' warn') },
+      el('div', { className: 'row inline' }, el('label', {}, ativo, ' regra ligada'), rem),
+      fld('Nome da regra (opcional)', nome),
+      fld('Pokémon (vazio = qualquer espécie)', esp),
+      fld('Comprar quando bater', modo),
+      fld('Outland', outl),
       est,
       el('div', { className: 'mut', textContent: 'IV individual (31 = perfeito):' }), estIv,
-      el('div', { className: 'row inline' }, el('label', {}, shiny, ' ✨ só shiny'), el('label', {}, 'Preço máx. ', preco), el('label', {}, 'Quantidade ', qtd)),
-      el('div', { className: 'mut', textContent: 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1) + (valida ? '' : ' — falta o preço máximo e pelo menos um filtro (P, IV, Q, N, espécie ou shiny)') }));
+      el('div', { className: 'fld' }, el('label', {}, shiny, ' ✨ só shiny')),
+      fld('Preço máximo por Pokémon (coins)', preco),
+      fld('Quantidade máxima a comprar', qtd),
+      resumoEl,
+      el('div', { className: 'mut', textContent: 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1) }));
+    const refaz = () => { const x = resumoDe(r); resumoEl.textContent = x.txt; resumoEl.className = 'resumo' + (x.ok ? '' : ' bad'); };
+    cardEl.addEventListener('input', refaz); cardEl.addEventListener('change', refaz);
+    return cardEl;
   }
   function renderPoke(force) {
     if (!rp && !rpRegras) return;
     if (rp) {
       $('pkOn').checked = !!rp.ativo;
-      $('pkHint').textContent = rp.ativo ? 'ligada — comprando de verdade' : 'desligada';
+      $('pkHint').textContent = rp.ativo ? (rp.cfg.simular ? 'ligada — SIMULAÇÃO (não compra)' : 'ligada — comprando de verdade') : 'desligada';
+      $('pkSim').checked = rp.cfg.simular !== false; $('pkSimHint').textContent = rp.cfg.simular !== false ? 'só avisa no registro o que compraria, sem comprar nada' : 'DESLIGADO: as regras compram de verdade';
       $('pkInfo').textContent = !rp.conectado ? 'Sem conexão com o jogo.' : !rp.lider ? 'Outra aba do jogo está cuidando das compras.' : (rp.msg || '') + (rp.stats && rp.stats.comprados ? ' · comprados: ' + rp.stats.comprados : '') + (rp.stats && rp.stats.falhas ? ' · falhas: ' + rp.stats.falhas : '');
       if (!emFocoRp() && root.activeElement !== $('pkInt')) $('pkInt').value = String(rp.cfg.intervaloS || 5);
       if (root.activeElement !== $('imAnte')) $('imAnte').value = String(rp.cfg.antecipaMs || 0);
@@ -540,6 +573,7 @@ function createUI(root) {
     const b = rp.busca || { rows: [] };
     $('imMsg').textContent = b.msg || 'Clique em "Buscar em retenção" para listar os anúncios que ainda aguardam a liberação.';
     $('imBuscar').disabled = !!b.carregando || !rp.conectado;
+    if (rp.imed) { $('imOn').checked = !!rp.imed.ativo; $('imHint').textContent = rp.imed.ativo ? 'LIGADA — compra de verdade · compradas: ' + rp.imed.comprados + '/' + rp.imed.limite : 'desligada — nada será comprado'; }
     const lista = $('imLista'); lista.textContent = '';
     const armados = new Set((rp.alvos || []).map((a) => a.id));
     for (const a of (b.rows || []).slice().sort((x, y) => x.compravelEm - y.compravelEm)) {
@@ -624,10 +658,20 @@ function createUI(root) {
       for (const [k, rot] of [['hp', 'HP ≥'], ['atk', 'Atk ≥'], ['def', 'Def ≥'], ['spAtk', 'SpAtk ≥'], ['spDef', 'SpDef ≥'], ['speed', 'Spd ≥']]) {
         $('csIv').append(el('span', { textContent: rot }), el('input', { type: 'number', step: '1', min: '0', max: '31', placeholder: '0–31', id: 'csiv_' + k }));
       }
+      $('csRegra').addEventListener('click', () => {
+        const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
+        const pm = parseNum($('csPreco').value) || 0;
+        if (!(pm > 0)) { $('csMsg').textContent = 'Para criar a regra, defina o preço máximo (coins).'; return; }
+        const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
+        if (!rpRegras) rpRegras = JSON.parse(JSON.stringify((rp && rp.cfg && rp.cfg.regras) || []));
+        rpRegras.push({ id: 'r' + Date.now().toString(36), nome: $('csEsp').value.trim(), ativo: true, especie: $('csEsp').value.trim(), modo: 'e', outland: $('csOutl').value, p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, shiny: $('csShiny').checked, precoMax: pm, qtd: Math.max(1, Math.min(999, Number($('csLim').value) || 1)), comprados: 0 });
+        rpSig = ''; rpEnviarCfg(); navTop = 'pokemon'; navPk = 'auto'; navAu = 'poke'; renderMercadoSub();
+        $('pkInfo').textContent = 'Regra criada a partir da consulta. Confira, e use o modo simulação antes de comprar de verdade.';
+      });
       $('csGo').addEventListener('click', () => {
         const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
         const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
-        rpCmd({ type: 'consultar', filtros: { especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: Number($('csPag').value) || 4 } });
+        rpCmd({ type: 'consultar', filtros: { ordem: $('csOrdem').value, limite: Number($('csLim').value) || 20, especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: 15 } });
       });
     }
     const c = rp && rp.cons; if (!c) return;
@@ -685,15 +729,40 @@ function createUI(root) {
   rpCmd({ type: 'hello' });
   $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
   $('rnCarregar').addEventListener('click', () => rpCmd({ type: 'ren-carregar' }));
-  $('pkOn').addEventListener('change', (e) => rpCmd({ type: 'ativo', value: e.target.checked }));
+  $('pkOn').addEventListener('change', async (e) => {
+    const on = e.target.checked;
+    if (on) {
+      const regs = (rpRegras || []).filter((r) => r.ativo !== false && r.precoMax > 0);
+      if (!regs.length) { e.target.checked = false; $('pkInfo').textContent = 'Crie ao menos uma regra com preço máximo e um filtro antes de ligar.'; return; }
+      const sim = $('pkSim').checked;
+      const total = regs.reduce((s, r) => s + r.precoMax * (r.qtd || 1), 0);
+      const ok = await confirmar(sim ? regs.length + ' regra(s) ativa(s). MODO SIMULAÇÃO: só vou avisar no registro o que compraria; nada será comprado.' : regs.length + ' regra(s) ativa(s). Vou COMPRAR DE VERDADE Pokémon que atendam às regras. Gasto máximo possível: ' + fmt(total) + ' coins.', 'Ligar compra automática', 'Ligar');
+      if (!ok) { e.target.checked = false; return; }
+    }
+    rpCmd({ type: 'ativo', value: on });
+  });
+  $('pkSim').addEventListener('change', async (e) => {
+    const sim = e.target.checked;
+    if (!sim) { const ok = await confirmar('Desligar a simulação? A partir de agora, ao ligar a compra automática, as regras vão COMPRAR de verdade.', 'Sair do modo simulação', 'Comprar de verdade'); if (!ok) { e.target.checked = true; return; } }
+    rpCmd({ type: 'simular', value: sim });
+  });
   $('pkInt').addEventListener('change', rpEnviarCfg);
   $('imAnte').addEventListener('change', rpEnviarCfg);
-  $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; rpRegras.push({ id: 'r' + Date.now().toString(36), nome: '', ativo: true, especie: '', modo: 'e', p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); rpSig = ''; renderPoke(true); rpEnviarCfg(); });
+  $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; rpRegras.push({ id: 'r' + Date.now().toString(36), nome: '', ativo: true, especie: '', modo: 'e', outland: 'omitir', ivs: {}, p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); rpSig = ''; renderPoke(true); rpEnviarCfg(); });
   $('pkZerar').addEventListener('click', () => { rpCmd({ type: 'zerar-contagens' }); rpRegras = null; });
   $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
   for (const id of ['pkLogLimpar', 'imLogLimpar', 'rnLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
   for (const id of ['pkLogCopiar', 'imLogCopiar', 'rnLogCopiar']) $(id).addEventListener('click', copiarLogPk);
-  $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 3 }));
+  $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, ordem: $('imOrdem').value, limite: Number($('imLim').value) || 5, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 4 }));
+  $('imLim').addEventListener('input', () => rpCmd({ type: 'imed-limite', limite: Number($('imLim').value) || 5 }));
+  $('imOn').addEventListener('change', async (e) => {
+    const on = e.target.checked;
+    if (on) {
+      const ok = await confirmar('Ligar a Compra Imediata? Qualquer Pokémon que você armar será COMPRADO de verdade (em coins) assim que for liberado, até o preço máximo informado e no máximo ' + (Number($('imLim').value) || 5) + ' compra(s).', 'Ligar Compra Imediata', 'Ligar');
+      if (!ok) { e.target.checked = false; return; }
+    }
+    rpCmd({ type: 'imed-ativo', value: on, limite: Number($('imLim').value) || 5 });
+  });
   setInterval(() => { if (sub === 'imed' && rp) renderImed(); }, 500);
 
 
@@ -932,7 +1001,9 @@ function createUI(root) {
   }
   $('novChecar').addEventListener('click', checarAtualizacao);
   setTimeout(checarAtualizacao, 4000); setInterval(checarAtualizacao, 3 * 3600 * 1000);
-  function showSub(s) { sub = s; renderMercadoSub(); }
+  function showSub(s) { if (s === 'compras' || s === 'hist' || s === 'pokemon') navTop = s; sub = calcSub(); renderMercadoSub(); }
+  root.querySelectorAll('#pknav button').forEach((b) => b.addEventListener('click', () => { navPk = b.dataset.pk; renderMercadoSub(); }));
+  root.querySelectorAll('#autonav button').forEach((b) => b.addEventListener('click', () => { navAu = b.dataset.au; renderMercadoSub(); }));
   root.querySelectorAll('#subtabs button').forEach((b) => b.addEventListener('click', () => showSub(b.dataset.sub)));
   root.querySelectorAll('#tabs button[data-tab]').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
   $('enabled').addEventListener('change', (e) => { cfg.enabled = e.target.checked; save(); renderMaster(); renderStatus(); });

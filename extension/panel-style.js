@@ -107,6 +107,12 @@ header button.icon { border-color: var(--frameD); background: rgba(10,30,60,.35)
 .card h2 { margin: 0; }
 .card.master { gap: 10px; }
 .row2 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.fld { display: grid; gap: 3px; }
+.fld label { color: var(--mut); font-size: 12px; font-weight: 600; }
+.fld input[type=text], .fld input[type=number], .fld select { width: 100%; box-sizing: border-box; }
+.fld button { width: 100%; }
+.resumo { background: #0c2a1a; border: 1px solid #1f6b3a; color: #bfeccf; border-radius: 6px; padding: 6px 8px; font-size: 12px; line-height: 1.4; }
+.resumo.bad { background: #2a1210; border-color: #7a2a22; color: #f3b9b2; }
 .est4 { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 4px 6px; align-items: center; margin: 4px 0; }
 .est4 input { width: 100%; }
 .est4 span { color: var(--mut); font-size: 12px; }

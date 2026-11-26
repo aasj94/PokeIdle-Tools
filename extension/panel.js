@@ -225,11 +225,8 @@
       <section id="tab-itens" class="tab" hidden>
         <nav class="tabs sub" id="subtabs">
           <button data-sub="compras" class="on">Itens</button>
-          <button data-sub="poke">Pokémon</button>
-          <button data-sub="imed">Compra Imediata</button>
-          <button data-sub="cons">Consulta</button>
-          <button data-sub="ren">Renovação</button>
-          <button data-sub="hist">Histórico de compras</button>
+          <button data-sub="pokemon">Pokémon</button>
+          <button data-sub="hist">Histórico</button>
         </nav>
         <div id="sub-compras">
         <div class="card master">
@@ -262,6 +259,35 @@
           </div>
         </details>
         </div>
+        <div id="sub-pokemon" hidden>
+          <nav class="tabs sub" id="pknav">
+            <button data-pk="auto" class="on">Auto-compra</button>
+            <button data-pk="ren">Renovar anúncios</button>
+          </nav>
+          <div id="pk-auto">
+            <nav class="tabs sub" id="autonav">
+              <button data-au="cons" class="on">Consultar</button>
+              <button data-au="poke">Regras</button>
+              <button data-au="imed">Compra Imediata</button>
+            </nav>
+        <div id="sub-cons" hidden>
+          <div class="card">
+            <h2>CONSULTAR O MERCADO</h2>
+            <div class="mut">Veja o que há à venda (só coins) de acordo com os filtros. <b>Não compra nada.</b> Campos vazios são ignorados. Depois de achar o que quer, use "Criar regra com estes filtros" para pôr na compra automática.</div>
+            <div class="fld"><label for="csEsp">Pokémon</label><input id="csEsp" type="text" placeholder="ex.: Snorlax (vazio = todos)"></div>
+            <div class="fld"><label for="csPreco">Preço máximo (coins)</label><input id="csPreco" type="text" placeholder="ex.: 30M"></div>
+            <div class="fld"><label for="csOutl">Outland</label><select id="csOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select></div>
+            <div class="fld"><label for="csOrdem">Ordenar por</label><select id="csOrdem"><option value="baratos">Menor preço</option><option value="recentes">Adicionados recentemente</option><option value="caros">Maior preço</option></select></div>
+            <div class="fld"><label for="csLim">Quantidade máxima de resultados</label><input id="csLim" type="number" min="1" max="500" step="1" value="20"></div>
+            <div class="fld"><label><input id="csShiny" type="checkbox"> ✨ só shiny</label></div>
+            <div class="est4" id="csEst"></div>
+            <div class="mut">IV individual (31 = perfeito):</div>
+            <div class="est4" id="csIv"></div>
+            <div class="btns"><button id="csGo" class="icon">Consultar</button><button id="csRegra" class="icon">Criar regra com estes filtros</button></div>
+            <div class="mut" id="csMsg"></div>
+            <div id="csLista" class="list"></div>
+          </div>
+        </div>
         <div id="sub-poke" hidden>
           <div class="card master">
             <label class="switch big">
@@ -270,6 +296,11 @@
               <span class="lbl"><b>Compra automática de Pokémon</b><small id="pkHint">desligada</small></span>
             </label>
             <div class="mut" id="pkInfo">Desligada.</div>
+            <label class="switch">
+              <input type="checkbox" id="pkSim" checked>
+              <span class="slider"></span>
+              <span class="lbl"><b>Modo simulação (recomendado para testar)</b><small id="pkSimHint">só avisa o que compraria, sem comprar nada</small></span>
+            </label>
             <div class="row inline">
               <label>Consultar a cada <input id="pkInt" type="number" min="4" step="0.5" value="5"> s <small>(uma regra por vez, em rodízio)</small></label>
             </div>
@@ -281,34 +312,36 @@
           <div class="mut">Cada regra compra Pokémon do Mercado (em coins) quando o anúncio atende aos critérios e custa até o preço máximo. P = potência, IV = soma dos IVs, Q = qualidade e N = nota (em milésimos, como na Venda automática: 1700, 3500). Campo vazio = ignorado. Preço máximo é obrigatório e vale sempre. Se o anúncio ainda estiver em retenção, a compra é agendada para o instante da liberação.</div>
         </div>
         <div id="sub-imed" hidden>
+          <div class="card master">
+            <label class="switch big">
+              <input type="checkbox" id="imOn">
+              <span class="slider"></span>
+              <span class="lbl"><b>Compra Imediata</b><small id="imHint">desligada — nada será comprado</small></span>
+            </label>
+            <div class="mut">Escolha um Pokémon que está no Mercado aguardando o tempo de retenção (2 min). A extensão acompanha o relógio do servidor e envia a compra no instante em que ele é liberado. Só em coins. Com a chave desligada, ela apenas mostra e arma, mas não compra.</div>
+          </div>
           <div class="card">
-            <h2>COMPRA IMEDIATA <small id="imHint"></small></h2>
-            <div class="mut">Escolha um Pokémon que está no Mercado aguardando o tempo de retenção. A extensão acompanha o relógio do servidor e envia o pedido de compra no instante em que ele é liberado.</div>
-            <div class="row addn"><input id="imNome" type="text" placeholder="nome do Pokémon (opcional)"><input id="imPreco" type="text" placeholder="preço máx. (opcional)"><select id="imOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select><button id="imBuscar" class="icon">Buscar em retenção</button></div>
+            <h2>BUSCAR EM RETENÇÃO</h2>
+            <div class="fld"><label for="imNome">Pokémon</label><input id="imNome" type="text" placeholder="nome (vazio = qualquer)"></div>
+            <div class="fld"><label for="imPreco">Preço máximo (coins)</label><input id="imPreco" type="text" placeholder="ex.: 30M (vazio = sem limite)"></div>
+            <div class="fld"><label for="imOutl">Outland</label><select id="imOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select></div>
+            <div class="fld"><label for="imOrdem">Ordenar por</label><select id="imOrdem"><option value="recentes">Adicionados recentemente</option><option value="baratos">Menor preço</option><option value="caros">Maior preço</option></select></div>
+            <div class="fld"><label for="imLim">Quantidade (buscar e comprar até)</label><input id="imLim" type="number" min="1" max="100" step="1" value="5"></div>
+            <div class="fld"><button id="imBuscar" class="icon">Buscar em retenção</button></div>
             <div class="mut" id="imMsg"></div>
             <div id="imLista" class="list"></div>
           </div>
           <div class="card">
             <h2>ARMADAS <small id="imArmN"></small></h2>
             <div id="imArmadas" class="list"></div>
-          <h2>REGISTRO <button id="imLogCopiar" class="link">copiar</button> <button id="imLogLimpar" class="link">limpar</button></h2>
-          <div id="imLog" class="log"></div>
             <div class="row inline"><label>Antecipar o envio em <input id="imAnte" type="number" min="0" max="1000" step="10" value="0"> ms <small>(compensa a demora da rede; 0 = no instante exato)</small></label></div>
           </div>
-        </div>
-        <div id="sub-cons" hidden>
           <div class="card">
-            <h2>CONSULTA DE DISPONIBILIDADE</h2>
-            <div class="mut">Mostra o que há à venda no Mercado de acordo com os filtros. Só consulta — não compra nada. Campos vazios são ignorados.</div>
-            <div class="row inline"><label>Espécie <input id="csEsp" type="text" placeholder="ex.: Snorlax"></label><label>Preço máx. <input id="csPreco" type="text" placeholder="ex.: 30M"></label><label><input id="csShiny" type="checkbox"> ✨ só shiny</label><select id="csOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select></div>
-            <div class="est4" id="csEst"></div>
-            <div class="mut">IV individual (31 = perfeito):</div>
-            <div class="est4" id="csIv"></div>
-            <div class="row inline"><label>Páginas <input id="csPag" type="number" min="1" max="10" value="4"> <small>(24 anúncios cada; ~4 s por página)</small></label><button id="csGo" class="icon">Consultar</button></div>
-            <div class="mut" id="csMsg"></div>
-            <div id="csLista" class="list"></div>
+            <h2>REGISTRO <button id="imLogCopiar" class="link">copiar</button> <button id="imLogLimpar" class="link">limpar</button></h2>
+            <div id="imLog" class="log"></div>
           </div>
         </div>
+          </div>
         <div id="sub-ren" hidden>
           <div class="card">
             <h2>RENOVAÇÃO AUTOMÁTICA DE ANÚNCIOS <small id="rnHint"></small></h2>
@@ -327,6 +360,7 @@
             <h2>REGISTRO <button id="rnLogCopiar" class="link">copiar</button> <button id="rnLogLimpar" class="link">limpar</button></h2>
             <div id="rnLog" class="log"></div>
           </div>
+        </div>
         </div>
         <div id="sub-hist" hidden>
 

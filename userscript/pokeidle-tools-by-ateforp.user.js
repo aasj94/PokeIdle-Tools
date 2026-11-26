@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.23
+// @version      2.3.24
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -2068,7 +2068,7 @@ function definirCaptura(v) {
   const REFRESCO_MS = 9000;           // antes da liberação, confere de novo o preço do anúncio escolhido
 
   // ---------- configuração ----------
-  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [] };
+  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], simular: true };
   let cfg = JSON.parse(JSON.stringify(PADRAO));
   const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
   function normRegra(r) {
@@ -2104,6 +2104,7 @@ function definirCaptura(v) {
     if (num(c.intervaloS) >= INTERVALO_MIN && num(c.intervaloS) <= 600) o.intervaloS = num(c.intervaloS);
     if (num(c.antecipaMs) >= 0 && num(c.antecipaMs) <= 1000) o.antecipaMs = Math.floor(num(c.antecipaMs));
     if (Array.isArray(c.regras)) o.regras = c.regras.slice(0, 20).map(normRegra);
+    if (c.simular === false) o.simular = false;
     if (Array.isArray(c.renova)) o.renova = c.renova.slice(0, 30).map(normRen);
     return o;
   }
@@ -2127,6 +2128,7 @@ function definirCaptura(v) {
   }
   setInterval(() => { if (logSujo) { logSujo = false; try { localStorage.setItem(CHAVE + '_log', JSON.stringify(logs)); } catch (e) { /* ignora */ } } }, 3000);
   const alvos = new Map();            // id do anúncio -> alvo agendado (Compra Imediata ou regra)
+  const simVistos = new Set();
   const tentado = new Map();          // id do anúncio -> quando foi pedido
   let busca = { rows: [], em: 0, carregando: false, total: 0, msg: '' };
   let cons = { rows: [], carregando: false, total: 0, msg: '', em: 0, regra: null, pag: 0, pags: 0, extra: null };
@@ -2153,6 +2155,9 @@ function definirCaptura(v) {
       p: Number(f.potencia) || 0, iv: Number(f.ivTotal) || 0, q: milesimos(f.quality), n: milesimos(f.nota)
     };
   }
+
+  const ordemOk = (v) => (v === 'baratos' || v === 'caros' ? v : 'recentes');
+  const IMED = { ativo: false, limite: 5, comprados: 0 };
 
   // ---------- regras ----------
   const IVS = ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'];
@@ -2240,7 +2245,7 @@ function definirCaptura(v) {
     const a = v.alvo;
     a.status = status === 'comprado' ? 'comprado' : 'falhou'; a.msg = motivo || (status === 'comprado' ? 'comprado!' : '');
     if (status === 'comprado') {
-      S.comprados++;
+      S.comprados++; if (a.origem === 'imediata') IMED.comprados++;
       if (a.regraId) { const r = cfg.regras.find((x) => x.id === a.regraId); if (r) { r.comprados++; salvar(); } }
     } else S.falhas++;
     salvarHist(); sujo = true;
@@ -2261,6 +2266,8 @@ function definirCaptura(v) {
       if (alvo.status === 'agendado') {
         if (alvo.estado && alvo.estado !== 'aberto') { alvo.status = 'falhou'; alvo.msg = 'anúncio não está mais aberto'; log('Cancelado ' + alvo.nome + ' (anúncio ' + alvo.id + '): não está mais aberto (' + alvo.estado + ')', 'erro'); sujo = true; continue; }
         const falta = alvo.compravelEm - t;
+        if (alvo.origem === 'imediata' && !IMED.ativo) { if (alvo.msg !== 'Compra Imediata desligada: não vou comprar') { alvo.msg = 'Compra Imediata desligada: não vou comprar'; sujo = true; } continue; }
+        if (alvo.origem === 'imediata' && IMED.comprados >= IMED.limite) { alvo.status = 'falhou'; alvo.msg = 'limite de ' + IMED.limite + ' compra(s) atingido'; log('Cancelado ' + alvo.nome + ' (anúncio ' + alvo.id + '): ' + alvo.msg, 'info'); sujo = true; continue; }
         if (falta <= cfg.antecipaMs) {
           if (alvo.preco > alvo.precoMax) { alvo.status = 'falhou'; alvo.msg = 'preço subiu acima do máximo (' + fmtN(alvo.preco) + ')'; log('Cancelado ' + alvo.nome + ' (anúncio ' + alvo.id + '): ' + alvo.msg, 'erro'); sujo = true; continue; }
           dispararCompra(alvo, falta > 0 ? 'liberação em ' + Math.max(0, Math.round(falta)) + ' ms' : 'liberado');
@@ -2298,10 +2305,11 @@ function definirCaptura(v) {
       const ids = new Set(cons.rows.map((r) => r.id));
       for (const a of linhas) if (a.estado === 'aberto' && !ids.has(a.id) && casa(cons.regra, a)) cons.rows.push(a);
       cons.total += linhas.length;
-      cons.rows.sort((x, y) => x.preco - y.preco);
+      if (cons.extra.ordem === 'caros') cons.rows.sort((x, y) => y.preco - x.preco); else if (cons.extra.ordem === 'baratos') cons.rows.sort((x, y) => x.preco - y.preco);
+      const cheio = cons.rows.length >= cons.limite; if (cheio) cons.rows.length = cons.limite;
       const tot = Number(m.total) || 0, pp = Number(m.porPagina) || 24;
-      if (cons.pag < cons.pags && cons.pag * pp < tot && linhas.length) cons.msg = 'Consultando… página ' + cons.pag + ' · ' + cons.rows.length + ' encontrado(s).';
-      else { cons.carregando = false; cons.msg = cons.rows.length + ' Pokémon encontrado(s) (' + cons.total + ' anúncios vistos' + (tot > cons.total ? ' de ' + tot : '') + ').'; log('Consulta concluída: ' + cons.msg, 'info'); }
+      if (!cheio && cons.pag < cons.pags && cons.pag * pp < tot && linhas.length) cons.msg = 'Consultando… página ' + cons.pag + ' · ' + cons.rows.length + ' encontrado(s).';
+      else { cons.carregando = false; cons.msg = cons.rows.length + ' Pokémon encontrado(s)' + (cheio ? ' (parei no limite de ' + cons.limite + ')' : '') + ' · ' + cons.total + ' anúncios vistos' + (tot > cons.total ? ' de ' + tot : '') + '.'; log('Consulta concluída: ' + cons.msg, 'info'); }
       sujo = true; return;
     }
     // resultados da busca da tela
@@ -2309,7 +2317,8 @@ function definirCaptura(v) {
       pendConsulta = null;
       const ret = linhas.filter((a) => a.estado === 'aberto' && a.compravelEm > t && !(busca.outland === 'so' && a.speciesId < 2001) && !(busca.outland === 'omitir' && a.speciesId >= 2001));
       const ids = new Set(busca.rows.map((r) => r.id));
-      for (const a of ret) if (!ids.has(a.id)) busca.rows.push(a);
+      for (const a of ret) if (!ids.has(a.id) && busca.rows.length < busca.limite) busca.rows.push(a);
+      if (busca.rows.length >= busca.limite) fila = [];
       busca.total = (busca.total || 0) + linhas.length;
       if (fila.length) busca.msg = 'Buscando… ' + busca.rows.length + ' em retenção até agora.';
       else { busca.carregando = false; busca.em = Date.now(); busca.msg = busca.rows.length ? busca.rows.length + ' anúncio(s) em retenção (de ' + busca.total + ' vistos).' : 'Nenhum anúncio em retenção nas páginas olhadas (' + busca.total + ' vistos).'; }
@@ -2318,11 +2327,16 @@ function definirCaptura(v) {
     // compra automática por regras
     if (ativo && lider) {
       for (const a of linhas) {
-        if (a.estado !== 'aberto' || alvos.has(a.id) || (tentado.get(a.id) || 0) > Date.now() - COOLDOWN_ANUNCIO) continue;
+        if (a.estado !== 'aberto' || alvos.has(a.id) || (tentado.get(a.id) || 0) > Date.now() - COOLDOWN_ANUNCIO || simVistos.has(a.id)) continue;
         const r = cfg.regras.find((x) => regraValida(x) && casa(x, a));
         if (!r) continue;
         const pendentes = [...alvos.values()].filter((x) => x.regraId === r.id && (x.status === 'agendado' || x.status === 'pedido')).length;
         if (r.comprados + pendentes >= r.qtd) continue;
+        if (cfg.simular) {
+          simVistos.add(a.id);
+          log('SIMULAÇÃO (não comprei): a regra ' + (r.nome || r.especie || 'sem nome') + ' compraria ' + a.nome + ' Nv ' + a.level + ' P' + a.p + ' IV ' + a.iv + ' [' + IVS.map((k) => a.ivs[k]).join('/') + '] Q ' + a.q + ' N ' + a.n + ' por ' + fmtN(a.preco) + ' (máx. ' + fmtN(r.precoMax) + ')', 'ok');
+          S.simulados = (S.simulados || 0) + 1; S.msg = 'SIMULAÇÃO: acharia ' + a.nome + ' por ' + fmtN(a.preco) + ' (nada foi comprado)'; sujo = true; continue;
+        }
         const alvo = agendar(a, 'regra', { regraId: r.id, regraNome: r.nome || r.especie || 'regra', precoMax: r.precoMax });
         alvo.msg = a.compravelEm > t ? 'bateu na regra; compra na liberação' : 'bateu na regra';
         S.msg = 'Achei: ' + a.nome + ' Nv ' + a.level + ' por ' + fmtN(a.preco) + ' (' + resumoRegra(r) + ')';
@@ -2495,7 +2509,7 @@ function definirCaptura(v) {
     window.postMessage({
       ch: CH, from: 'rmtpoke', type: 'state', state: {
         ativo, lider, conectado: !!(getWs() && getWs().readyState === 1), offset, cfg, msg: S.msg, stats: S,
-        hist: hist.slice(0, 40), log: logs.slice(-80), busca, ren: { ativo: ren.ativo, msg: ren.msg, em: ren.em, meus: ren.meus.slice(0, 60), renovadas: ren.renovadas }, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
+        hist: hist.slice(0, 40), log: logs.slice(-80), busca, imed: { ativo: IMED.ativo, limite: IMED.limite, comprados: IMED.comprados }, ren: { ativo: ren.ativo, msg: ren.msg, em: ren.em, meus: ren.meus.slice(0, 60), renovadas: ren.renovadas }, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
         alvos: [...alvos.values()].map((a) => ({ id: a.id, nome: a.nome, level: a.level, shiny: a.shiny, vendedor: a.vendedor, preco: a.preco, precoMax: a.precoMax, compravelEm: a.compravelEm, p: a.p, iv: a.iv, q: a.q, n: a.n, origem: a.origem, regraNome: a.regraNome || '', status: a.status, msg: a.msg || '' }))
       }
     }, '*');
@@ -2509,8 +2523,8 @@ function definirCaptura(v) {
     if (r.especie) extra.busca = r.especie;
     if (r.precoMax < 1e15) extra.precoMax = String(r.precoMax);
     if (r.shiny) extra.soShiny = true;
-    extra.semOutland = r.outland === 'omitir';
-    cons = { rows: [], carregando: true, total: 0, msg: 'Consultando…', em: Date.now(), regra: r, pag: 0, pags: Math.max(1, Math.min(10, Math.floor(num(o.paginas) || 4))), extra };
+    extra.semOutland = r.outland === 'omitir'; extra.ordem = ordemOk(o.ordem);
+    cons = { rows: [], carregando: true, total: 0, msg: 'Consultando…', em: Date.now(), regra: r, pag: 0, pags: Math.max(1, Math.min(20, Math.floor(num(o.paginas) || 10))), limite: Math.max(1, Math.min(500, Math.floor(num(o.limite) || 20))), extra };
     pendConsulta = null; fila = [];
     log('Consulta iniciada: ' + (r.especie || 'todas as espécies') + (r.precoMax < 1e15 ? ' até ' + fmtN(r.precoMax) : '') + ', até ' + cons.pags + ' página(s)', 'info');
     sujo = true;
@@ -2519,13 +2533,14 @@ function definirCaptura(v) {
     o = o || {};
     if (busca.carregando) return;
     busca = { rows: [], em: Date.now(), carregando: true, total: 0, msg: 'Buscando…' };
+    busca.limite = Math.max(1, Math.min(100, Math.floor(num(o.limite) || 5))); IMED.comprados = 0; IMED.limite = busca.limite;
     fila = []; busca.outland = o.outland === 'incluir' || o.outland === 'so' ? o.outland : 'omitir';
     const pags = Math.max(1, Math.min(4, Math.floor(num(o.paginas) || 2)));
     for (let p = 1; p <= pags; p++) {
       const extra = { pagina: p };
       if (o.nome) extra.busca = String(o.nome).slice(0, 40);
       if (num(o.precoMax) > 0) extra.precoMax = String(Math.floor(num(o.precoMax)));
-      extra.semOutland = o.outland !== 'incluir' && o.outland !== 'so';
+      extra.semOutland = o.outland !== 'incluir' && o.outland !== 'so'; extra.ordem = ordemOk(o.ordem);
       fila.push(pedidoLista(extra));
     }
     sujo = true;
@@ -2537,12 +2552,15 @@ function definirCaptura(v) {
     else if (m.type === 'ativo') {
       ativo = !!m.value; S.msg = ativo ? 'Ligado.' : 'Desligado.'; log(ativo ? 'Compra automática de Pokémon LIGADA (' + cfg.regras.filter(regraValida).length + ' regra(s) válida(s))' : 'Compra automática de Pokémon desligada', 'info'); if (ativo) ultReq = 0; sujo = true;
     } else if (m.type === 'cfg') {
-      { const rv = cfg.renova; cfg = normCfg(m.cfg); if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; }
+      { const rv = cfg.renova, sm = cfg.simular; cfg = normCfg(m.cfg); if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; if (!m.cfg || m.cfg.simular === undefined) cfg.simular = sm; }
       // preserva a contagem de comprados que a tela não conhece
       salvar(); sujo = true;
     } else if (m.type === 'zerar-contagens') { cfg.regras.forEach((r) => { r.comprados = 0; }); salvar(); sujo = true; }
     else if (m.type === 'buscar') buscar(m);
     else if (m.type === 'consultar') consultar(m.filtros);
+    else if (m.type === 'imed-ativo') { IMED.ativo = !!m.value; if (num(m.limite) > 0) IMED.limite = Math.floor(num(m.limite)); log(IMED.ativo ? 'Compra Imediata LIGADA (até ' + IMED.limite + ' compra(s))' : 'Compra Imediata desligada', 'info'); sujo = true; }
+    else if (m.type === 'imed-limite') { if (num(m.limite) > 0) IMED.limite = Math.floor(num(m.limite)); sujo = true; }
+    else if (m.type === 'simular') { cfg.simular = !!m.value; salvar(); log(cfg.simular ? 'Modo SIMULAÇÃO ligado: as regras só avisam, não compram' : 'Modo SIMULAÇÃO desligado: as regras COMPRAM de verdade', 'info'); sujo = true; }
     else if (m.type === 'ren-ativo') { ren.ativo = !!m.value; ren.msg = ren.ativo ? 'Ligada.' : 'Desligada.'; if (ren.ativo) { ren.forcar = true; cfg.renova.forEach((r) => { r.sumiu = false; }); } log(ren.ativo ? 'Renovação automática LIGADA (' + cfg.renova.filter(renValida).length + ' anúncio(s))' : 'Renovação automática desligada', 'info'); sujo = true; }
     else if (m.type === 'ren-carregar') { ren.forcar = true; ren.em = 0; if (!ren.ativo) { const ws = getWs(); if (ws && ws.readyState === 1 && podeConsultar(true) && enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); } } sujo = true; }
     else if (m.type === 'ren-cfg') { cfg.renova = (Array.isArray(m.regras) ? m.regras : []).slice(0, 30).map(normRen); salvar(); sujo = true; }
@@ -2728,6 +2746,12 @@ function definirCaptura(v) {
     .card h2 { margin: 0; }
     .card.master { gap: 10px; }
     .row2 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .fld { display: grid; gap: 3px; }
+    .fld label { color: var(--mut); font-size: 12px; font-weight: 600; }
+    .fld input[type=text], .fld input[type=number], .fld select { width: 100%; box-sizing: border-box; }
+    .fld button { width: 100%; }
+    .resumo { background: #0c2a1a; border: 1px solid #1f6b3a; color: #bfeccf; border-radius: 6px; padding: 6px 8px; font-size: 12px; line-height: 1.4; }
+    .resumo.bad { background: #2a1210; border-color: #7a2a22; color: #f3b9b2; }
     .est4 { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 4px 6px; align-items: center; margin: 4px 0; }
     .est4 input { width: 100%; }
     .est4 span { color: var(--mut); font-size: 12px; }
@@ -2812,6 +2836,7 @@ function definirCaptura(v) {
     
     // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
     window.__ateforpReleases = [
+     {"v": "2.3.24", "itens": ["Mercado RMT reorganizado: Itens | Pokémon | Histórico. Em Pokémon: Auto-compra (Consultar, Regras, Compra Imediata) e Renovar anúncios. Consulta e Compra Imediata com ordenação (menor preço, maior preço, recentes) e limite de quantidade; Compra Imediata com liga/desliga próprio; regras com resumo claro do que será comprado, modo simulação (só avisa) e confirmação antes de ligar; botão para criar regra a partir da consulta. Tudo em coins."]},
      {"v": "2.3.23", "itens": ["Nova aba Renovação (Mercado RMT): renova sozinha os seus anúncios de Pokémon, alternando o preço entre dois valores (Preço A e Preço B) a cada intervalo (mínimo 30 min, limite do jogo), até vender. Desligada por padrão, com explicação na tela e registro de cada renovação."]},
      {"v": "2.3.22", "itens": ["Nova aba Novidades com o resumo de cada versão. A extensão avisa quando há uma versão nova da própria extensão (ponto vermelho na aba, checagem a cada 3 horas). No userscript, o aviso é do Tampermonkey/Greasy Fork."]},
      {
@@ -3311,9 +3336,16 @@ function definirCaptura(v) {
         $('enabledHint').textContent = cfg.enabled ? 'ligada — comprando de verdade' : 'desligada';
       }
     
+      let navTop = 'compras', navPk = 'auto', navAu = 'cons';
+      const calcSub = () => (navTop === 'pokemon' ? (navPk === 'ren' ? 'ren' : navAu) : navTop);
       function renderMercadoSub() {
-        root.querySelectorAll('#subtabs button').forEach((b) => b.classList.toggle('on', b.dataset.sub === sub));
-        $('sub-compras').hidden = sub !== 'compras';
+        sub = calcSub();
+        root.querySelectorAll('#subtabs button').forEach((b) => b.classList.toggle('on', b.dataset.sub === navTop));
+        root.querySelectorAll('#pknav button').forEach((b) => b.classList.toggle('on', b.dataset.pk === navPk));
+        root.querySelectorAll('#autonav button').forEach((b) => b.classList.toggle('on', b.dataset.au === navAu));
+        $('sub-compras').hidden = navTop !== 'compras';
+        $('sub-pokemon').hidden = navTop !== 'pokemon';
+        $('pk-auto').hidden = navPk !== 'auto';
         $('sub-poke').hidden = sub !== 'poke';
         $('sub-imed').hidden = sub !== 'imed';
         $('sub-cons').hidden = sub !== 'cons';
@@ -3349,12 +3381,27 @@ function definirCaptura(v) {
         inp.addEventListener('input', () => { r[k] = inp.value.trim() === '' ? null : Number(inp.value); rpEnviarCfg(); });
         return [el('span', { textContent: rotulo }), inp];
       }
+      function resumoDe(r) {
+        const rotIv = { hp: 'HP', atk: 'Atk', def: 'Def', spAtk: 'SpAtk', spDef: 'SpDef', speed: 'Spd' };
+        const crit = [];
+        if (r.p != null) crit.push('Potência ≥ ' + r.p);
+        if (r.iv != null) crit.push('IV total ≥ ' + r.iv);
+        for (const k of Object.keys(rotIv)) if (r.ivs[k] != null) crit.push('IV ' + rotIv[k] + ' ≥ ' + r.ivs[k]);
+        if (r.q != null) crit.push('Qualidade ≥ ' + fmt(r.q));
+        if (r.n != null) crit.push('Nota ≥ ' + fmt(r.n));
+        const outT = r.outland === 'so' ? 'somente Outland' : r.outland === 'incluir' ? 'com ou sem Outland' : 'sem Outland';
+        const txt = !(r.precoMax > 0) ? 'Falta o preço máximo.' : !(crit.length || r.especie || r.shiny) ? 'Falta pelo menos um filtro.' :
+          'Vai comprar até ' + (r.qtd || 1) + ' ' + (r.especie || 'Pokémon de qualquer espécie') + (r.shiny ? ' shiny' : '') + ' (' + outT + ', só coins) ' +
+          (crit.length ? (r.modo === 'ou' ? 'quando QUALQUER UM destes bater: ' : 'quando TODOS estes critérios baterem: ') + crit.join(' · ') + ' ' : '') +
+          'por no máximo ' + fmt(r.precoMax) + ' coins cada. Gasto máximo: ' + fmt(r.precoMax * (r.qtd || 1)) + ' coins.';
+        return { txt, ok: r.precoMax > 0 && (crit.length > 0 || !!r.especie || !!r.shiny) };
+      }
       function cartaoRegra(r, i) {
-        const nome = el('input', { type: 'text', placeholder: 'nome da regra (opcional)', value: r.nome || '' });
+        const nome = el('input', { type: 'text', placeholder: 'ex.: Snorlax perfeito', value: r.nome || '' });
         nome.addEventListener('input', () => { r.nome = nome.value; rpEnviarCfg(); });
         const ativo = el('input', { type: 'checkbox', checked: r.ativo !== false });
         ativo.addEventListener('change', () => { r.ativo = ativo.checked; rpEnviarCfg(); });
-        const esp = el('input', { type: 'text', placeholder: 'espécie (opcional), ex.: Dragonite', value: r.especie || '' });
+        const esp = el('input', { type: 'text', placeholder: 'ex.: Dragonite', value: r.especie || '' });
         esp.addEventListener('input', () => { r.especie = esp.value; rpEnviarCfg(); });
         const modo = el('select', {}, el('option', { value: 'e', textContent: 'todos os critérios (E)' }), el('option', { value: 'ou', textContent: 'qualquer um dos critérios (OU)' }));
         modo.value = r.modo === 'ou' ? 'ou' : 'e';
@@ -3379,20 +3426,31 @@ function definirCaptura(v) {
         }
         const rem = el('button', { className: 'link', textContent: 'remover', onclick: () => { rpRegras.splice(i, 1); rpSig = ''; renderPoke(true); rpEnviarCfg(); } });
         const valida = r.precoMax > 0 && (['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].some((k) => r.ivs[k] != null) || r.p != null || r.iv != null || r.q != null || r.n != null || r.especie || r.shiny);
-        return el('div', { className: 'card' + (valida ? '' : ' warn') },
-          el('div', { className: 'row inline' }, el('label', {}, ativo, ' ligada'), nome, rem),
-          el('div', { className: 'row inline' }, el('label', {}, 'Espécie ', esp)),
-          el('div', { className: 'row inline' }, el('label', {}, 'Comprar se bater ', modo), el('label', {}, 'Outland ', outl)),
+        const rs0 = resumoDe(r); const resumoEl = el('div', { className: 'resumo' + (rs0.ok ? '' : ' bad'), textContent: rs0.txt });
+        const fld = (rot, ...x) => el('div', { className: 'fld' }, el('label', {}, rot), ...x);
+        const cardEl = el('div', { className: 'card' + (valida ? '' : ' warn') },
+          el('div', { className: 'row inline' }, el('label', {}, ativo, ' regra ligada'), rem),
+          fld('Nome da regra (opcional)', nome),
+          fld('Pokémon (vazio = qualquer espécie)', esp),
+          fld('Comprar quando bater', modo),
+          fld('Outland', outl),
           est,
           el('div', { className: 'mut', textContent: 'IV individual (31 = perfeito):' }), estIv,
-          el('div', { className: 'row inline' }, el('label', {}, shiny, ' ✨ só shiny'), el('label', {}, 'Preço máx. ', preco), el('label', {}, 'Quantidade ', qtd)),
-          el('div', { className: 'mut', textContent: 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1) + (valida ? '' : ' — falta o preço máximo e pelo menos um filtro (P, IV, Q, N, espécie ou shiny)') }));
+          el('div', { className: 'fld' }, el('label', {}, shiny, ' ✨ só shiny')),
+          fld('Preço máximo por Pokémon (coins)', preco),
+          fld('Quantidade máxima a comprar', qtd),
+          resumoEl,
+          el('div', { className: 'mut', textContent: 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1) }));
+        const refaz = () => { const x = resumoDe(r); resumoEl.textContent = x.txt; resumoEl.className = 'resumo' + (x.ok ? '' : ' bad'); };
+        cardEl.addEventListener('input', refaz); cardEl.addEventListener('change', refaz);
+        return cardEl;
       }
       function renderPoke(force) {
         if (!rp && !rpRegras) return;
         if (rp) {
           $('pkOn').checked = !!rp.ativo;
-          $('pkHint').textContent = rp.ativo ? 'ligada — comprando de verdade' : 'desligada';
+          $('pkHint').textContent = rp.ativo ? (rp.cfg.simular ? 'ligada — SIMULAÇÃO (não compra)' : 'ligada — comprando de verdade') : 'desligada';
+          $('pkSim').checked = rp.cfg.simular !== false; $('pkSimHint').textContent = rp.cfg.simular !== false ? 'só avisa no registro o que compraria, sem comprar nada' : 'DESLIGADO: as regras compram de verdade';
           $('pkInfo').textContent = !rp.conectado ? 'Sem conexão com o jogo.' : !rp.lider ? 'Outra aba do jogo está cuidando das compras.' : (rp.msg || '') + (rp.stats && rp.stats.comprados ? ' · comprados: ' + rp.stats.comprados : '') + (rp.stats && rp.stats.falhas ? ' · falhas: ' + rp.stats.falhas : '');
           if (!emFocoRp() && root.activeElement !== $('pkInt')) $('pkInt').value = String(rp.cfg.intervaloS || 5);
           if (root.activeElement !== $('imAnte')) $('imAnte').value = String(rp.cfg.antecipaMs || 0);
@@ -3416,6 +3474,7 @@ function definirCaptura(v) {
         const b = rp.busca || { rows: [] };
         $('imMsg').textContent = b.msg || 'Clique em "Buscar em retenção" para listar os anúncios que ainda aguardam a liberação.';
         $('imBuscar').disabled = !!b.carregando || !rp.conectado;
+        if (rp.imed) { $('imOn').checked = !!rp.imed.ativo; $('imHint').textContent = rp.imed.ativo ? 'LIGADA — compra de verdade · compradas: ' + rp.imed.comprados + '/' + rp.imed.limite : 'desligada — nada será comprado'; }
         const lista = $('imLista'); lista.textContent = '';
         const armados = new Set((rp.alvos || []).map((a) => a.id));
         for (const a of (b.rows || []).slice().sort((x, y) => x.compravelEm - y.compravelEm)) {
@@ -3500,10 +3559,20 @@ function definirCaptura(v) {
           for (const [k, rot] of [['hp', 'HP ≥'], ['atk', 'Atk ≥'], ['def', 'Def ≥'], ['spAtk', 'SpAtk ≥'], ['spDef', 'SpDef ≥'], ['speed', 'Spd ≥']]) {
             $('csIv').append(el('span', { textContent: rot }), el('input', { type: 'number', step: '1', min: '0', max: '31', placeholder: '0–31', id: 'csiv_' + k }));
           }
+          $('csRegra').addEventListener('click', () => {
+            const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
+            const pm = parseNum($('csPreco').value) || 0;
+            if (!(pm > 0)) { $('csMsg').textContent = 'Para criar a regra, defina o preço máximo (coins).'; return; }
+            const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
+            if (!rpRegras) rpRegras = JSON.parse(JSON.stringify((rp && rp.cfg && rp.cfg.regras) || []));
+            rpRegras.push({ id: 'r' + Date.now().toString(36), nome: $('csEsp').value.trim(), ativo: true, especie: $('csEsp').value.trim(), modo: 'e', outland: $('csOutl').value, p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, shiny: $('csShiny').checked, precoMax: pm, qtd: Math.max(1, Math.min(999, Number($('csLim').value) || 1)), comprados: 0 });
+            rpSig = ''; rpEnviarCfg(); navTop = 'pokemon'; navPk = 'auto'; navAu = 'poke'; renderMercadoSub();
+            $('pkInfo').textContent = 'Regra criada a partir da consulta. Confira, e use o modo simulação antes de comprar de verdade.';
+          });
           $('csGo').addEventListener('click', () => {
             const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
             const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
-            rpCmd({ type: 'consultar', filtros: { especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: Number($('csPag').value) || 4 } });
+            rpCmd({ type: 'consultar', filtros: { ordem: $('csOrdem').value, limite: Number($('csLim').value) || 20, especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: 15 } });
           });
         }
         const c = rp && rp.cons; if (!c) return;
@@ -3561,15 +3630,40 @@ function definirCaptura(v) {
       rpCmd({ type: 'hello' });
       $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
       $('rnCarregar').addEventListener('click', () => rpCmd({ type: 'ren-carregar' }));
-      $('pkOn').addEventListener('change', (e) => rpCmd({ type: 'ativo', value: e.target.checked }));
+      $('pkOn').addEventListener('change', async (e) => {
+        const on = e.target.checked;
+        if (on) {
+          const regs = (rpRegras || []).filter((r) => r.ativo !== false && r.precoMax > 0);
+          if (!regs.length) { e.target.checked = false; $('pkInfo').textContent = 'Crie ao menos uma regra com preço máximo e um filtro antes de ligar.'; return; }
+          const sim = $('pkSim').checked;
+          const total = regs.reduce((s, r) => s + r.precoMax * (r.qtd || 1), 0);
+          const ok = await confirmar(sim ? regs.length + ' regra(s) ativa(s). MODO SIMULAÇÃO: só vou avisar no registro o que compraria; nada será comprado.' : regs.length + ' regra(s) ativa(s). Vou COMPRAR DE VERDADE Pokémon que atendam às regras. Gasto máximo possível: ' + fmt(total) + ' coins.', 'Ligar compra automática', 'Ligar');
+          if (!ok) { e.target.checked = false; return; }
+        }
+        rpCmd({ type: 'ativo', value: on });
+      });
+      $('pkSim').addEventListener('change', async (e) => {
+        const sim = e.target.checked;
+        if (!sim) { const ok = await confirmar('Desligar a simulação? A partir de agora, ao ligar a compra automática, as regras vão COMPRAR de verdade.', 'Sair do modo simulação', 'Comprar de verdade'); if (!ok) { e.target.checked = true; return; } }
+        rpCmd({ type: 'simular', value: sim });
+      });
       $('pkInt').addEventListener('change', rpEnviarCfg);
       $('imAnte').addEventListener('change', rpEnviarCfg);
-      $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; rpRegras.push({ id: 'r' + Date.now().toString(36), nome: '', ativo: true, especie: '', modo: 'e', p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); rpSig = ''; renderPoke(true); rpEnviarCfg(); });
+      $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; rpRegras.push({ id: 'r' + Date.now().toString(36), nome: '', ativo: true, especie: '', modo: 'e', outland: 'omitir', ivs: {}, p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); rpSig = ''; renderPoke(true); rpEnviarCfg(); });
       $('pkZerar').addEventListener('click', () => { rpCmd({ type: 'zerar-contagens' }); rpRegras = null; });
       $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
       for (const id of ['pkLogLimpar', 'imLogLimpar', 'rnLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
       for (const id of ['pkLogCopiar', 'imLogCopiar', 'rnLogCopiar']) $(id).addEventListener('click', copiarLogPk);
-      $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 3 }));
+      $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, ordem: $('imOrdem').value, limite: Number($('imLim').value) || 5, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 4 }));
+      $('imLim').addEventListener('input', () => rpCmd({ type: 'imed-limite', limite: Number($('imLim').value) || 5 }));
+      $('imOn').addEventListener('change', async (e) => {
+        const on = e.target.checked;
+        if (on) {
+          const ok = await confirmar('Ligar a Compra Imediata? Qualquer Pokémon que você armar será COMPRADO de verdade (em coins) assim que for liberado, até o preço máximo informado e no máximo ' + (Number($('imLim').value) || 5) + ' compra(s).', 'Ligar Compra Imediata', 'Ligar');
+          if (!ok) { e.target.checked = false; return; }
+        }
+        rpCmd({ type: 'imed-ativo', value: on, limite: Number($('imLim').value) || 5 });
+      });
       setInterval(() => { if (sub === 'imed' && rp) renderImed(); }, 500);
     
     
@@ -3808,7 +3902,9 @@ function definirCaptura(v) {
       }
       $('novChecar').addEventListener('click', checarAtualizacao);
       setTimeout(checarAtualizacao, 4000); setInterval(checarAtualizacao, 3 * 3600 * 1000);
-      function showSub(s) { sub = s; renderMercadoSub(); }
+      function showSub(s) { if (s === 'compras' || s === 'hist' || s === 'pokemon') navTop = s; sub = calcSub(); renderMercadoSub(); }
+      root.querySelectorAll('#pknav button').forEach((b) => b.addEventListener('click', () => { navPk = b.dataset.pk; renderMercadoSub(); }));
+      root.querySelectorAll('#autonav button').forEach((b) => b.addEventListener('click', () => { navAu = b.dataset.au; renderMercadoSub(); }));
       root.querySelectorAll('#subtabs button').forEach((b) => b.addEventListener('click', () => showSub(b.dataset.sub)));
       root.querySelectorAll('#tabs button[data-tab]').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
       $('enabled').addEventListener('change', (e) => { cfg.enabled = e.target.checked; save(); renderMaster(); renderStatus(); });
@@ -4098,11 +4194,8 @@ function definirCaptura(v) {
           <section id="tab-itens" class="tab" hidden>
             <nav class="tabs sub" id="subtabs">
               <button data-sub="compras" class="on">Itens</button>
-              <button data-sub="poke">Pokémon</button>
-              <button data-sub="imed">Compra Imediata</button>
-              <button data-sub="cons">Consulta</button>
-              <button data-sub="ren">Renovação</button>
-              <button data-sub="hist">Histórico de compras</button>
+              <button data-sub="pokemon">Pokémon</button>
+              <button data-sub="hist">Histórico</button>
             </nav>
             <div id="sub-compras">
             <div class="card master">
@@ -4135,6 +4228,35 @@ function definirCaptura(v) {
               </div>
             </details>
             </div>
+            <div id="sub-pokemon" hidden>
+              <nav class="tabs sub" id="pknav">
+                <button data-pk="auto" class="on">Auto-compra</button>
+                <button data-pk="ren">Renovar anúncios</button>
+              </nav>
+              <div id="pk-auto">
+                <nav class="tabs sub" id="autonav">
+                  <button data-au="cons" class="on">Consultar</button>
+                  <button data-au="poke">Regras</button>
+                  <button data-au="imed">Compra Imediata</button>
+                </nav>
+            <div id="sub-cons" hidden>
+              <div class="card">
+                <h2>CONSULTAR O MERCADO</h2>
+                <div class="mut">Veja o que há à venda (só coins) de acordo com os filtros. <b>Não compra nada.</b> Campos vazios são ignorados. Depois de achar o que quer, use "Criar regra com estes filtros" para pôr na compra automática.</div>
+                <div class="fld"><label for="csEsp">Pokémon</label><input id="csEsp" type="text" placeholder="ex.: Snorlax (vazio = todos)"></div>
+                <div class="fld"><label for="csPreco">Preço máximo (coins)</label><input id="csPreco" type="text" placeholder="ex.: 30M"></div>
+                <div class="fld"><label for="csOutl">Outland</label><select id="csOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select></div>
+                <div class="fld"><label for="csOrdem">Ordenar por</label><select id="csOrdem"><option value="baratos">Menor preço</option><option value="recentes">Adicionados recentemente</option><option value="caros">Maior preço</option></select></div>
+                <div class="fld"><label for="csLim">Quantidade máxima de resultados</label><input id="csLim" type="number" min="1" max="500" step="1" value="20"></div>
+                <div class="fld"><label><input id="csShiny" type="checkbox"> ✨ só shiny</label></div>
+                <div class="est4" id="csEst"></div>
+                <div class="mut">IV individual (31 = perfeito):</div>
+                <div class="est4" id="csIv"></div>
+                <div class="btns"><button id="csGo" class="icon">Consultar</button><button id="csRegra" class="icon">Criar regra com estes filtros</button></div>
+                <div class="mut" id="csMsg"></div>
+                <div id="csLista" class="list"></div>
+              </div>
+            </div>
             <div id="sub-poke" hidden>
               <div class="card master">
                 <label class="switch big">
@@ -4143,6 +4265,11 @@ function definirCaptura(v) {
                   <span class="lbl"><b>Compra automática de Pokémon</b><small id="pkHint">desligada</small></span>
                 </label>
                 <div class="mut" id="pkInfo">Desligada.</div>
+                <label class="switch">
+                  <input type="checkbox" id="pkSim" checked>
+                  <span class="slider"></span>
+                  <span class="lbl"><b>Modo simulação (recomendado para testar)</b><small id="pkSimHint">só avisa o que compraria, sem comprar nada</small></span>
+                </label>
                 <div class="row inline">
                   <label>Consultar a cada <input id="pkInt" type="number" min="4" step="0.5" value="5"> s <small>(uma regra por vez, em rodízio)</small></label>
                 </div>
@@ -4154,34 +4281,36 @@ function definirCaptura(v) {
               <div class="mut">Cada regra compra Pokémon do Mercado (em coins) quando o anúncio atende aos critérios e custa até o preço máximo. P = potência, IV = soma dos IVs, Q = qualidade e N = nota (em milésimos, como na Venda automática: 1700, 3500). Campo vazio = ignorado. Preço máximo é obrigatório e vale sempre. Se o anúncio ainda estiver em retenção, a compra é agendada para o instante da liberação.</div>
             </div>
             <div id="sub-imed" hidden>
+              <div class="card master">
+                <label class="switch big">
+                  <input type="checkbox" id="imOn">
+                  <span class="slider"></span>
+                  <span class="lbl"><b>Compra Imediata</b><small id="imHint">desligada — nada será comprado</small></span>
+                </label>
+                <div class="mut">Escolha um Pokémon que está no Mercado aguardando o tempo de retenção (2 min). A extensão acompanha o relógio do servidor e envia a compra no instante em que ele é liberado. Só em coins. Com a chave desligada, ela apenas mostra e arma, mas não compra.</div>
+              </div>
               <div class="card">
-                <h2>COMPRA IMEDIATA <small id="imHint"></small></h2>
-                <div class="mut">Escolha um Pokémon que está no Mercado aguardando o tempo de retenção. A extensão acompanha o relógio do servidor e envia o pedido de compra no instante em que ele é liberado.</div>
-                <div class="row addn"><input id="imNome" type="text" placeholder="nome do Pokémon (opcional)"><input id="imPreco" type="text" placeholder="preço máx. (opcional)"><select id="imOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select><button id="imBuscar" class="icon">Buscar em retenção</button></div>
+                <h2>BUSCAR EM RETENÇÃO</h2>
+                <div class="fld"><label for="imNome">Pokémon</label><input id="imNome" type="text" placeholder="nome (vazio = qualquer)"></div>
+                <div class="fld"><label for="imPreco">Preço máximo (coins)</label><input id="imPreco" type="text" placeholder="ex.: 30M (vazio = sem limite)"></div>
+                <div class="fld"><label for="imOutl">Outland</label><select id="imOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select></div>
+                <div class="fld"><label for="imOrdem">Ordenar por</label><select id="imOrdem"><option value="recentes">Adicionados recentemente</option><option value="baratos">Menor preço</option><option value="caros">Maior preço</option></select></div>
+                <div class="fld"><label for="imLim">Quantidade (buscar e comprar até)</label><input id="imLim" type="number" min="1" max="100" step="1" value="5"></div>
+                <div class="fld"><button id="imBuscar" class="icon">Buscar em retenção</button></div>
                 <div class="mut" id="imMsg"></div>
                 <div id="imLista" class="list"></div>
               </div>
               <div class="card">
                 <h2>ARMADAS <small id="imArmN"></small></h2>
                 <div id="imArmadas" class="list"></div>
-              <h2>REGISTRO <button id="imLogCopiar" class="link">copiar</button> <button id="imLogLimpar" class="link">limpar</button></h2>
-              <div id="imLog" class="log"></div>
                 <div class="row inline"><label>Antecipar o envio em <input id="imAnte" type="number" min="0" max="1000" step="10" value="0"> ms <small>(compensa a demora da rede; 0 = no instante exato)</small></label></div>
               </div>
-            </div>
-            <div id="sub-cons" hidden>
               <div class="card">
-                <h2>CONSULTA DE DISPONIBILIDADE</h2>
-                <div class="mut">Mostra o que há à venda no Mercado de acordo com os filtros. Só consulta — não compra nada. Campos vazios são ignorados.</div>
-                <div class="row inline"><label>Espécie <input id="csEsp" type="text" placeholder="ex.: Snorlax"></label><label>Preço máx. <input id="csPreco" type="text" placeholder="ex.: 30M"></label><label><input id="csShiny" type="checkbox"> ✨ só shiny</label><select id="csOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select></div>
-                <div class="est4" id="csEst"></div>
-                <div class="mut">IV individual (31 = perfeito):</div>
-                <div class="est4" id="csIv"></div>
-                <div class="row inline"><label>Páginas <input id="csPag" type="number" min="1" max="10" value="4"> <small>(24 anúncios cada; ~4 s por página)</small></label><button id="csGo" class="icon">Consultar</button></div>
-                <div class="mut" id="csMsg"></div>
-                <div id="csLista" class="list"></div>
+                <h2>REGISTRO <button id="imLogCopiar" class="link">copiar</button> <button id="imLogLimpar" class="link">limpar</button></h2>
+                <div id="imLog" class="log"></div>
               </div>
             </div>
+              </div>
             <div id="sub-ren" hidden>
               <div class="card">
                 <h2>RENOVAÇÃO AUTOMÁTICA DE ANÚNCIOS <small id="rnHint"></small></h2>
@@ -4200,6 +4329,7 @@ function definirCaptura(v) {
                 <h2>REGISTRO <button id="rnLogCopiar" class="link">copiar</button> <button id="rnLogLimpar" class="link">limpar</button></h2>
                 <div id="rnLog" class="log"></div>
               </div>
+            </div>
             </div>
             <div id="sub-hist" hidden>
     

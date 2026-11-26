@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.24", "itens": ["Mercado RMT reorganizado: Itens | Pokémon | Histórico. Em Pokémon: Auto-compra (Consultar, Regras, Compra Imediata) e Renovar anúncios. Consulta e Compra Imediata com ordenação (menor preço, maior preço, recentes) e limite de quantidade; Compra Imediata com liga/desliga próprio; regras com resumo claro do que será comprado, modo simulação (só avisa) e confirmação antes de ligar; botão para criar regra a partir da consulta. Tudo em coins."]},
  {"v": "2.3.23", "itens": ["Nova aba Renovação (Mercado RMT): renova sozinha os seus anúncios de Pokémon, alternando o preço entre dois valores (Preço A e Preço B) a cada intervalo (mínimo 30 min, limite do jogo), até vender. Desligada por padrão, com explicação na tela e registro de cada renovação."]},
  {"v": "2.3.22", "itens": ["Nova aba Novidades com o resumo de cada versão. A extensão avisa quando há uma versão nova da própria extensão (ponto vermelho na aba, checagem a cada 3 horas). No userscript, o aviso é do Tampermonkey/Greasy Fork."]},
  {

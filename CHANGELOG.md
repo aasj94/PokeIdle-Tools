@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## v2.3.24
+- **Mercado RMT reorganizado:** Itens | Pokémon | Histórico. Em Pokémon: **Auto-compra** (Consultar, Regras, Compra Imediata) e **Renovar anúncios**.
+- Consulta e Compra Imediata com **ordenação** (menor preço, maior preço, recentes) e **limite de quantidade**; Compra Imediata com liga/desliga próprio; cada campo em uma linha.
+- Regras com **resumo claro do que será comprado**, **modo simulação** (só avisa, não compra; ligado por padrão) e **confirmação** antes de ligar.
+- Botão "Criar regra com estes filtros" na Consulta. Tudo somente em coins.
+
 ## v2.3.23
 - Nova aba **Renovação** (Mercado RMT): renova sozinha os seus anúncios de Pokémon, alternando o preço entre dois valores (Preço A e Preço B) a cada intervalo (mínimo 30 min, limite do jogo), até vender. Desligada por padrão, com explicação na tela e registro de cada renovação.
 
