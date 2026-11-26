@@ -20,6 +20,7 @@ Versão atual: **2.3.19**
 2. Abra [`userscript/pokeidle-tools-by-ateforp.user.js`](userscript/pokeidle-tools-by-ateforp.user.js) e clique em **Raw**; o gerenciador oferece a instalação.
 
 ### Extensão do Chrome (modo desenvolvedor)
+Baixe o ZIP pronto: [download/pokeidle-tools-by-ateforp.zip](https://github.com/aasj94/PokeIdle-Tools/raw/main/download/pokeidle-tools-by-ateforp.zip).
 1. Baixe o `.zip` da [última versão](../../releases/latest) e extraia.
 2. Abra `chrome://extensions`, ative **Modo do desenvolvedor**.
 3. Clique em **Carregar sem compactação** e escolha a pasta `extension`.

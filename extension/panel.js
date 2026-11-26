@@ -217,7 +217,7 @@
         <div class="card">
           <h2>NOVIDADES <small id="novVer"></small></h2>
           <div class="mut" id="novAviso"></div>
-          <div class="btns"><button id="novChecar" class="icon">Verificar atualização</button><a id="novBaixar" class="icon" href="https://github.com/aasj94/PokeIdle-Tools/releases/latest" target="_blank" rel="noopener" hidden>⬇ Baixar atualização</a></div>
+          <div class="btns"><button id="novChecar" class="icon">Verificar atualização</button><a id="novBaixar" class="icon" href="https://github.com/aasj94/PokeIdle-Tools/raw/main/download/pokeidle-tools-by-ateforp.zip" target="_blank" rel="noopener" hidden>⬇ Baixar atualização</a></div>
         </div>
         <div id="novLista"></div>
       </section>

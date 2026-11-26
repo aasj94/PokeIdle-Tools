@@ -1021,7 +1021,7 @@ function createUI(root) {
     if (novaVerificando) av.textContent = 'Verificando…';
     else if (nova) av.textContent = 'Nova versão disponível: ' + nova.version + ' (a sua é a ' + VERSAO + '). A extensão não se atualiza sozinha: clique em "Baixar atualização", extraia o ZIP por cima da pasta da extensão e recarregue em chrome://extensions. No userscript, use "Atualizar script agora" no Tampermonkey/Greasy Fork.' + quando;
     else av.textContent = novaErro ? 'Não consegui verificar agora (' + novaErro + ').' + quando : 'Você está na versão mais recente (' + VERSAO + ').' + quando;
-    const dl = $('novBaixar'); if (dl) { dl.hidden = !nova; if (nova) dl.href = nova.download || 'https://github.com/aasj94/PokeIdle-Tools/releases/latest'; }
+    const dl = $('novBaixar'); if (dl) { dl.hidden = !nova; if (nova) dl.href = nova.download || 'https://github.com/aasj94/PokeIdle-Tools/raw/main/download/pokeidle-tools-by-ateforp.zip'; }
     const bt = $('novChecar'); if (bt) bt.disabled = novaVerificando;
     const box = $('novLista'); box.textContent = '';
     RELS.forEach((r, i) => {

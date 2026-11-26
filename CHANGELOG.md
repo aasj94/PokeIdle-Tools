@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.28
+- Corrigido o botão **Baixar atualização**: agora baixa direto o ZIP da extensão (pasta `download/`), em vez de uma página de releases inexistente.
+
 ## v2.3.27
 - Shiny Monitor com textos mais claros: resumo em linhas com legenda.
 
