@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.31
+// @version      2.3.32
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -2080,7 +2080,7 @@ function definirCaptura(v) {
       especie: String(r.especie || '').slice(0, 40),
       modo: r.modo === 'ou' ? 'ou' : 'e',
       outland: r.outland === 'incluir' || r.outland === 'so' ? r.outland : 'omitir',
-      p: num(r.p), iv: num(r.iv), q: num(r.q), n: num(r.n),
+      p: num(r.p), iv: num(r.iv), q: num(r.q), n: num(r.n), nivMin: num(r.nivMin), nivMax: num(r.nivMax),
       ivs: { hp: num(r.ivs && r.ivs.hp), atk: num(r.ivs && r.ivs.atk), def: num(r.ivs && r.ivs.def), spAtk: num(r.ivs && r.ivs.spAtk), spDef: num(r.ivs && r.ivs.spDef), speed: num(r.ivs && r.ivs.speed) },
       shiny: !!r.shiny,
       precoMax: Math.max(0, Math.floor(num(r.precoMax) || 0)),
@@ -2167,6 +2167,8 @@ function definirCaptura(v) {
     if (a.moeda !== 'gold' || a.preco <= 0 || a.preco > r.precoMax) return false;
     if (r.especie && nomeNorm(a.nome).indexOf(nomeNorm(r.especie)) === -1) return false;
     if (r.shiny && !a.shiny) return false;
+    if (r.nivMin != null && !(a.level >= r.nivMin)) return false;
+    if (r.nivMax != null && !(a.level <= r.nivMax)) return false;
     if (r.outland === 'so' && a.speciesId < 2001) return false;
     if (r.outland === 'omitir' && a.speciesId >= 2001) return false;
     const testes = [];
@@ -2300,8 +2302,8 @@ function definirCaptura(v) {
       }
     }
     // consulta de disponibilidade (aba Consulta): lista tudo que bate nos filtros, sem comprar
-    if (pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em < 8000) {
-      pendConsulta = null;
+    if (pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em < 10000) {
+      pendConsulta = null; cons.tent = 0;
       const ids = new Set(cons.rows.map((r) => r.id));
       for (const a of linhas) if (a.estado === 'aberto' && !ids.has(a.id) && casa(cons.regra, a)) cons.rows.push(a);
       cons.total += linhas.length;
@@ -2389,6 +2391,7 @@ function definirCaptura(v) {
   function aoLimite() {
     S.limites++; limitesRec = limitesRec.filter((t) => Date.now() - t < 60000); limitesRec.push(Date.now());
     penalidade = Math.min(15000, penalidade + 2000); ultReq = Date.now();
+    if (cons.carregando && pendConsulta && pendConsulta.tipo === 'cons') { pendConsulta = null; cons.pag = Math.max(0, cons.pag - 1); }
     S.msg = 'O jogo avisou "Devagar aí". Aumentei o intervalo em ' + (penalidade / 1000) + ' s.'; log(S.msg, 'erro');
     if (limitesRec.length >= 6 && ativo) { ativo = false; S.msg = 'O jogo avisou 6 vezes em 1 minuto. Compra de Pokémon DESLIGADA por segurança — aumente o intervalo e ligue de novo.'; }
     sujo = true;
@@ -2401,6 +2404,8 @@ function definirCaptura(v) {
     const r = regras[rotor % regras.length]; rotor++;
     const extra = { precoMax: String(r.precoMax) };
     if (r.shiny) extra.soShiny = true;
+    if (r.nivMin != null) extra.nivelMin = String(r.nivMin);
+    if (r.nivMax != null) extra.nivelMax = String(r.nivMax);
     extra.semOutland = r.outland === 'omitir';
     if (r.especie) extra.busca = r.especie;
     if (!enviar(pedidoLista(extra))) return false;
@@ -2411,7 +2416,12 @@ function definirCaptura(v) {
     const ws = getWs(); const aberto = !!(ws && ws.readyState === 1);
     pump(); renTick();
     if (busca.carregando && !fila.length && (!pendConsulta || pendConsulta.tipo !== 'busca' || Date.now() - pendConsulta.em > 10000)) { busca.carregando = false; busca.msg = busca.rows.length + ' anúncio(s) em retenção (algumas páginas não responderam).'; pendConsulta = null; sujo = true; }
-    if (cons.carregando && !fila.length && pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em > 10000) { cons.carregando = false; cons.msg = cons.rows.length + ' encontrado(s) (uma página não respondeu).'; pendConsulta = null; sujo = true; }
+    if (cons.carregando && !fila.length && pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em > 10000) {
+      pendConsulta = null; cons.tent = (cons.tent || 0) + 1;
+      if (cons.tent <= 3) { cons.pag--; cons.msg = 'A página ' + (cons.pag + 1) + ' demorou; tentando de novo (' + cons.tent + '/3)…'; log('Consulta: sem resposta da página ' + (cons.pag + 1) + ', tentando de novo (' + cons.tent + '/3)', 'info'); }
+      else { cons.carregando = false; cons.msg = 'O jogo não respondeu à consulta (página ' + (cons.pag + 1) + '). Tente de novo em instantes; se persistir, veja o Registro.'; log(cons.msg, 'erro'); }
+      sujo = true;
+    }
     if (aberto && lider && cons.carregando && !fila.length && !pendConsulta && cons.pag < cons.pags && podeConsultar(true)) {
       cons.pag++;
       if (enviar(pedidoLista(Object.assign({}, cons.extra, { pagina: cons.pag })))) { marcarReq(); S.consultas++; pendConsulta = { tipo: 'cons', em: Date.now() }; } else cons.pag--;
@@ -2959,6 +2969,8 @@ function definirCaptura(v) {
     .dlg { position: absolute; inset: 0; z-index: 20; background: rgba(4,12,28,.72); display: flex; align-items: center; justify-content: center; padding: 14px; }
     .dlg[hidden] { display: none; }
     .dlgbox { width: min(340px, 100%); background: #10213b; border: 1px solid #3f67a8; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+    .dlgopc { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .dlgopc button { width: 100%; text-align: left; }
     .dlgbox .dlgt { font-weight: 800; color: var(--ouro); margin-bottom: 6px; }
     .dlgbox p { margin: 0 0 12px; font-size: 13px; line-height: 1.45; color: var(--txt); }
     .dlgbox .btns { display: flex; gap: 8px; justify-content: flex-end; }
@@ -2975,6 +2987,7 @@ function definirCaptura(v) {
     
     // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
     window.__ateforpReleases = [
+     {"v": "2.3.32", "itens": ["Regras e Consulta: novo filtro de nível do Pokémon (mínimo e máximo). O botão da regra agora se chama \"Consultar Pokémon disponíveis\". Ao criar uma regra pela Consulta para um Pokémon que já tem regra, aparece um aviso: atualizar a regra existente, descartar a antiga (com novo nome) ou cancelar (com confirmação de zerar o filtro). A Consulta tenta de novo quando uma página do mercado demora a responder."]},
      {"v": "2.3.31", "itens": ["Regras de Pokémon: novo botão \"Ver o que casa agora\" em cada regra. Abre a Consulta já com os filtros da regra e mostra os anúncios que ela compraria, sem comprar nada. Quando a compra automática está desligada, o painel avisa que nem a simulação avalia anúncios."]},
      {"v": "2.3.30", "itens": ["Regras de compra de Pokémon: dá para recolher cada regra (fica só nome, botão ligada, resumo do que compra e quantos já comprou); o estado de aberta/fechada é lembrado. Corrigido o contador \"Comprados\" que não acompanhava a quantidade digitada."]},
      {"v": "2.3.29", "itens": ["Userscript: botão Atualizar userscript na aba Novidades (abre a tela de instalação do Tampermonkey: 1 clique para atualizar)."]},
@@ -3535,12 +3548,13 @@ function definirCaptura(v) {
         for (const k of Object.keys(rotIv)) if (r.ivs[k] != null) crit.push('IV ' + rotIv[k] + ' ≥ ' + r.ivs[k]);
         if (r.q != null) crit.push('Qualidade ≥ ' + fmt(r.q));
         if (r.n != null) crit.push('Nota ≥ ' + fmt(r.n));
+        const lvT = (r.nivMin != null || r.nivMax != null) ? ' Nível ' + (r.nivMin != null && r.nivMax != null ? 'entre ' + r.nivMin + ' e ' + r.nivMax : r.nivMin != null ? 'a partir de ' + r.nivMin : 'até ' + r.nivMax) + ' (obrigatório).' : '';
         const outT = r.outland === 'so' ? 'somente Outland' : r.outland === 'incluir' ? 'com ou sem Outland' : 'sem Outland';
-        const txt = !(r.precoMax > 0) ? 'Falta o preço máximo.' : !(crit.length || r.especie || r.shiny) ? 'Falta pelo menos um filtro.' :
+        const txt = !(r.precoMax > 0) ? 'Falta o preço máximo.' : !(crit.length || r.especie || r.shiny || lvT) ? 'Falta pelo menos um filtro.' :
           'Vai comprar até ' + (r.qtd || 1) + ' ' + (r.especie || 'Pokémon de qualquer espécie') + (r.shiny ? ' shiny' : '') + ' (' + outT + ', só coins) ' +
           (crit.length ? (r.modo === 'ou' ? 'quando QUALQUER UM destes bater: ' : 'quando TODOS estes critérios baterem: ') + crit.join(' · ') + ' ' : '') +
-          'por no máximo ' + fmt(r.precoMax) + ' coins cada. Gasto máximo: ' + fmt(r.precoMax * (r.qtd || 1)) + ' coins.';
-        return { txt, ok: r.precoMax > 0 && (crit.length > 0 || !!r.especie || !!r.shiny) };
+          'por no máximo ' + fmt(r.precoMax) + ' coins cada.' + lvT + ' Gasto máximo: ' + fmt(r.precoMax * (r.qtd || 1)) + ' coins.';
+        return { txt, ok: r.precoMax > 0 && (crit.length > 0 || !!r.especie || !!r.shiny || !!lvT) };
       }
       let rpCol = {}; try { rpCol = JSON.parse(localStorage.getItem('ateforp-rp-col') || '{}') || {}; } catch (e) { rpCol = {}; }
       function cartaoRegra(r, i) {
@@ -3564,6 +3578,8 @@ function definirCaptura(v) {
         qtd.addEventListener('input', () => { r.qtd = Math.max(1, Number(qtd.value) || 1); rpEnviarCfg(); });
         const est = el('div', { className: 'est4' });
         for (const [k, rot, ph] of [['p', 'P ≥', '1–5'], ['iv', 'IV ≥', '0–192'], ['q', 'Q ≥', '1700'], ['n', 'N ≥', '3500']]) for (const x of campoNum(r, k, rot, ph)) est.append(x);
+        const estLv = el('div', { className: 'est4' });
+        for (const [k, rot, ph] of [['nivMin', 'Nível ≥', 'mín.'], ['nivMax', 'Nível ≤', 'máx.']]) for (const x of campoNum(r, k, rot, ph)) estLv.append(x);
         r.ivs = r.ivs || {};
         const estIv = el('div', { className: 'est4' });
         for (const [k, rot] of [['hp', 'HP ≥'], ['atk', 'Atk ≥'], ['def', 'Def ≥'], ['spAtk', 'SpAtk ≥'], ['spDef', 'SpDef ≥'], ['speed', 'Spd ≥']]) {
@@ -3572,7 +3588,7 @@ function definirCaptura(v) {
           estIv.append(el('span', { textContent: rot }), inp);
         }
         const rem = el('button', { className: 'link', textContent: 'remover', onclick: () => { rpRegras.splice(i, 1); rpSig = ''; renderPoke(true); rpEnviarCfg(); } });
-        const valida = r.precoMax > 0 && (['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].some((k) => r.ivs[k] != null) || r.p != null || r.iv != null || r.q != null || r.n != null || r.especie || r.shiny);
+        const valida = r.precoMax > 0 && (['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].some((k) => r.ivs[k] != null) || r.p != null || r.iv != null || r.q != null || r.n != null || r.nivMin != null || r.nivMax != null || r.especie || r.shiny);
         const rs0 = resumoDe(r); const resumoEl = el('div', { className: 'resumo' + (rs0.ok ? '' : ' bad'), textContent: rs0.txt });
         const compEl = el('div', { className: 'mut' });
         const textoComp = () => { compEl.textContent = 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1); };
@@ -3585,7 +3601,7 @@ function definirCaptura(v) {
           fld('Pokémon (vazio = qualquer espécie)', esp),
           fld('Comprar quando bater', modo),
           fld('Outland', outl),
-          est,
+          est, estLv,
           el('div', { className: 'mut', textContent: 'IV individual (31 = perfeito):' }), estIv,
           el('div', { className: 'fld' }, el('label', {}, shiny, ' ✨ só shiny')),
           fld('Preço máximo por Pokémon (coins)', preco),
@@ -3596,16 +3612,16 @@ function definirCaptura(v) {
         const aplicaCol = () => { const c = colapsada(); corpo.hidden = c; seta.textContent = c ? '▸ editar' : '▾ fechar'; };
         seta.addEventListener('click', () => { rpCol[r.id] = !colapsada(); try { localStorage.setItem('ateforp-rp-col', JSON.stringify(rpCol)); } catch (e) { /* ignora */ } aplicaCol(); });
         aplicaCol();
-        const ver = el('button', { className: 'icon', textContent: '🔍 Ver o que casa agora', title: 'Faz uma consulta (sem comprar nada) com os filtros desta regra e mostra os anúncios que ela compraria', onclick: () => {
+        const ver = el('button', { className: 'icon', textContent: '🔍 Consultar Pokémon disponíveis', title: 'Faz uma consulta (sem comprar nada) com os filtros desta regra e mostra os anúncios que ela compraria', onclick: () => {
           const iv = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) iv[k] = r.ivs[k] == null ? null : r.ivs[k];
           navTop = 'pokemon'; navPk = 'auto'; navAu = 'cons'; renderMercadoSub();
           const set = (id, v) => { const x = $(id); if (x) x.value = v == null ? '' : String(v); };
           set('csEsp', r.especie || ''); set('csPreco', r.precoMax ? short(r.precoMax) : ''); set('csOutl', r.outland || 'omitir'); set('csLim', 50);
           if ($('csShiny')) $('csShiny').checked = !!r.shiny;
-          for (const k of ['p', 'iv', 'q', 'n']) set('cs_' + k, r[k]);
+          for (const k of ['p', 'iv', 'q', 'n']) set('cs_' + k, r[k]); set('cs_nivMin', r.nivMin); set('cs_nivMax', r.nivMax);
           for (const k of Object.keys(iv)) set('csiv_' + k, iv[k]);
           csSig = '';
-          rpCmd({ type: 'consultar', filtros: { ordem: 'baratos', limite: 50, especie: r.especie || '', precoMax: r.precoMax || 0, shiny: !!r.shiny, outland: r.outland || 'omitir', modo: r.modo === 'ou' ? 'ou' : 'e', p: r.p, iv: r.iv, q: r.q, n: r.n, ivs: iv, paginas: 15 } });
+          rpCmd({ type: 'consultar', filtros: { ordem: 'baratos', limite: 50, especie: r.especie || '', precoMax: r.precoMax || 0, shiny: !!r.shiny, outland: r.outland || 'omitir', modo: r.modo === 'ou' ? 'ou' : 'e', nivMin: r.nivMin, nivMax: r.nivMax, p: r.p, iv: r.iv, q: r.q, n: r.n, ivs: iv, paginas: 15 } });
         } });
         const cardEl = el('div', { className: 'card' + (valida ? '' : ' warn') },
           el('div', { className: 'row inline rcab' }, el('label', {}, ativo, ' ligada'), tituloEl, seta),
@@ -3725,27 +3741,56 @@ function definirCaptura(v) {
       function renderCons() {
         if (!csInit) {
           csInit = true;
-          for (const [k, rot, ph] of [['p', 'P ≥', '1–5'], ['iv', 'IV total ≥', '0–192'], ['q', 'Q ≥', '1700'], ['n', 'N ≥', '3500']]) {
+          for (const [k, rot, ph] of [['p', 'P ≥', '1–5'], ['iv', 'IV total ≥', '0–192'], ['q', 'Q ≥', '1700'], ['n', 'N ≥', '3500'], ['nivMin', 'Nível ≥', 'mín.'], ['nivMax', 'Nível ≤', 'máx.']]) {
             $('csEst').append(el('span', { textContent: rot }), el('input', { type: 'number', step: '1', min: '0', placeholder: ph, id: 'cs_' + k }));
           }
           for (const [k, rot] of [['hp', 'HP ≥'], ['atk', 'Atk ≥'], ['def', 'Def ≥'], ['spAtk', 'SpAtk ≥'], ['spDef', 'SpDef ≥'], ['speed', 'Spd ≥']]) {
             $('csIv').append(el('span', { textContent: rot }), el('input', { type: 'number', step: '1', min: '0', max: '31', placeholder: '0–31', id: 'csiv_' + k }));
           }
-          $('csRegra').addEventListener('click', () => {
+          $('csRegra').addEventListener('click', async () => {
             const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
             const pm = parseNum($('csPreco').value) || 0;
             if (!(pm > 0)) { $('csMsg').textContent = 'Para criar a regra, defina o preço máximo (coins).'; return; }
             const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
             if (!rpRegras) rpRegras = JSON.parse(JSON.stringify((rp && rp.cfg && rp.cfg.regras) || []));
-            const nid2 = 'r' + Date.now().toString(36); rpCol[nid2] = false;
-            rpRegras.push({ id: nid2, nome: $('csEsp').value.trim(), ativo: true, especie: $('csEsp').value.trim(), modo: 'e', outland: $('csOutl').value, p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, shiny: $('csShiny').checked, precoMax: pm, qtd: Math.max(1, Math.min(999, Number($('csLim').value) || 1)), comprados: 0 });
+            const esp = $('csEsp').value.trim();
+            const filtros = { modo: 'e', outland: $('csOutl').value, nivMin: v('cs_nivMin'), nivMax: v('cs_nivMax'), p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, shiny: $('csShiny').checked, precoMax: pm, qtd: Math.max(1, Math.min(999, Number($('csLim').value) || 1)) };
+            const norm = (t) => String(t || '').trim().toLowerCase();
+            const velha = esp ? rpRegras.find((x) => norm(x.especie) === norm(esp)) : null;
+            let nome = esp, substitui = null, atualiza = null;
+            if (velha) {
+              for (;;) {
+                const r1 = await escolher('Você já tem uma regra para ' + esp + ': "' + (velha.nome || velha.especie) + '". O que fazer com a nova?', 'Já existe uma regra',
+                  [{ k: 'atualizar', t: 'Atualizar a regra existente com estes filtros' }, { k: 'descartar', t: 'Descartar a regra antiga e criar uma nova' }, { k: 'cancelar', t: 'Cancelar a criação' }]);
+                if (r1.k === 'atualizar') { atualiza = velha; break; }
+                if (r1.k === 'descartar') {
+                  const r2 = await escolher('A regra antiga "' + (velha.nome || velha.especie) + '" será removida. Dê um nome para a nova regra:', 'Novo nome da regra',
+                    [{ k: 'ok', t: 'Descartar a antiga e criar' }, { k: 'voltar', t: 'Voltar' }], { nome: '' });
+                  if (r2.k === 'ok') { substitui = velha; nome = r2.nome; break; }
+                  continue;
+                }
+                const r3 = await escolher('Se cancelar, os filtros da consulta serão ZERADOS (Pokémon, preço, níveis, IVs…). Deseja mesmo zerar ou prefere editar o filtro?', 'Cancelar e zerar o filtro?',
+                  [{ k: 'zerar', t: 'Sim, zerar o filtro' }, { k: 'editar', t: 'Não, quero editar o filtro' }]);
+                if (r3.k === 'zerar') {
+                  for (const el0 of root.querySelectorAll('#sub-cons input, #sub-cons select')) { if (el0.type === 'checkbox') el0.checked = false; else if (el0.tagName === 'SELECT') el0.selectedIndex = 0; else el0.value = el0.id === 'csLim' ? '20' : ''; }
+                  csSig = ''; $('csLista').textContent = ''; $('csMsg').textContent = 'Criação cancelada; filtros zerados.';
+                } else $('csMsg').textContent = 'Criação cancelada. Edite o filtro e tente de novo.';
+                return;
+              }
+            }
+            if (atualiza) { Object.assign(atualiza, filtros, { comprados: atualiza.comprados || 0 }); rpCol[atualiza.id] = false; }
+            else {
+              if (substitui) rpRegras.splice(rpRegras.indexOf(substitui), 1);
+              const nid2 = 'r' + Date.now().toString(36); rpCol[nid2] = false;
+              rpRegras.push(Object.assign({ id: nid2, nome, ativo: true, especie: esp, comprados: 0 }, filtros));
+            }
             rpSig = ''; rpEnviarCfg(); navTop = 'pokemon'; navPk = 'auto'; navAu = 'poke'; renderMercadoSub();
-            $('pkInfo').textContent = 'Regra criada a partir da consulta. Confira, e use o modo simulação antes de comprar de verdade.';
+            $('pkInfo').textContent = atualiza ? 'Regra "' + (atualiza.nome || atualiza.especie) + '" atualizada com os filtros da consulta. Confira, e use o modo simulação antes de comprar de verdade.' : 'Regra criada a partir da consulta. Confira, e use o modo simulação antes de comprar de verdade.';
           });
           $('csGo').addEventListener('click', () => {
             const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
             const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
-            rpCmd({ type: 'consultar', filtros: { ordem: $('csOrdem').value, limite: Number($('csLim').value) || 20, especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: 15 } });
+            rpCmd({ type: 'consultar', filtros: { ordem: $('csOrdem').value, limite: Number($('csLim').value) || 20, especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', nivMin: v('cs_nivMin'), nivMax: v('cs_nivMax'), p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: 15 } });
           });
         }
         const c = rp && rp.cons; if (!c) return;
@@ -4011,6 +4056,27 @@ function definirCaptura(v) {
           $('dlgOk').onclick = () => fim(true); $('dlgNo').onclick = () => fim(false);
           window.addEventListener('keydown', tecla, true);
           dlg.hidden = false; $('dlgNo').focus();
+        });
+      }
+      // diálogo com várias opções (e, opcionalmente, um campo de nome obrigatório)
+      function escolher(msg, titulo, botoes, campo) {
+        return new Promise((resolve) => {
+          const dlg = $('dlg'), btns = $('dlgOk').parentNode;
+          $('dlgT').textContent = titulo; $('dlgM').textContent = msg;
+          const antes = [$('dlgOk'), $('dlgNo')]; antes.forEach((b) => { b.hidden = true; });
+          const caixa = el('div', { className: 'dlgopc' });
+          let inp = null;
+          if (campo) { inp = el('input', { type: 'text', placeholder: 'Nome da nova regra', maxLength: 40, value: campo.nome || '' }); caixa.append(inp); }
+          const fim = (k) => { caixa.remove(); antes.forEach((b) => { b.hidden = false; }); dlg.hidden = true; window.removeEventListener('keydown', tecla, true); resolve({ k, nome: inp ? inp.value.trim() : '' }); };
+          const tecla = (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); fim(botoes[botoes.length - 1].k); } };
+          window.addEventListener('keydown', tecla, true);
+          botoes.forEach((b, i) => {
+            const bt = el('button', { className: 'icon' + (i === 0 ? ' dlgok' : ''), textContent: b.t });
+            bt.addEventListener('click', () => { if (inp && b.k === 'ok' && !inp.value.trim()) { inp.focus(); inp.placeholder = 'Digite um nome para continuar'; return; } fim(b.k); });
+            caixa.append(bt);
+          });
+          btns.parentNode.insertBefore(caixa, btns);
+          dlg.hidden = false; (inp || caixa.firstChild).focus();
         });
       }
       $('vdOn').addEventListener('change', async (e) => {

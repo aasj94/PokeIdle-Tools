@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## v2.3.32
+- Filtro de **nível** (mín./máx.) nas regras e na Consulta.
+- Botão da regra renomeado para **Consultar Pokémon disponíveis**.
+- Criar regra pela Consulta quando já existe regra do mesmo Pokémon: atualizar, descartar (novo nome) ou cancelar (com confirmação de zerar o filtro).
+- Consulta tenta de novo (até 3x) quando uma página demora a responder.
+
 ## v2.3.31
 - Regras de Pokémon: botão **Ver o que casa agora** em cada regra; abre a Consulta com os filtros da regra e lista o que ela compraria, sem comprar nada.
 - Aviso na tela quando a compra automática está desligada (nem a simulação avalia anúncios).

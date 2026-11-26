@@ -47,7 +47,7 @@
       especie: String(r.especie || '').slice(0, 40),
       modo: r.modo === 'ou' ? 'ou' : 'e',
       outland: r.outland === 'incluir' || r.outland === 'so' ? r.outland : 'omitir',
-      p: num(r.p), iv: num(r.iv), q: num(r.q), n: num(r.n),
+      p: num(r.p), iv: num(r.iv), q: num(r.q), n: num(r.n), nivMin: num(r.nivMin), nivMax: num(r.nivMax),
       ivs: { hp: num(r.ivs && r.ivs.hp), atk: num(r.ivs && r.ivs.atk), def: num(r.ivs && r.ivs.def), spAtk: num(r.ivs && r.ivs.spAtk), spDef: num(r.ivs && r.ivs.spDef), speed: num(r.ivs && r.ivs.speed) },
       shiny: !!r.shiny,
       precoMax: Math.max(0, Math.floor(num(r.precoMax) || 0)),
@@ -134,6 +134,8 @@
     if (a.moeda !== 'gold' || a.preco <= 0 || a.preco > r.precoMax) return false;
     if (r.especie && nomeNorm(a.nome).indexOf(nomeNorm(r.especie)) === -1) return false;
     if (r.shiny && !a.shiny) return false;
+    if (r.nivMin != null && !(a.level >= r.nivMin)) return false;
+    if (r.nivMax != null && !(a.level <= r.nivMax)) return false;
     if (r.outland === 'so' && a.speciesId < 2001) return false;
     if (r.outland === 'omitir' && a.speciesId >= 2001) return false;
     const testes = [];
@@ -267,8 +269,8 @@
       }
     }
     // consulta de disponibilidade (aba Consulta): lista tudo que bate nos filtros, sem comprar
-    if (pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em < 8000) {
-      pendConsulta = null;
+    if (pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em < 10000) {
+      pendConsulta = null; cons.tent = 0;
       const ids = new Set(cons.rows.map((r) => r.id));
       for (const a of linhas) if (a.estado === 'aberto' && !ids.has(a.id) && casa(cons.regra, a)) cons.rows.push(a);
       cons.total += linhas.length;
@@ -356,6 +358,7 @@
   function aoLimite() {
     S.limites++; limitesRec = limitesRec.filter((t) => Date.now() - t < 60000); limitesRec.push(Date.now());
     penalidade = Math.min(15000, penalidade + 2000); ultReq = Date.now();
+    if (cons.carregando && pendConsulta && pendConsulta.tipo === 'cons') { pendConsulta = null; cons.pag = Math.max(0, cons.pag - 1); }
     S.msg = 'O jogo avisou "Devagar aí". Aumentei o intervalo em ' + (penalidade / 1000) + ' s.'; log(S.msg, 'erro');
     if (limitesRec.length >= 6 && ativo) { ativo = false; S.msg = 'O jogo avisou 6 vezes em 1 minuto. Compra de Pokémon DESLIGADA por segurança — aumente o intervalo e ligue de novo.'; }
     sujo = true;
@@ -368,6 +371,8 @@
     const r = regras[rotor % regras.length]; rotor++;
     const extra = { precoMax: String(r.precoMax) };
     if (r.shiny) extra.soShiny = true;
+    if (r.nivMin != null) extra.nivelMin = String(r.nivMin);
+    if (r.nivMax != null) extra.nivelMax = String(r.nivMax);
     extra.semOutland = r.outland === 'omitir';
     if (r.especie) extra.busca = r.especie;
     if (!enviar(pedidoLista(extra))) return false;
@@ -378,7 +383,12 @@
     const ws = getWs(); const aberto = !!(ws && ws.readyState === 1);
     pump(); renTick();
     if (busca.carregando && !fila.length && (!pendConsulta || pendConsulta.tipo !== 'busca' || Date.now() - pendConsulta.em > 10000)) { busca.carregando = false; busca.msg = busca.rows.length + ' anúncio(s) em retenção (algumas páginas não responderam).'; pendConsulta = null; sujo = true; }
-    if (cons.carregando && !fila.length && pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em > 10000) { cons.carregando = false; cons.msg = cons.rows.length + ' encontrado(s) (uma página não respondeu).'; pendConsulta = null; sujo = true; }
+    if (cons.carregando && !fila.length && pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em > 10000) {
+      pendConsulta = null; cons.tent = (cons.tent || 0) + 1;
+      if (cons.tent <= 3) { cons.pag--; cons.msg = 'A página ' + (cons.pag + 1) + ' demorou; tentando de novo (' + cons.tent + '/3)…'; log('Consulta: sem resposta da página ' + (cons.pag + 1) + ', tentando de novo (' + cons.tent + '/3)', 'info'); }
+      else { cons.carregando = false; cons.msg = 'O jogo não respondeu à consulta (página ' + (cons.pag + 1) + '). Tente de novo em instantes; se persistir, veja o Registro.'; log(cons.msg, 'erro'); }
+      sujo = true;
+    }
     if (aberto && lider && cons.carregando && !fila.length && !pendConsulta && cons.pag < cons.pags && podeConsultar(true)) {
       cons.pag++;
       if (enviar(pedidoLista(Object.assign({}, cons.extra, { pagina: cons.pag })))) { marcarReq(); S.consultas++; pendConsulta = { tipo: 'cons', em: Date.now() }; } else cons.pag--;

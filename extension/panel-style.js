@@ -188,6 +188,8 @@ header button.icon { flex: none; }
 .dlg { position: absolute; inset: 0; z-index: 20; background: rgba(4,12,28,.72); display: flex; align-items: center; justify-content: center; padding: 14px; }
 .dlg[hidden] { display: none; }
 .dlgbox { width: min(340px, 100%); background: #10213b; border: 1px solid #3f67a8; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+.dlgopc { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.dlgopc button { width: 100%; text-align: left; }
 .dlgbox .dlgt { font-weight: 800; color: var(--ouro); margin-bottom: 6px; }
 .dlgbox p { margin: 0 0 12px; font-size: 13px; line-height: 1.45; color: var(--txt); }
 .dlgbox .btns { display: flex; gap: 8px; justify-content: flex-end; }

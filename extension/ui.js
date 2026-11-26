@@ -488,12 +488,13 @@ function createUI(root) {
     for (const k of Object.keys(rotIv)) if (r.ivs[k] != null) crit.push('IV ' + rotIv[k] + ' ≥ ' + r.ivs[k]);
     if (r.q != null) crit.push('Qualidade ≥ ' + fmt(r.q));
     if (r.n != null) crit.push('Nota ≥ ' + fmt(r.n));
+    const lvT = (r.nivMin != null || r.nivMax != null) ? ' Nível ' + (r.nivMin != null && r.nivMax != null ? 'entre ' + r.nivMin + ' e ' + r.nivMax : r.nivMin != null ? 'a partir de ' + r.nivMin : 'até ' + r.nivMax) + ' (obrigatório).' : '';
     const outT = r.outland === 'so' ? 'somente Outland' : r.outland === 'incluir' ? 'com ou sem Outland' : 'sem Outland';
-    const txt = !(r.precoMax > 0) ? 'Falta o preço máximo.' : !(crit.length || r.especie || r.shiny) ? 'Falta pelo menos um filtro.' :
+    const txt = !(r.precoMax > 0) ? 'Falta o preço máximo.' : !(crit.length || r.especie || r.shiny || lvT) ? 'Falta pelo menos um filtro.' :
       'Vai comprar até ' + (r.qtd || 1) + ' ' + (r.especie || 'Pokémon de qualquer espécie') + (r.shiny ? ' shiny' : '') + ' (' + outT + ', só coins) ' +
       (crit.length ? (r.modo === 'ou' ? 'quando QUALQUER UM destes bater: ' : 'quando TODOS estes critérios baterem: ') + crit.join(' · ') + ' ' : '') +
-      'por no máximo ' + fmt(r.precoMax) + ' coins cada. Gasto máximo: ' + fmt(r.precoMax * (r.qtd || 1)) + ' coins.';
-    return { txt, ok: r.precoMax > 0 && (crit.length > 0 || !!r.especie || !!r.shiny) };
+      'por no máximo ' + fmt(r.precoMax) + ' coins cada.' + lvT + ' Gasto máximo: ' + fmt(r.precoMax * (r.qtd || 1)) + ' coins.';
+    return { txt, ok: r.precoMax > 0 && (crit.length > 0 || !!r.especie || !!r.shiny || !!lvT) };
   }
   let rpCol = {}; try { rpCol = JSON.parse(localStorage.getItem('ateforp-rp-col') || '{}') || {}; } catch (e) { rpCol = {}; }
   function cartaoRegra(r, i) {
@@ -517,6 +518,8 @@ function createUI(root) {
     qtd.addEventListener('input', () => { r.qtd = Math.max(1, Number(qtd.value) || 1); rpEnviarCfg(); });
     const est = el('div', { className: 'est4' });
     for (const [k, rot, ph] of [['p', 'P ≥', '1–5'], ['iv', 'IV ≥', '0–192'], ['q', 'Q ≥', '1700'], ['n', 'N ≥', '3500']]) for (const x of campoNum(r, k, rot, ph)) est.append(x);
+    const estLv = el('div', { className: 'est4' });
+    for (const [k, rot, ph] of [['nivMin', 'Nível ≥', 'mín.'], ['nivMax', 'Nível ≤', 'máx.']]) for (const x of campoNum(r, k, rot, ph)) estLv.append(x);
     r.ivs = r.ivs || {};
     const estIv = el('div', { className: 'est4' });
     for (const [k, rot] of [['hp', 'HP ≥'], ['atk', 'Atk ≥'], ['def', 'Def ≥'], ['spAtk', 'SpAtk ≥'], ['spDef', 'SpDef ≥'], ['speed', 'Spd ≥']]) {
@@ -525,7 +528,7 @@ function createUI(root) {
       estIv.append(el('span', { textContent: rot }), inp);
     }
     const rem = el('button', { className: 'link', textContent: 'remover', onclick: () => { rpRegras.splice(i, 1); rpSig = ''; renderPoke(true); rpEnviarCfg(); } });
-    const valida = r.precoMax > 0 && (['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].some((k) => r.ivs[k] != null) || r.p != null || r.iv != null || r.q != null || r.n != null || r.especie || r.shiny);
+    const valida = r.precoMax > 0 && (['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].some((k) => r.ivs[k] != null) || r.p != null || r.iv != null || r.q != null || r.n != null || r.nivMin != null || r.nivMax != null || r.especie || r.shiny);
     const rs0 = resumoDe(r); const resumoEl = el('div', { className: 'resumo' + (rs0.ok ? '' : ' bad'), textContent: rs0.txt });
     const compEl = el('div', { className: 'mut' });
     const textoComp = () => { compEl.textContent = 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1); };
@@ -538,7 +541,7 @@ function createUI(root) {
       fld('Pokémon (vazio = qualquer espécie)', esp),
       fld('Comprar quando bater', modo),
       fld('Outland', outl),
-      est,
+      est, estLv,
       el('div', { className: 'mut', textContent: 'IV individual (31 = perfeito):' }), estIv,
       el('div', { className: 'fld' }, el('label', {}, shiny, ' ✨ só shiny')),
       fld('Preço máximo por Pokémon (coins)', preco),
@@ -549,16 +552,16 @@ function createUI(root) {
     const aplicaCol = () => { const c = colapsada(); corpo.hidden = c; seta.textContent = c ? '▸ editar' : '▾ fechar'; };
     seta.addEventListener('click', () => { rpCol[r.id] = !colapsada(); try { localStorage.setItem('ateforp-rp-col', JSON.stringify(rpCol)); } catch (e) { /* ignora */ } aplicaCol(); });
     aplicaCol();
-    const ver = el('button', { className: 'icon', textContent: '🔍 Ver o que casa agora', title: 'Faz uma consulta (sem comprar nada) com os filtros desta regra e mostra os anúncios que ela compraria', onclick: () => {
+    const ver = el('button', { className: 'icon', textContent: '🔍 Consultar Pokémon disponíveis', title: 'Faz uma consulta (sem comprar nada) com os filtros desta regra e mostra os anúncios que ela compraria', onclick: () => {
       const iv = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) iv[k] = r.ivs[k] == null ? null : r.ivs[k];
       navTop = 'pokemon'; navPk = 'auto'; navAu = 'cons'; renderMercadoSub();
       const set = (id, v) => { const x = $(id); if (x) x.value = v == null ? '' : String(v); };
       set('csEsp', r.especie || ''); set('csPreco', r.precoMax ? short(r.precoMax) : ''); set('csOutl', r.outland || 'omitir'); set('csLim', 50);
       if ($('csShiny')) $('csShiny').checked = !!r.shiny;
-      for (const k of ['p', 'iv', 'q', 'n']) set('cs_' + k, r[k]);
+      for (const k of ['p', 'iv', 'q', 'n']) set('cs_' + k, r[k]); set('cs_nivMin', r.nivMin); set('cs_nivMax', r.nivMax);
       for (const k of Object.keys(iv)) set('csiv_' + k, iv[k]);
       csSig = '';
-      rpCmd({ type: 'consultar', filtros: { ordem: 'baratos', limite: 50, especie: r.especie || '', precoMax: r.precoMax || 0, shiny: !!r.shiny, outland: r.outland || 'omitir', modo: r.modo === 'ou' ? 'ou' : 'e', p: r.p, iv: r.iv, q: r.q, n: r.n, ivs: iv, paginas: 15 } });
+      rpCmd({ type: 'consultar', filtros: { ordem: 'baratos', limite: 50, especie: r.especie || '', precoMax: r.precoMax || 0, shiny: !!r.shiny, outland: r.outland || 'omitir', modo: r.modo === 'ou' ? 'ou' : 'e', nivMin: r.nivMin, nivMax: r.nivMax, p: r.p, iv: r.iv, q: r.q, n: r.n, ivs: iv, paginas: 15 } });
     } });
     const cardEl = el('div', { className: 'card' + (valida ? '' : ' warn') },
       el('div', { className: 'row inline rcab' }, el('label', {}, ativo, ' ligada'), tituloEl, seta),
@@ -678,27 +681,56 @@ function createUI(root) {
   function renderCons() {
     if (!csInit) {
       csInit = true;
-      for (const [k, rot, ph] of [['p', 'P ≥', '1–5'], ['iv', 'IV total ≥', '0–192'], ['q', 'Q ≥', '1700'], ['n', 'N ≥', '3500']]) {
+      for (const [k, rot, ph] of [['p', 'P ≥', '1–5'], ['iv', 'IV total ≥', '0–192'], ['q', 'Q ≥', '1700'], ['n', 'N ≥', '3500'], ['nivMin', 'Nível ≥', 'mín.'], ['nivMax', 'Nível ≤', 'máx.']]) {
         $('csEst').append(el('span', { textContent: rot }), el('input', { type: 'number', step: '1', min: '0', placeholder: ph, id: 'cs_' + k }));
       }
       for (const [k, rot] of [['hp', 'HP ≥'], ['atk', 'Atk ≥'], ['def', 'Def ≥'], ['spAtk', 'SpAtk ≥'], ['spDef', 'SpDef ≥'], ['speed', 'Spd ≥']]) {
         $('csIv').append(el('span', { textContent: rot }), el('input', { type: 'number', step: '1', min: '0', max: '31', placeholder: '0–31', id: 'csiv_' + k }));
       }
-      $('csRegra').addEventListener('click', () => {
+      $('csRegra').addEventListener('click', async () => {
         const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
         const pm = parseNum($('csPreco').value) || 0;
         if (!(pm > 0)) { $('csMsg').textContent = 'Para criar a regra, defina o preço máximo (coins).'; return; }
         const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
         if (!rpRegras) rpRegras = JSON.parse(JSON.stringify((rp && rp.cfg && rp.cfg.regras) || []));
-        const nid2 = 'r' + Date.now().toString(36); rpCol[nid2] = false;
-        rpRegras.push({ id: nid2, nome: $('csEsp').value.trim(), ativo: true, especie: $('csEsp').value.trim(), modo: 'e', outland: $('csOutl').value, p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, shiny: $('csShiny').checked, precoMax: pm, qtd: Math.max(1, Math.min(999, Number($('csLim').value) || 1)), comprados: 0 });
+        const esp = $('csEsp').value.trim();
+        const filtros = { modo: 'e', outland: $('csOutl').value, nivMin: v('cs_nivMin'), nivMax: v('cs_nivMax'), p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, shiny: $('csShiny').checked, precoMax: pm, qtd: Math.max(1, Math.min(999, Number($('csLim').value) || 1)) };
+        const norm = (t) => String(t || '').trim().toLowerCase();
+        const velha = esp ? rpRegras.find((x) => norm(x.especie) === norm(esp)) : null;
+        let nome = esp, substitui = null, atualiza = null;
+        if (velha) {
+          for (;;) {
+            const r1 = await escolher('Você já tem uma regra para ' + esp + ': "' + (velha.nome || velha.especie) + '". O que fazer com a nova?', 'Já existe uma regra',
+              [{ k: 'atualizar', t: 'Atualizar a regra existente com estes filtros' }, { k: 'descartar', t: 'Descartar a regra antiga e criar uma nova' }, { k: 'cancelar', t: 'Cancelar a criação' }]);
+            if (r1.k === 'atualizar') { atualiza = velha; break; }
+            if (r1.k === 'descartar') {
+              const r2 = await escolher('A regra antiga "' + (velha.nome || velha.especie) + '" será removida. Dê um nome para a nova regra:', 'Novo nome da regra',
+                [{ k: 'ok', t: 'Descartar a antiga e criar' }, { k: 'voltar', t: 'Voltar' }], { nome: '' });
+              if (r2.k === 'ok') { substitui = velha; nome = r2.nome; break; }
+              continue;
+            }
+            const r3 = await escolher('Se cancelar, os filtros da consulta serão ZERADOS (Pokémon, preço, níveis, IVs…). Deseja mesmo zerar ou prefere editar o filtro?', 'Cancelar e zerar o filtro?',
+              [{ k: 'zerar', t: 'Sim, zerar o filtro' }, { k: 'editar', t: 'Não, quero editar o filtro' }]);
+            if (r3.k === 'zerar') {
+              for (const el0 of root.querySelectorAll('#sub-cons input, #sub-cons select')) { if (el0.type === 'checkbox') el0.checked = false; else if (el0.tagName === 'SELECT') el0.selectedIndex = 0; else el0.value = el0.id === 'csLim' ? '20' : ''; }
+              csSig = ''; $('csLista').textContent = ''; $('csMsg').textContent = 'Criação cancelada; filtros zerados.';
+            } else $('csMsg').textContent = 'Criação cancelada. Edite o filtro e tente de novo.';
+            return;
+          }
+        }
+        if (atualiza) { Object.assign(atualiza, filtros, { comprados: atualiza.comprados || 0 }); rpCol[atualiza.id] = false; }
+        else {
+          if (substitui) rpRegras.splice(rpRegras.indexOf(substitui), 1);
+          const nid2 = 'r' + Date.now().toString(36); rpCol[nid2] = false;
+          rpRegras.push(Object.assign({ id: nid2, nome, ativo: true, especie: esp, comprados: 0 }, filtros));
+        }
         rpSig = ''; rpEnviarCfg(); navTop = 'pokemon'; navPk = 'auto'; navAu = 'poke'; renderMercadoSub();
-        $('pkInfo').textContent = 'Regra criada a partir da consulta. Confira, e use o modo simulação antes de comprar de verdade.';
+        $('pkInfo').textContent = atualiza ? 'Regra "' + (atualiza.nome || atualiza.especie) + '" atualizada com os filtros da consulta. Confira, e use o modo simulação antes de comprar de verdade.' : 'Regra criada a partir da consulta. Confira, e use o modo simulação antes de comprar de verdade.';
       });
       $('csGo').addEventListener('click', () => {
         const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
         const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
-        rpCmd({ type: 'consultar', filtros: { ordem: $('csOrdem').value, limite: Number($('csLim').value) || 20, especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: 15 } });
+        rpCmd({ type: 'consultar', filtros: { ordem: $('csOrdem').value, limite: Number($('csLim').value) || 20, especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', nivMin: v('cs_nivMin'), nivMax: v('cs_nivMax'), p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: 15 } });
       });
     }
     const c = rp && rp.cons; if (!c) return;
@@ -964,6 +996,27 @@ function createUI(root) {
       $('dlgOk').onclick = () => fim(true); $('dlgNo').onclick = () => fim(false);
       window.addEventListener('keydown', tecla, true);
       dlg.hidden = false; $('dlgNo').focus();
+    });
+  }
+  // diálogo com várias opções (e, opcionalmente, um campo de nome obrigatório)
+  function escolher(msg, titulo, botoes, campo) {
+    return new Promise((resolve) => {
+      const dlg = $('dlg'), btns = $('dlgOk').parentNode;
+      $('dlgT').textContent = titulo; $('dlgM').textContent = msg;
+      const antes = [$('dlgOk'), $('dlgNo')]; antes.forEach((b) => { b.hidden = true; });
+      const caixa = el('div', { className: 'dlgopc' });
+      let inp = null;
+      if (campo) { inp = el('input', { type: 'text', placeholder: 'Nome da nova regra', maxLength: 40, value: campo.nome || '' }); caixa.append(inp); }
+      const fim = (k) => { caixa.remove(); antes.forEach((b) => { b.hidden = false; }); dlg.hidden = true; window.removeEventListener('keydown', tecla, true); resolve({ k, nome: inp ? inp.value.trim() : '' }); };
+      const tecla = (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); fim(botoes[botoes.length - 1].k); } };
+      window.addEventListener('keydown', tecla, true);
+      botoes.forEach((b, i) => {
+        const bt = el('button', { className: 'icon' + (i === 0 ? ' dlgok' : ''), textContent: b.t });
+        bt.addEventListener('click', () => { if (inp && b.k === 'ok' && !inp.value.trim()) { inp.focus(); inp.placeholder = 'Digite um nome para continuar'; return; } fim(b.k); });
+        caixa.append(bt);
+      });
+      btns.parentNode.insertBefore(caixa, btns);
+      dlg.hidden = false; (inp || caixa.firstChild).focus();
     });
   }
   $('vdOn').addEventListener('change', async (e) => {
