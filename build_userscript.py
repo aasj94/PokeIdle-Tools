@@ -66,6 +66,6 @@ ui_part = "\n".join(rd(n) for n in ['gyarados.js', 'qrcode.min.js', 'panel-style
 # painel só depois que o DOM existir
 boot = "(function () {\n  const start = () => {\n" + "".join("    " + l + "\n" for l in ui_part.splitlines()) + "  };\n  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();\n})();\n"
 
-body = "(function () {\n'use strict';\n" + shim + "\n/* ===== motor do Mercado ===== */\n" + rd('engine.js') + "\n/* ===== ponte ===== */\n" + rd('bridge.js') + "\n/* ===== captura / estoque ===== */\n" + rd('catch.js') + "\n/* ===== venda automatica ===== */\n" + rd('autovenda.js') + "\n/* ===== pvp ===== */\n" + rd('pvp.js') + "\n/* ===== compra de pokemon (RMT) ===== */\n" + rd('rmtpoke.js') + "\n/* ===== painel ===== */\n" + boot + "\n})();\n"
+body = "(function () {\n'use strict';\n" + shim + "\n/* ===== motor do Mercado ===== */\n" + rd('engine.js') + "\n/* ===== ponte ===== */\n" + rd('bridge.js') + "\n/* ===== captura / estoque ===== */\n" + rd('catch.js') + "\n/* ===== venda automatica ===== */\n" + rd('autovenda.js') + "\n/* ===== pvp ===== */\n" + rd('pvp.js') + "\n/* ===== compra de pokemon (RMT) ===== */\n" + rd('rmtpoke.js') + "\n/* ===== shiny monitor ===== */\n" + rd('shinymon.js') + "\n/* ===== painel ===== */\n" + boot + "\n})();\n"
 open(out, 'w', encoding='utf-8').write(head + "\n" + body)
 print('ok', out, len(head + body) // 1024, 'KB')

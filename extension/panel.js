@@ -392,6 +392,15 @@
           <h2>Conexão com o jogo <small id="conHint"></small></h2>
           <div class="mut" id="conInfo">Fecha sozinho o popup do Discord e "destrava" o jogo quando a aba fica parada.</div>
         </div>
+        <div class="card">
+          <h2>SHINY MONITOR <small id="smHint"></small></h2>
+          <div class="mut">Só observa (não envia nada ao jogo): guarda dados de cada Pokémon shiny que aparece (nível, bolas usadas, chance informada, resultado, quantos Pokémon apareceram antes) e estatísticas das bolas, para entendermos a captura de shiny. Os dados ficam salvos no navegador.</div>
+          <label class="switch"><input type="checkbox" id="smOn" checked><span class="slider"></span><span class="lbl"><b>Registrar encontros com shiny</b><small>desligue para parar de coletar</small></span></label>
+          <div id="smResumo" class="mut"></div>
+          <div id="smEnc" class="list"></div>
+          <div class="btns"><button id="smCopiar" class="icon">📋 Copiar relatório</button><button id="smLimpar" class="link">limpar dados</button></div>
+          <div class="mut" id="smMsg"></div>
+        </div>
         <h2>Logs <button id="resetAll" class="link">zerar contagens</button></h2>
         <div id="log" class="log"></div>
       </section>

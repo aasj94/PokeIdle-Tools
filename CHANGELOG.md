@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.25
+- **Shiny Monitor** (aba Logs): só observa e guarda no navegador os encontros com Pokémon shiny (nível, bolas usadas, chance informada pelo jogo, resultado, quantos Pokémon apareceram antes), estatísticas das bolas e dados do dex. Botão para copiar o relatório. Base para um futuro Shiny Hunter.
+
 ## v2.3.24
 - **Mercado RMT reorganizado:** Itens | Pokémon | Histórico. Em Pokémon: **Auto-compra** (Consultar, Regras, Compra Imediata) e **Renovar anúncios**.
 - Consulta e Compra Imediata com **ordenação** (menor preço, maior preço, recentes) e **limite de quantidade**; Compra Imediata com liga/desliga próprio; cada campo em uma linha.

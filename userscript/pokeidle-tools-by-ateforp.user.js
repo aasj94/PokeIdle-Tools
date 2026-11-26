@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.24
+// @version      2.3.25
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -2596,6 +2596,138 @@ function definirCaptura(v) {
   window.__ateforpRmtPokeDbg = { cfg: () => cfg, alvos, emVoo, tick, pump, casa, ln };
 })();
 
+/* ===== shiny monitor ===== */
+/*
+ * PokeIdle Tools by Ateforp - Shiny Monitor (mundo da página). SOMENTE OBSERVA.
+ * Não envia nada ao servidor: lê os mesmos quadros que o jogo já manda ao jogador (aparecimento, bola, fuga, captura, dex)
+ * e guarda no navegador dados sobre os encontros com Pokémon shiny, para estudar como a captura de shiny funciona.
+ * Quadros usados: batalha.ev {k: spawn|bola|fugiu|capturado|morte} e estado {dexMud, balls, selvagem, kick}.
+ */
+(() => {
+  'use strict';
+  if (window.__ateforpShiny) return;
+  window.__ateforpShiny = true;
+
+  const CH = 'ateforp-shiny';
+  const CHAVE = 'ateforp_shinymon';
+  const BUS = window.__PM_BUS;
+  if (!BUS || !BUS.on) return;
+
+  const MAX_ENC = 300;
+  const novo = () => ({ desde: Date.now(), spawns: 0, spawnsDesdeShiny: 0, shinyVistos: 0, shinyCapturados: 0, shinyFugidos: 0, shinySemCaptura: 0, capturas: 0, bolas: {}, especies: {}, dex: {}, encontros: [] });
+  let ligado = true;
+  let D = novo();
+  try {
+    const s = JSON.parse(localStorage.getItem(CHAVE) || 'null');
+    if (s) { if (s.ligado === false) ligado = false; if (s.D && Array.isArray(s.D.encontros)) D = Object.assign(novo(), s.D); }
+  } catch (e) { /* ignora */ }
+  let sujo = false, salvarSujo = false, ultEmit = 0;
+  const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify({ ligado, D })); } catch (e) { /* ignora */ } };
+
+  const mobs = new Map();               // slot -> {nome, sid, level, shiny, t, enc}
+  let ctx = { kickShiny: null, bolas: null };
+  const faixa = (l) => (l >= 400 ? '400+' : l >= 200 ? '200-399' : l >= 100 ? '100-199' : l >= 50 ? '50-99' : '1-49');
+  const esp = (sid, nome) => { const k = String(sid || 0); return D.especies[k] || (D.especies[k] = { n: nome || '?', sp: 0, sh: 0, shCap: 0 }); };
+
+  function abrirEncontro(m, detectadoPor) {
+    if (m.enc) return m.enc;
+    const e = { t: Date.now(), slot: m.slot, nome: m.nome, sid: m.sid, level: m.level, antes: D.spawnsDesdeShiny, via: detectadoPor, kickShiny: ctx.kickShiny, bolasTinha: ctx.bolas, tent: [], fim: '', ms: 0 };
+    D.shinyVistos++; esp(m.sid, m.nome).sh++; D.spawnsDesdeShiny = 0;
+    D.encontros.push(e); if (D.encontros.length > MAX_ENC) D.encontros.shift();
+    m.enc = e; return e;
+  }
+  function fechar(e, fim) { if (e && !e.fim) { e.fim = fim; e.ms = Date.now() - e.t; if (fim === 'capturado') { D.shinyCapturados++; esp(e.sid, e.nome).shCap++; } else if (fim === 'fugiu') D.shinyFugidos++; else D.shinySemCaptura++; } }
+
+  function evento(ev) {
+    if (!ev) return;
+    if (ev.k === 'spawn' && ev.slot !== undefined) {
+      const ex = mobs.get(ev.slot);
+      if (ex && Date.now() - ex.t < 1500 && ex.nome === ev.nome) { if ((ev.shiny || ev.sh) && !ex.shiny) { ex.shiny = true; abrirEncontro(ex, 'spawn-repetido'); } return; }   // quadro repetido do mesmo spawn
+      const m = { slot: ev.slot, nome: ev.nome, sid: ev.speciesId, level: ev.level, shiny: !!(ev.shiny || ev.sh), t: Date.now(), enc: null };
+      mobs.set(ev.slot, m);
+      D.spawns++; D.spawnsDesdeShiny++; esp(m.sid, m.nome).sp++;
+      if (m.shiny) abrirEncontro(m, 'spawn');
+      sujo = salvarSujo = true;
+    } else if (ev.k === 'bola') {
+      const m = mobs.get(ev.slot) || { slot: ev.slot, nome: '?', sid: 0, level: 0, shiny: false, t: Date.now(), enc: null };
+      const sh = !!(ev.shiny || m.shiny);
+      if (sh && !m.shiny) { m.shiny = true; }
+      if (sh) abrirEncontro(m, 'bola');
+      const chave = ev.ballId + '|' + (sh ? 1 : 0) + '|' + faixa(m.level || 0);
+      const b = D.bolas[chave] || (D.bolas[chave] = { n: 0, ok: 0, soma: 0 });
+      b.n++; if (ev.sucesso) b.ok++; b.soma += Number(ev.chance) || 0;
+      if (m.enc) m.enc.tent.push({ b: ev.ballId, c: Number(ev.chance) || 0, ok: !!ev.sucesso, ms: Date.now() - m.enc.t });
+      if (ev.sucesso) D.capturas++;
+      sujo = salvarSujo = true;
+    } else if (ev.k === 'capturado') {
+      const p = ev.pokemon || {};
+      const m = [...mobs.values()].reverse().find((x) => x.enc && !x.enc.fim && (p.nome ? x.nome === p.nome : true));
+      if (m && (p.shiny || p.lookShiny || m.shiny)) fechar(m.enc, 'capturado');
+      sujo = salvarSujo = true;
+    } else if (ev.k === 'fugiu') {
+      const m = [...mobs.values()].reverse().find((x) => x.enc && !x.enc.fim && x.nome === ev.nome);
+      if (m && (ev.shiny || m.shiny)) fechar(m.enc, 'fugiu');
+      else if (ev.shiny) { const e = abrirEncontro({ slot: -1, nome: ev.nome, sid: 0, level: ev.level, shiny: true, enc: null }, 'fugiu'); fechar(e, 'fugiu'); }
+      sujo = salvarSujo = true;
+    } else if (ev.k === 'morte' && ev.quem === 'selvagem') {
+      const m = mobs.get(ev.slot); if (m && m.enc && !m.enc.morreuEm) { m.enc.morreuEm = Date.now() - m.enc.t; sujo = salvarSujo = true; }
+    }
+  }
+
+  function aoQuadro(f) {
+    if (!ligado || typeof f !== 'string' || f.charCodeAt(0) !== 123) return;
+    if (f.indexOf('"t":"batalha"') === 1 && f.length < 80000) {
+      if (f.indexOf('"k":"spawn"') === -1 && f.indexOf('"k":"bola"') === -1 && f.indexOf('"k":"fugiu"') === -1 && f.indexOf('"k":"capturado"') === -1 && f.indexOf('"k":"morte"') === -1) return;
+      try { for (const ev of JSON.parse(f).ev || []) evento(ev); } catch (e) { /* ignora */ }
+    } else if (f.indexOf('"t":"estado"') === 1 && f.length < 400000) {
+      if (f.indexOf('"dexMud"') === -1 && f.indexOf('"balls"') === -1 && f.indexOf('"selvagem"') === -1 && f.indexOf('"kick"') === -1) return;
+      try {
+        const e = JSON.parse(f).estado || {};
+        if (e.balls) ctx.bolas = Object.assign({}, ctx.bolas || {}, e.balls);
+        if (e.kick && e.kick.bonus && e.kick.bonus.shiny !== undefined) ctx.kickShiny = e.kick.bonus.shiny;
+        if (e.dexMud) for (const k of Object.keys(e.dexMud)) { const x = e.dexMud[k]; if (x) D.dex[k] = { k: x.k, c: x.c, sv: x.sv }; }
+        const s = e.selvagem;
+        if (s && s.shiny && s.slot !== undefined) { const m = mobs.get(s.slot); if (m && !m.shiny) { m.shiny = true; abrirEncontro(m, 'estado.selvagem'); sujo = salvarSujo = true; } }
+        sujo = salvarSujo = true;
+      } catch (err) { /* ignora */ }
+    }
+  }
+  BUS.on(aoQuadro);
+
+  function resumo() {
+    const dias = Math.max(0.01, (Date.now() - D.desde) / 86400000);
+    return { desde: D.desde, spawns: D.spawns, spawnsDesdeUltimoShiny: D.spawnsDesdeShiny, shinyVistos: D.shinyVistos, shinyCapturados: D.shinyCapturados, shinyFugidos: D.shinyFugidos, shinySemCaptura: D.shinySemCaptura, umShinyACada: D.shinyVistos ? Math.round(D.spawns / D.shinyVistos) : null, spawnsPorDia: Math.round(D.spawns / dias) };
+  }
+  function relatorio() {
+    const bolas = Object.keys(D.bolas).sort().map((k) => { const [b, sh, fx] = k.split('|'); const x = D.bolas[k]; return { bola: Number(b), shiny: sh === '1', faixaNivel: fx, tentativas: x.n, sucessos: x.ok, chanceMediaInformada: x.n ? Number((x.soma / x.n).toFixed(4)) : 0, taxaReal: x.n ? Number((x.ok / x.n).toFixed(4)) : 0 };});
+    const especies = Object.keys(D.especies).map((k) => Object.assign({ id: Number(k) }, D.especies[k])).sort((a, b) => b.sp - a.sp).slice(0, 25);
+    const dex = Object.keys(D.dex).map((k) => ({ id: Number(k), nome: (D.especies[k] || {}).n || '', k: D.dex[k].k, c: D.dex[k].c, sv: D.dex[k].sv })).filter((x) => x.sv > 0).sort((a, b) => b.sv - a.sv).slice(0, 40);
+    return { relatorio: 'Shiny Monitor (PokeIdle Tools by Ateforp)', geradoEm: new Date().toISOString(), observacao: 'dex: k/c/sv são os campos brutos de dexMud do jogo (provavelmente abates/capturas/shinies); bolas: faixaNivel = nível do selvagem', resumo: resumo(), bolas, especiesMaisVistas: especies, dexComShiny: dex, ultimosEncontrosShiny: D.encontros.slice(-30) };
+  }
+  function emitir() {
+    sujo = false; ultEmit = Date.now();
+    const R = relatorio();
+    window.postMessage({ ch: CH, from: 'shiny', type: 'state', state: { ligado, resumo: resumo(), encontros: D.encontros.slice(-12), bolas: R.bolas, texto: JSON.stringify(R) } }, '*');
+  }
+  window.addEventListener('message', (ev) => {
+    const m = ev.data;
+    if (ev.source !== window || !m || m.ch !== CH || m.from !== 'ui') return;
+    if (m.type === 'hello') sujo = true;
+    else if (m.type === 'ligar') { ligado = !!m.value; salvar(); sujo = true; }
+    else if (m.type === 'limpar') { D = novo(); mobs.clear(); salvar(); sujo = true; }
+  });
+  setInterval(() => {
+    const agora = Date.now();
+    for (const [s, m] of mobs) {
+      if (m.enc && !m.enc.fim && agora - m.t > 90000) { fechar(m.enc, 'sem-desfecho'); salvarSujo = sujo = true; }
+      if (agora - m.t > 600000) mobs.delete(s);
+    }
+    if (salvarSujo) { salvarSujo = false; salvar(); }
+    if (sujo && agora - ultEmit > 1000) emitir();
+  }, 1000);
+  window.__ateforpShinyDbg = { D: () => D, relatorio, evento, aoQuadro };
+})();
+
 /* ===== painel ===== */
 (function () {
   const start = () => {
@@ -2836,6 +2968,7 @@ function definirCaptura(v) {
     
     // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
     window.__ateforpReleases = [
+     {"v": "2.3.25", "itens": ["Novo Shiny Monitor na aba Logs: só observa e guarda, no navegador, dados de cada Pokémon shiny que aparece (nível, bolas usadas, chance informada pelo jogo, resultado, quantos Pokémon apareceram antes), estatísticas das bolas e dados do dex. Botão para copiar o relatório (JSON) e colar na conversa. Base para um futuro Shiny Hunter."]},
      {"v": "2.3.24", "itens": ["Mercado RMT reorganizado: Itens | Pokémon | Histórico. Em Pokémon: Auto-compra (Consultar, Regras, Compra Imediata) e Renovar anúncios. Consulta e Compra Imediata com ordenação (menor preço, maior preço, recentes) e limite de quantidade; Compra Imediata com liga/desliga próprio; regras com resumo claro do que será comprado, modo simulação (só avisa) e confirmação antes de ligar; botão para criar regra a partir da consulta. Tudo em coins."]},
      {"v": "2.3.23", "itens": ["Nova aba Renovação (Mercado RMT): renova sozinha os seus anúncios de Pokémon, alternando o preço entre dois valores (Preço A e Preço B) a cada intervalo (mínimo 30 min, limite do jogo), até vender. Desligada por padrão, com explicação na tela e registro de cada renovação."]},
      {"v": "2.3.22", "itens": ["Nova aba Novidades com o resumo de cada versão. A extensão avisa quando há uma versão nova da própria extensão (ponto vermelho na aba, checagem a cada 3 horas). No userscript, o aviso é do Tampermonkey/Greasy Fork."]},
@@ -3869,6 +4002,41 @@ function definirCaptura(v) {
         if (t === 'registro') renderLog();
         if (t === 'novidades') renderNovidades();
       }
+      // ---------- Shiny Monitor (shinymon.js) ----------
+      let sm = null;
+      const smCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-shiny', from: 'ui' }, o), '*');
+      function renderShiny() {
+        if (!sm) return;
+        const r = sm.resumo;
+        $('smOn').checked = !!sm.ligado; $('smHint').textContent = sm.ligado ? 'coletando' : 'parado';
+        $('smResumo').textContent = 'Pokémon vistos: ' + fmt(r.spawns) + ' · shinies vistos: ' + r.shinyVistos + ' (capturados ' + r.shinyCapturados + ', fugiram ' + r.shinyFugidos + (r.shinySemCaptura ? ', sem desfecho ' + r.shinySemCaptura : '') + ') · desde o último shiny: ' + fmt(r.spawnsDesdeUltimoShiny) + (r.umShinyACada ? ' · 1 shiny a cada ~' + fmt(r.umShinyACada) : '');
+        const box = $('smEnc'); box.textContent = '';
+        for (const e of sm.encontros.slice().reverse()) {
+          box.append(el('div', { className: 'row-poke ' + (e.fim === 'capturado' ? 'ok' : e.fim === 'fugiu' ? 'bad' : '') },
+            el('b', { textContent: '✨ ' + e.nome + ' Nv ' + e.level }),
+            el('span', { className: 'mut', textContent: ' ' + new Date(e.t).toLocaleString('pt-BR') }),
+            el('div', { textContent: (e.fim || 'em andamento') + ' · ' + e.tent.length + ' bola(s)' + (e.tent.length ? ': ' + e.tent.map((t) => 'B' + t.b + ' ' + (t.c * 100).toFixed(1) + '%' + (t.ok ? ' ✔' : ' ✘')).join(', ') : '') + ' · vistos antes: ' + fmt(e.antes) })));
+        }
+        if (!sm.encontros.length) box.append(el('div', { className: 'mut', textContent: 'Nenhum shiny registrado ainda.' }));
+      }
+      window.addEventListener('message', (ev) => {
+        const m = ev.data;
+        if (ev.source !== window || !m || m.ch !== 'ateforp-shiny' || m.from !== 'shiny' || m.type !== 'state') return;
+        sm = m.state; renderShiny();
+      });
+      smCmd({ type: 'hello' });
+      $('smOn').addEventListener('change', (e) => smCmd({ type: 'ligar', value: e.target.checked }));
+      $('smLimpar').addEventListener('click', async () => { if (await confirmar('Apagar todos os dados do Shiny Monitor?', 'Limpar Shiny Monitor', 'Apagar')) smCmd({ type: 'limpar' }); });
+      $('smCopiar').addEventListener('click', async () => {
+        const txt = sm ? sm.texto : '';
+        if (!txt) { $('smMsg').textContent = 'Ainda não há dados.'; return; }
+        let ok = false;
+        try { await navigator.clipboard.writeText(txt); ok = true; } catch (e) {
+          try { const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'; document.body.append(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch (e2) { ok = false; }
+        }
+        $('smMsg').textContent = ok ? 'Relatório copiado (' + Math.round(txt.length / 1024 * 10) / 10 + ' KB). Cole na conversa.' : 'Não consegui copiar. Tente de novo com o painel em foco.';
+      });
+    
       // ---------- Novidades / aviso de nova versão ----------
       const RELS = window.__ateforpReleases || [];
       const VERSAO = RELS[0] ? RELS[0].v : '';
@@ -4360,6 +4528,15 @@ function definirCaptura(v) {
             <div class="card">
               <h2>Conexão com o jogo <small id="conHint"></small></h2>
               <div class="mut" id="conInfo">Fecha sozinho o popup do Discord e "destrava" o jogo quando a aba fica parada.</div>
+            </div>
+            <div class="card">
+              <h2>SHINY MONITOR <small id="smHint"></small></h2>
+              <div class="mut">Só observa (não envia nada ao jogo): guarda dados de cada Pokémon shiny que aparece (nível, bolas usadas, chance informada, resultado, quantos Pokémon apareceram antes) e estatísticas das bolas, para entendermos a captura de shiny. Os dados ficam salvos no navegador.</div>
+              <label class="switch"><input type="checkbox" id="smOn" checked><span class="slider"></span><span class="lbl"><b>Registrar encontros com shiny</b><small>desligue para parar de coletar</small></span></label>
+              <div id="smResumo" class="mut"></div>
+              <div id="smEnc" class="list"></div>
+              <div class="btns"><button id="smCopiar" class="icon">📋 Copiar relatório</button><button id="smLimpar" class="link">limpar dados</button></div>
+              <div class="mut" id="smMsg"></div>
             </div>
             <h2>Logs <button id="resetAll" class="link">zerar contagens</button></h2>
             <div id="log" class="log"></div>

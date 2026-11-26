@@ -968,6 +968,41 @@ function createUI(root) {
     if (t === 'registro') renderLog();
     if (t === 'novidades') renderNovidades();
   }
+  // ---------- Shiny Monitor (shinymon.js) ----------
+  let sm = null;
+  const smCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-shiny', from: 'ui' }, o), '*');
+  function renderShiny() {
+    if (!sm) return;
+    const r = sm.resumo;
+    $('smOn').checked = !!sm.ligado; $('smHint').textContent = sm.ligado ? 'coletando' : 'parado';
+    $('smResumo').textContent = 'Pokémon vistos: ' + fmt(r.spawns) + ' · shinies vistos: ' + r.shinyVistos + ' (capturados ' + r.shinyCapturados + ', fugiram ' + r.shinyFugidos + (r.shinySemCaptura ? ', sem desfecho ' + r.shinySemCaptura : '') + ') · desde o último shiny: ' + fmt(r.spawnsDesdeUltimoShiny) + (r.umShinyACada ? ' · 1 shiny a cada ~' + fmt(r.umShinyACada) : '');
+    const box = $('smEnc'); box.textContent = '';
+    for (const e of sm.encontros.slice().reverse()) {
+      box.append(el('div', { className: 'row-poke ' + (e.fim === 'capturado' ? 'ok' : e.fim === 'fugiu' ? 'bad' : '') },
+        el('b', { textContent: '✨ ' + e.nome + ' Nv ' + e.level }),
+        el('span', { className: 'mut', textContent: ' ' + new Date(e.t).toLocaleString('pt-BR') }),
+        el('div', { textContent: (e.fim || 'em andamento') + ' · ' + e.tent.length + ' bola(s)' + (e.tent.length ? ': ' + e.tent.map((t) => 'B' + t.b + ' ' + (t.c * 100).toFixed(1) + '%' + (t.ok ? ' ✔' : ' ✘')).join(', ') : '') + ' · vistos antes: ' + fmt(e.antes) })));
+    }
+    if (!sm.encontros.length) box.append(el('div', { className: 'mut', textContent: 'Nenhum shiny registrado ainda.' }));
+  }
+  window.addEventListener('message', (ev) => {
+    const m = ev.data;
+    if (ev.source !== window || !m || m.ch !== 'ateforp-shiny' || m.from !== 'shiny' || m.type !== 'state') return;
+    sm = m.state; renderShiny();
+  });
+  smCmd({ type: 'hello' });
+  $('smOn').addEventListener('change', (e) => smCmd({ type: 'ligar', value: e.target.checked }));
+  $('smLimpar').addEventListener('click', async () => { if (await confirmar('Apagar todos os dados do Shiny Monitor?', 'Limpar Shiny Monitor', 'Apagar')) smCmd({ type: 'limpar' }); });
+  $('smCopiar').addEventListener('click', async () => {
+    const txt = sm ? sm.texto : '';
+    if (!txt) { $('smMsg').textContent = 'Ainda não há dados.'; return; }
+    let ok = false;
+    try { await navigator.clipboard.writeText(txt); ok = true; } catch (e) {
+      try { const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'; document.body.append(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch (e2) { ok = false; }
+    }
+    $('smMsg').textContent = ok ? 'Relatório copiado (' + Math.round(txt.length / 1024 * 10) / 10 + ' KB). Cole na conversa.' : 'Não consegui copiar. Tente de novo com o painel em foco.';
+  });
+
   // ---------- Novidades / aviso de nova versão ----------
   const RELS = window.__ateforpReleases || [];
   const VERSAO = RELS[0] ? RELS[0].v : '';
