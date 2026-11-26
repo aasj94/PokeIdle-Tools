@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.33
+- **Correção importante:** o mercado do jogo conta as páginas a partir de 0 e a extensão pedia a partir de 1, então nunca via a primeira página (mais baratos/mais novos). Corrigido na Consulta, nas regras e na Compra Imediata.
+
 ## v2.3.32
 - Filtro de **nível** (mín./máx.) nas regras e na Consulta.
 - Botão da regra renomeado para **Consultar Pokémon disponíveis**.

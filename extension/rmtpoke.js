@@ -9,7 +9,7 @@
  *      tempo e manda o pedido no instante em que ele é liberado.
  *
  * Protocolo observado no jogo (somente o que o jogador já faz pela tela):
- *   lista:    {"t":"market.listar","tipo":"pokemon","moeda":"gold","ordem":"recentes","pagina":1,"precoMax":"..",...}
+ *   lista:    {"t":"market.listar","tipo":"pokemon","moeda":"gold","ordem":"recentes","pagina":0 (a primeira página é 0),"precoMax":"..",...}
  *   resposta: {"t":"market","aba":"vitrine","total":N,"pagina":P,"porPagina":24,"linhas":[ {id, vendedor, pokemonId, qtd,
  *             ficha:{nome,level,shiny,ivTotal,quality,nota,potencia,speciesId,...}, preco, moeda, estado:"aberto",
  *             criadoEm, compravelEm (fim da retenção), expiraEm } ]}
@@ -173,7 +173,7 @@
       categoria: '', soShiny: false, soP5: false, soMega: false, soLendario: false, soTmElemental: false, soTmAoe: false, semOutland: true,
       nivelMin: '', nivelMax: '', potenciaMin: '', potenciaMax: '', qualidadeMin: '', qualidadeMax: '', notaMin: '', notaMax: '',
       precoMin: '', precoMax: '', ivHpMin: '', ivHpMax: '', ivAtkMin: '', ivAtkMax: '', ivDefMin: '', ivDefMax: '', ivSpAtkMin: '', ivSpAtkMax: '',
-      ivSpDefMin: '', ivSpDefMax: '', ivSpdMin: '', ivSpdMax: '', pagina: 1, especieId: 0
+      ivSpDefMin: '', ivSpDefMax: '', ivSpdMin: '', ivSpdMax: '', pagina: 0, especieId: 0
     }, extra || {});
   }
 
@@ -391,7 +391,7 @@
     }
     if (aberto && lider && cons.carregando && !fila.length && !pendConsulta && cons.pag < cons.pags && podeConsultar(true)) {
       cons.pag++;
-      if (enviar(pedidoLista(Object.assign({}, cons.extra, { pagina: cons.pag })))) { marcarReq(); S.consultas++; pendConsulta = { tipo: 'cons', em: Date.now() }; } else cons.pag--;
+      if (enviar(pedidoLista(Object.assign({}, cons.extra, { pagina: cons.pag - 1 })))) { marcarReq(); S.consultas++; pendConsulta = { tipo: 'cons', em: Date.now() }; } else cons.pag--;
     } else if (aberto && lider && fila.length && podeConsultar(true)) {
       const q = fila.shift();
       if (enviar(q)) { marcarReq(); S.consultas++; pendConsulta = { tipo: 'busca', em: Date.now() }; }
@@ -513,7 +513,7 @@
     busca.limite = Math.max(1, Math.min(100, Math.floor(num(o.limite) || 5))); IMED.comprados = 0; IMED.limite = busca.limite;
     fila = []; busca.outland = o.outland === 'incluir' || o.outland === 'so' ? o.outland : 'omitir';
     const pags = Math.max(1, Math.min(4, Math.floor(num(o.paginas) || 2)));
-    for (let p = 1; p <= pags; p++) {
+    for (let p = 0; p < pags; p++) {
       const extra = { pagina: p };
       if (o.nome) extra.busca = String(o.nome).slice(0, 40);
       if (num(o.precoMax) > 0) extra.precoMax = String(Math.floor(num(o.precoMax)));
