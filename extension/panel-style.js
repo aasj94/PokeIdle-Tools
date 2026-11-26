@@ -113,6 +113,10 @@ header button.icon { border-color: var(--frameD); background: rgba(10,30,60,.35)
 .fld label { color: var(--mut); font-size: 12px; font-weight: 600; }
 .fld input[type=text], .fld input[type=number], .fld select { width: 100%; box-sizing: border-box; }
 .fld button { width: 100%; }
+.rcab { justify-content: space-between; gap: 8px; }
+.rcab .rtit { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rcorpo { display: grid; gap: 8px; }
+.rcorpo[hidden] { display: none; }
 .smlin { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
 .resumo { background: #0c2a1a; border: 1px solid #1f6b3a; color: #bfeccf; border-radius: 6px; padding: 6px 8px; font-size: 12px; line-height: 1.4; }
 .resumo.bad { background: #2a1210; border-color: #7a2a22; color: #f3b9b2; }

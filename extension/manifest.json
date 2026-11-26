@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PokeIdle Tools by Ateforp",
-  "version": "2.3.29",
+  "version": "2.3.30",
   "description": "Configurações de PvE, PvP, compras, tudo automático e num painel só.",
   "permissions": [
     "storage"

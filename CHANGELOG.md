@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v2.3.30
+- Regras de compra de Pokémon **recolhíveis**: fica só o nome, o botão ligada, o resumo e quantos já comprou; o estado é lembrado.
+- Corrigido o contador "Comprados" que não acompanhava a quantidade digitada.
+
 ## v2.3.29
 - Userscript: botão **Atualizar userscript** na aba Novidades; abre a tela de instalação do Tampermonkey (1 clique para atualizar).
 

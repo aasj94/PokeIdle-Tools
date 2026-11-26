@@ -495,6 +495,7 @@ function createUI(root) {
       'por no máximo ' + fmt(r.precoMax) + ' coins cada. Gasto máximo: ' + fmt(r.precoMax * (r.qtd || 1)) + ' coins.';
     return { txt, ok: r.precoMax > 0 && (crit.length > 0 || !!r.especie || !!r.shiny) };
   }
+  let rpCol = {}; try { rpCol = JSON.parse(localStorage.getItem('ateforp-rp-col') || '{}') || {}; } catch (e) { rpCol = {}; }
   function cartaoRegra(r, i) {
     const nome = el('input', { type: 'text', placeholder: 'ex.: Snorlax perfeito', value: r.nome || '' });
     nome.addEventListener('input', () => { r.nome = nome.value; rpEnviarCfg(); });
@@ -526,9 +527,13 @@ function createUI(root) {
     const rem = el('button', { className: 'link', textContent: 'remover', onclick: () => { rpRegras.splice(i, 1); rpSig = ''; renderPoke(true); rpEnviarCfg(); } });
     const valida = r.precoMax > 0 && (['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].some((k) => r.ivs[k] != null) || r.p != null || r.iv != null || r.q != null || r.n != null || r.especie || r.shiny);
     const rs0 = resumoDe(r); const resumoEl = el('div', { className: 'resumo' + (rs0.ok ? '' : ' bad'), textContent: rs0.txt });
+    const compEl = el('div', { className: 'mut' });
+    const textoComp = () => { compEl.textContent = 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1); };
+    textoComp();
     const fld = (rot, ...x) => el('div', { className: 'fld' }, el('label', {}, rot), ...x);
-    const cardEl = el('div', { className: 'card' + (valida ? '' : ' warn') },
-      el('div', { className: 'row inline' }, el('label', {}, ativo, ' regra ligada'), rem),
+    const titulo = () => (r.nome || r.especie || 'Regra sem nome') + (r.especie && r.nome && r.nome !== r.especie ? ' · ' + r.especie : '');
+    const tituloEl = el('b', { className: 'rtit', textContent: titulo() });
+    const corpo = el('div', { className: 'rcorpo' },
       fld('Nome da regra (opcional)', nome),
       fld('Pokémon (vazio = qualquer espécie)', esp),
       fld('Comprar quando bater', modo),
@@ -538,9 +543,18 @@ function createUI(root) {
       el('div', { className: 'fld' }, el('label', {}, shiny, ' ✨ só shiny')),
       fld('Preço máximo por Pokémon (coins)', preco),
       fld('Quantidade máxima a comprar', qtd),
+      el('div', { className: 'btns' }, rem));
+    const colapsada = () => (rpCol[r.id] === undefined ? valida : !!rpCol[r.id]);
+    const seta = el('button', { className: 'icon rseta', title: 'Abrir/fechar os detalhes da regra' });
+    const aplicaCol = () => { const c = colapsada(); corpo.hidden = c; seta.textContent = c ? '▸ editar' : '▾ fechar'; };
+    seta.addEventListener('click', () => { rpCol[r.id] = !colapsada(); try { localStorage.setItem('ateforp-rp-col', JSON.stringify(rpCol)); } catch (e) { /* ignora */ } aplicaCol(); });
+    aplicaCol();
+    const cardEl = el('div', { className: 'card' + (valida ? '' : ' warn') },
+      el('div', { className: 'row inline rcab' }, el('label', {}, ativo, ' ligada'), tituloEl, seta),
       resumoEl,
-      el('div', { className: 'mut', textContent: 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1) }));
-    const refaz = () => { const x = resumoDe(r); resumoEl.textContent = x.txt; resumoEl.className = 'resumo' + (x.ok ? '' : ' bad'); };
+      compEl,
+      corpo);
+    const refaz = () => { textoComp(); tituloEl.textContent = titulo(); const x = resumoDe(r); resumoEl.textContent = x.txt; resumoEl.className = 'resumo' + (x.ok ? '' : ' bad'); };
     cardEl.addEventListener('input', refaz); cardEl.addEventListener('change', refaz);
     return cardEl;
   }
@@ -664,7 +678,8 @@ function createUI(root) {
         if (!(pm > 0)) { $('csMsg').textContent = 'Para criar a regra, defina o preço máximo (coins).'; return; }
         const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
         if (!rpRegras) rpRegras = JSON.parse(JSON.stringify((rp && rp.cfg && rp.cfg.regras) || []));
-        rpRegras.push({ id: 'r' + Date.now().toString(36), nome: $('csEsp').value.trim(), ativo: true, especie: $('csEsp').value.trim(), modo: 'e', outland: $('csOutl').value, p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, shiny: $('csShiny').checked, precoMax: pm, qtd: Math.max(1, Math.min(999, Number($('csLim').value) || 1)), comprados: 0 });
+        const nid2 = 'r' + Date.now().toString(36); rpCol[nid2] = false;
+        rpRegras.push({ id: nid2, nome: $('csEsp').value.trim(), ativo: true, especie: $('csEsp').value.trim(), modo: 'e', outland: $('csOutl').value, p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, shiny: $('csShiny').checked, precoMax: pm, qtd: Math.max(1, Math.min(999, Number($('csLim').value) || 1)), comprados: 0 });
         rpSig = ''; rpEnviarCfg(); navTop = 'pokemon'; navPk = 'auto'; navAu = 'poke'; renderMercadoSub();
         $('pkInfo').textContent = 'Regra criada a partir da consulta. Confira, e use o modo simulação antes de comprar de verdade.';
       });
@@ -748,7 +763,7 @@ function createUI(root) {
   });
   $('pkInt').addEventListener('change', rpEnviarCfg);
   $('imAnte').addEventListener('change', rpEnviarCfg);
-  $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; rpRegras.push({ id: 'r' + Date.now().toString(36), nome: '', ativo: true, especie: '', modo: 'e', outland: 'omitir', ivs: {}, p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); rpSig = ''; renderPoke(true); rpEnviarCfg(); });
+  $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; { const nid = 'r' + Date.now().toString(36); rpCol[nid] = false; rpRegras.push({ id: nid, nome: '', ativo: true, especie: '', modo: 'e', outland: 'omitir', ivs: {}, p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); } rpSig = ''; renderPoke(true); rpEnviarCfg(); });
   $('pkZerar').addEventListener('click', () => { rpCmd({ type: 'zerar-contagens' }); rpRegras = null; });
   $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
   for (const id of ['pkLogLimpar', 'imLogLimpar', 'rnLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
