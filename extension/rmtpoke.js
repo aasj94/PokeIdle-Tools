@@ -364,6 +364,19 @@
     sujo = true;
   }
 
+  // filtros que o próprio servidor aplica (como no front-end do jogo): evita varrer páginas inteiras.
+  // Só valem no modo "todos os critérios (E)"; a conferência final continua sendo feita aqui (casa).
+  function filtrosServidor(r) {
+    const x = {};
+    if (r.modo !== 'ou') {
+      if (r.p != null && r.p > 0) x.potenciaMin = String(Math.floor(r.p));
+      const mp = { hp: 'ivHpMin', atk: 'ivAtkMin', def: 'ivDefMin', spAtk: 'ivSpAtkMin', spDef: 'ivSpDefMin', speed: 'ivSpdMin' };
+      for (const k of IVS) if (r.ivs && r.ivs[k] != null && r.ivs[k] > 0) x[mp[k]] = String(Math.floor(r.ivs[k]));
+    }
+    if (r.nivMin != null) x.nivelMin = String(r.nivMin);
+    if (r.nivMax != null) x.nivelMax = String(r.nivMax);
+    return x;
+  }
   // ---------- laço principal ----------
   function consultaRegra() {
     const regras = cfg.regras.filter(regraValida);
@@ -371,8 +384,7 @@
     const r = regras[rotor % regras.length]; rotor++;
     const extra = { precoMax: String(r.precoMax) };
     if (r.shiny) extra.soShiny = true;
-    if (r.nivMin != null) extra.nivelMin = String(r.nivMin);
-    if (r.nivMax != null) extra.nivelMax = String(r.nivMax);
+    Object.assign(extra, filtrosServidor(r));
     extra.semOutland = r.outland === 'omitir';
     if (r.especie) extra.busca = r.especie;
     if (!enviar(pedidoLista(extra))) return false;
@@ -500,6 +512,7 @@
     if (r.especie) extra.busca = r.especie;
     if (r.precoMax < 1e15) extra.precoMax = String(r.precoMax);
     if (r.shiny) extra.soShiny = true;
+    Object.assign(extra, filtrosServidor(r));
     extra.semOutland = r.outland === 'omitir'; extra.ordem = ordemOk(o.ordem);
     cons = { rows: [], carregando: true, total: 0, msg: 'Consultando…', em: Date.now(), regra: r, pag: 0, pags: Math.max(1, Math.min(40, Math.floor(num(o.paginas) || 10))), limite: Math.max(1, Math.min(500, Math.floor(num(o.limite) || 20))), extra };
     pendConsulta = null; fila = [];
