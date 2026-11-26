@@ -438,9 +438,208 @@ function createUI(root) {
   function renderMercadoSub() {
     root.querySelectorAll('#subtabs button').forEach((b) => b.classList.toggle('on', b.dataset.sub === sub));
     $('sub-compras').hidden = sub !== 'compras';
+    $('sub-poke').hidden = sub !== 'poke';
+    $('sub-imed').hidden = sub !== 'imed';
+    $('sub-cons').hidden = sub !== 'cons';
     $('sub-hist').hidden = sub !== 'hist';
-    if (sub === 'hist') { renderHistory(); renderTentativas(); }
+    if (sub === 'hist') { renderHistory(); renderTentativas(); renderPkHist(); }
+    if (sub === 'poke') renderPoke(true);
+    if (sub === 'imed') renderImed();
+    if (sub === 'cons') renderCons();
+    if (sub === 'poke' || sub === 'imed') renderPkLog();
   }
+
+  // ---------- Compra de Pokémon no Mercado (rmtpoke.js) ----------
+  const rpCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-rmtpoke', from: 'ui' }, o), '*');
+  let rp = null;                    // estado vindo do módulo
+  let rpRegras = null;              // cópia editável das regras
+  let rpSig = '';
+  let rpEnvio = null;
+  const emFocoRp = () => { const a = root.activeElement; return !!(a && a.closest && a.closest('#pkRegras')); };
+  const sigRegras = (rs) => JSON.stringify((rs || []).map((r) => Object.assign({}, r, { comprados: 0 })));
+  function rpEnviarCfg() {
+    clearTimeout(rpEnvio);
+    rpEnvio = setTimeout(() => {
+      rpEnvio = null;
+      rpCmd({ type: 'cfg', cfg: { intervaloS: Number($('pkInt').value) || 5, antecipaMs: Number($('imAnte').value) || 0, regras: rpRegras } });
+    }, 300);
+  }
+  const mmss = (ms) => { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+  const infoPoke = (a) => 'Nv ' + a.level + (a.shiny ? ' ✨' : '') + ' · P' + a.p + ' · IV ' + a.iv + ' · Q ' + fmt(a.q) + ' · N ' + fmt(a.n);
+  function campoNum(r, k, rotulo, ph) {
+    const inp = el('input', { type: 'number', step: '1', min: '0', placeholder: ph || '—', value: r[k] == null ? '' : String(r[k]) });
+    inp.addEventListener('input', () => { r[k] = inp.value.trim() === '' ? null : Number(inp.value); rpEnviarCfg(); });
+    return [el('span', { textContent: rotulo }), inp];
+  }
+  function cartaoRegra(r, i) {
+    const nome = el('input', { type: 'text', placeholder: 'nome da regra (opcional)', value: r.nome || '' });
+    nome.addEventListener('input', () => { r.nome = nome.value; rpEnviarCfg(); });
+    const ativo = el('input', { type: 'checkbox', checked: r.ativo !== false });
+    ativo.addEventListener('change', () => { r.ativo = ativo.checked; rpEnviarCfg(); });
+    const esp = el('input', { type: 'text', placeholder: 'espécie (opcional), ex.: Dragonite', value: r.especie || '' });
+    esp.addEventListener('input', () => { r.especie = esp.value; rpEnviarCfg(); });
+    const modo = el('select', {}, el('option', { value: 'e', textContent: 'todos os critérios (E)' }), el('option', { value: 'ou', textContent: 'qualquer um dos critérios (OU)' }));
+    modo.value = r.modo === 'ou' ? 'ou' : 'e';
+    modo.addEventListener('change', () => { r.modo = modo.value; rpEnviarCfg(); });
+    const shiny = el('input', { type: 'checkbox', checked: !!r.shiny });
+    shiny.addEventListener('change', () => { r.shiny = shiny.checked; rpEnviarCfg(); });
+    const preco = el('input', { type: 'text', placeholder: 'ex.: 30M', value: r.precoMax ? short(r.precoMax) : '' });
+    preco.addEventListener('change', () => { r.precoMax = parseNum(preco.value); preco.value = r.precoMax ? short(r.precoMax) : ''; rpEnviarCfg(); });
+    const qtd = el('input', { type: 'number', min: '1', max: '999', step: '1', value: String(r.qtd || 1) });
+    qtd.addEventListener('input', () => { r.qtd = Math.max(1, Number(qtd.value) || 1); rpEnviarCfg(); });
+    const est = el('div', { className: 'est4' });
+    for (const [k, rot, ph] of [['p', 'P ≥', '1–5'], ['iv', 'IV ≥', '0–192'], ['q', 'Q ≥', '1700'], ['n', 'N ≥', '3500']]) for (const x of campoNum(r, k, rot, ph)) est.append(x);
+    r.ivs = r.ivs || {};
+    const estIv = el('div', { className: 'est4' });
+    for (const [k, rot] of [['hp', 'HP ≥'], ['atk', 'Atk ≥'], ['def', 'Def ≥'], ['spAtk', 'SpAtk ≥'], ['spDef', 'SpDef ≥'], ['speed', 'Spd ≥']]) {
+      const inp = el('input', { type: 'number', step: '1', min: '0', max: '31', placeholder: '0–31', value: r.ivs[k] == null ? '' : String(r.ivs[k]) });
+      inp.addEventListener('input', () => { r.ivs[k] = inp.value.trim() === '' ? null : Math.max(0, Math.min(31, Number(inp.value))); rpEnviarCfg(); });
+      estIv.append(el('span', { textContent: rot }), inp);
+    }
+    const rem = el('button', { className: 'link', textContent: 'remover', onclick: () => { rpRegras.splice(i, 1); rpSig = ''; renderPoke(true); rpEnviarCfg(); } });
+    const valida = r.precoMax > 0 && (['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].some((k) => r.ivs[k] != null) || r.p != null || r.iv != null || r.q != null || r.n != null || r.especie || r.shiny);
+    return el('div', { className: 'card' + (valida ? '' : ' warn') },
+      el('div', { className: 'row inline' }, el('label', {}, ativo, ' ligada'), nome, rem),
+      el('div', { className: 'row inline' }, el('label', {}, 'Espécie ', esp)),
+      el('div', { className: 'row inline' }, el('label', {}, 'Comprar se bater ', modo)),
+      est,
+      el('div', { className: 'mut', textContent: 'IV individual (31 = perfeito):' }), estIv,
+      el('div', { className: 'row inline' }, el('label', {}, shiny, ' ✨ só shiny'), el('label', {}, 'Preço máx. ', preco), el('label', {}, 'Quantidade ', qtd)),
+      el('div', { className: 'mut', textContent: 'Comprados: ' + (r.comprados || 0) + '/' + (r.qtd || 1) + (valida ? '' : ' — falta o preço máximo e pelo menos um filtro (P, IV, Q, N, espécie ou shiny)') }));
+  }
+  function renderPoke(force) {
+    if (!rp && !rpRegras) return;
+    if (rp) {
+      $('pkOn').checked = !!rp.ativo;
+      $('pkHint').textContent = rp.ativo ? 'ligada — comprando de verdade' : 'desligada';
+      $('pkInfo').textContent = !rp.conectado ? 'Sem conexão com o jogo.' : !rp.lider ? 'Outra aba do jogo está cuidando das compras.' : (rp.msg || '') + (rp.stats && rp.stats.comprados ? ' · comprados: ' + rp.stats.comprados : '') + (rp.stats && rp.stats.falhas ? ' · falhas: ' + rp.stats.falhas : '');
+      if (!emFocoRp() && root.activeElement !== $('pkInt')) $('pkInt').value = String(rp.cfg.intervaloS || 5);
+      if (root.activeElement !== $('imAnte')) $('imAnte').value = String(rp.cfg.antecipaMs || 0);
+      if (!rpRegras) rpRegras = JSON.parse(JSON.stringify(rp.cfg.regras || []));
+      // quando o usuário não está editando e a configuração mudou por fora, adota a do módulo
+      const sig = sigRegras(rp.cfg.regras);
+      if (force !== true && !emFocoRp() && !rpEnvio && sig !== sigRegras(rpRegras)) rpRegras = JSON.parse(JSON.stringify(rp.cfg.regras || []));
+      else if (rpRegras) rpRegras.forEach((r) => { const m = (rp.cfg.regras || []).find((x) => x.id === r.id); if (m) r.comprados = m.comprados; });
+    }
+    if (force === true || (!emFocoRp() && rpSig !== sigRegras(rpRegras))) {
+      const box = $('pkRegras'); box.textContent = '';
+      rpRegras.forEach((r, i) => box.append(cartaoRegra(r, i)));
+      if (!rpRegras.length) box.append(el('div', { className: 'mut', textContent: 'Nenhuma regra. Clique em "+ Nova regra".' }));
+      rpSig = sigRegras(rpRegras);
+    }
+  }
+  function renderImed() {
+    if (!rp) return;
+    const off = rp.offset || 0;
+    const agoraSrv = Date.now() + off;
+    const b = rp.busca || { rows: [] };
+    $('imMsg').textContent = b.msg || 'Clique em "Buscar em retenção" para listar os anúncios que ainda aguardam a liberação.';
+    $('imBuscar').disabled = !!b.carregando || !rp.conectado;
+    const lista = $('imLista'); lista.textContent = '';
+    const armados = new Set((rp.alvos || []).map((a) => a.id));
+    for (const a of (b.rows || []).slice().sort((x, y) => x.compravelEm - y.compravelEm)) {
+      const falta = a.compravelEm - agoraSrv;
+      const btn = el('button', { className: 'icon', textContent: armados.has(a.id) ? 'armada' : 'Comprar ao liberar', disabled: armados.has(a.id) || falta <= -2000, onclick: () => {
+        const pm = parseNum($('imPreco').value);
+        rpCmd({ type: 'armar', id: a.id, precoMax: pm > 0 ? pm : a.preco });
+      } });
+      lista.append(el('div', { className: 'row-poke' },
+        el('b', { textContent: a.nome }), el('span', { className: 'mut', textContent: ' ' + infoPoke(a) }),
+        el('div', { textContent: fmt(a.preco) + ' coins · ' + (a.vendedor || '?') + ' · libera em ' + (falta > 0 ? mmss(falta) : 'agora') }), btn));
+    }
+    if (!(b.rows || []).length) lista.append(el('div', { className: 'mut', textContent: 'Nada listado.' }));
+    const arm = $('imArmadas'); arm.textContent = '';
+    const alvos = (rp.alvos || []).slice().sort((x, y) => x.compravelEm - y.compravelEm);
+    $('imArmN').textContent = alvos.length ? '(' + alvos.length + ')' : '';
+    for (const a of alvos) {
+      const falta = a.compravelEm - agoraSrv;
+      const st = a.status === 'agendado' ? (falta > 0 ? 'libera em ' + mmss(falta) + (falta < 10000 ? ' (' + (Math.max(0, falta) / 1000).toFixed(1) + ' s)' : '') : 'enviando…') : a.status === 'pedido' ? 'pedido enviado…' : a.status === 'comprado' ? 'COMPRADO ✔' : 'falhou';
+      arm.append(el('div', { className: 'row-poke ' + (a.status === 'comprado' ? 'ok' : a.status === 'falhou' ? 'bad' : '') },
+        el('b', { textContent: a.nome }), el('span', { className: 'mut', textContent: ' ' + infoPoke(a) + ' · ' + (a.origem === 'regra' ? 'regra: ' + a.regraNome : 'imediata') }),
+        el('div', { textContent: fmt(a.preco) + ' coins (máx. ' + fmt(a.precoMax) + ') · ' + st + (a.msg ? ' · ' + a.msg : '') }),
+        a.status === 'agendado' ? el('button', { className: 'link', textContent: 'cancelar', onclick: () => rpCmd({ type: 'desarmar', id: a.id }) }) : ''));
+    }
+    if (!alvos.length) arm.append(el('div', { className: 'mut', textContent: 'Nenhuma compra armada.' }));
+    $('imHint').textContent = alvos.some((a) => a.status === 'agendado') ? 'armada' : '';
+  }
+  let csInit = false, csSig = '';
+  function renderCons() {
+    if (!csInit) {
+      csInit = true;
+      for (const [k, rot, ph] of [['p', 'P ≥', '1–5'], ['iv', 'IV total ≥', '0–192'], ['q', 'Q ≥', '1700'], ['n', 'N ≥', '3500']]) {
+        $('csEst').append(el('span', { textContent: rot }), el('input', { type: 'number', step: '1', min: '0', placeholder: ph, id: 'cs_' + k }));
+      }
+      for (const [k, rot] of [['hp', 'HP ≥'], ['atk', 'Atk ≥'], ['def', 'Def ≥'], ['spAtk', 'SpAtk ≥'], ['spDef', 'SpDef ≥'], ['speed', 'Spd ≥']]) {
+        $('csIv').append(el('span', { textContent: rot }), el('input', { type: 'number', step: '1', min: '0', max: '31', placeholder: '0–31', id: 'csiv_' + k }));
+      }
+      $('csGo').addEventListener('click', () => {
+        const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
+        const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
+        rpCmd({ type: 'consultar', filtros: { especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: Number($('csPag').value) || 4 } });
+      });
+    }
+    const c = rp && rp.cons; if (!c) return;
+    $('csGo').disabled = !!c.carregando || !rp.conectado;
+    $('csMsg').textContent = c.msg || '';
+    const sig = c.rows.map((r) => r.id + ':' + r.preco).join(',') + c.carregando;
+    if (sig === csSig) return; csSig = sig;
+    const box = $('csLista'); box.textContent = '';
+    for (const a of c.rows) {
+      const iv = a.ivs ? ' · IV ' + ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed'].map((k) => a.ivs[k]).join('/') : '';
+      box.append(el('div', { className: 'row-poke' }, el('b', { textContent: a.nome + (a.shiny ? ' ✨' : '') }), el('span', { className: 'mut', textContent: ' ' + infoPoke(a) + iv }), el('div', { textContent: fmt(a.preco) + ' coins · ' + (a.vendedor || '?') + (a.compravelEm > Date.now() + (rp.offset || 0) ? ' · em retenção' : '') })));
+    }
+    if (!c.rows.length) box.append(el('div', { className: 'mut', textContent: c.carregando ? 'Consultando…' : 'Nada encontrado.' }));
+  }
+  function renderPkLog() {
+    for (const id of ['pkLog', 'imLog']) {
+      const box = $(id); if (!box) continue;
+      const lg = (rp && rp.log) || [];
+      const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);
+      if (box.dataset.sig === sig) continue;
+      box.dataset.sig = sig;
+      const fim = box.scrollTop + box.clientHeight >= box.scrollHeight - 8;
+      box.textContent = '';
+      for (const l of lg) box.append(el('div', { className: l.lvl }, el('time', { textContent: new Date(l.t).toLocaleTimeString('pt-BR') }), l.msg));
+      if (!lg.length) box.append(el('div', { className: 'mut', textContent: 'Sem registros ainda.' }));
+      if (fim) box.scrollTop = box.scrollHeight;
+    }
+  }
+  function copiarLogPk() {
+    const t = ((rp && rp.log) || []).map((l) => new Date(l.t).toLocaleTimeString('pt-BR') + ' [' + l.lvl + '] ' + l.msg).join('\n');
+    try { navigator.clipboard.writeText(t); } catch (e) { /* ignora */ }
+  }
+  function renderPkHist() {
+    const box = $('pkHist'); if (!box) return;
+    box.textContent = '';
+    for (const x of ((rp && rp.hist) || [])) {
+      box.append(el('div', { className: 'row-poke ' + (x.status === 'comprado' ? 'ok' : x.status === 'pendente' ? '' : 'bad') },
+        el('time', { textContent: when(x.em) + ' ' }), el('b', { textContent: x.nome + ' Nv ' + x.level }),
+        el('span', { className: 'mut', textContent: ' P' + x.p + ' · IV ' + x.iv + ' · Q ' + fmt(x.q) + ' · N ' + fmt(x.n) + (x.shiny ? ' ✨' : '') }),
+        el('div', { textContent: fmt(x.preco) + ' coins · ' + (x.vendedor || '?') + ' · ' + (x.origem === 'regra' ? 'regra ' + x.regra : 'imediata') + ' · ' + x.status + (x.motivo ? ' — ' + x.motivo : '') })));
+    }
+    if (!box.firstChild) box.append(el('div', { className: 'mut', textContent: 'Nenhuma compra de Pokémon ainda.' }));
+  }
+  window.addEventListener('message', (ev) => {
+    const m = ev.data;
+    if (ev.source !== window || !m || m.ch !== 'ateforp-rmtpoke' || m.from !== 'rmtpoke' || m.type !== 'state') return;
+    rp = m.state;
+    if (sub === 'poke') renderPoke(false);
+    if (sub === 'imed') renderImed();
+    if (sub === 'hist') renderPkHist();
+    if (sub === 'cons') renderCons();
+    if (sub === 'poke' || sub === 'imed') renderPkLog();
+  });
+  rpCmd({ type: 'hello' });
+  $('pkOn').addEventListener('change', (e) => rpCmd({ type: 'ativo', value: e.target.checked }));
+  $('pkInt').addEventListener('change', rpEnviarCfg);
+  $('imAnte').addEventListener('change', rpEnviarCfg);
+  $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; rpRegras.push({ id: 'r' + Date.now().toString(36), nome: '', ativo: true, especie: '', modo: 'e', p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); rpSig = ''; renderPoke(true); rpEnviarCfg(); });
+  $('pkZerar').addEventListener('click', () => { rpCmd({ type: 'zerar-contagens' }); rpRegras = null; });
+  $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
+  for (const id of ['pkLogLimpar', 'imLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
+  for (const id of ['pkLogCopiar', 'imLogCopiar']) $(id).addEventListener('click', copiarLogPk);
+  $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 3 }));
+  setInterval(() => { if (sub === 'imed' && rp) renderImed(); }, 500);
 
 
   // ---------- PvP automático ----------

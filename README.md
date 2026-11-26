@@ -10,7 +10,7 @@ Versão atual: **2.3.19**
 - **Estatísticas para modo economia:** quadro ao vivo nos modos Economia/Ultra com bolas e gold, Pokémon sendo caçado, vistos/derrotados/capturados/fugiram, PvP e compras. Pode ser ligado ou desligado, escolhendo as seções, e dá para **mover, redimensionar (por todas as bordas), minimizar e fixar**; a posição fica salva.
 - **Venda de Pokémon:** vende ou envia para a Coleção, sozinho, segundo regras de P, IV, Q e N, com prévia (Vender / Coleção / Sem ação) e registro.
 - **PvP:** entra na fila automaticamente (também ao logar), com histórico de partidas. Não se desliga sozinho após falhas: tenta de novo com espera crescente.
-- **Mercado RMT:** compra automática e histórico.
+- **Mercado RMT:** compra automática de itens e de Pokémon (regras com IV individual, potência, qualidade, nota e preço), Compra Imediata, Consulta de disponibilidade, registro e histórico.
 - Painel redimensionável e maximizável, com caixa de ferramentas no cartão do jogador.
 
 ## Instalação

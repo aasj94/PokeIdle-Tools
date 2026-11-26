@@ -214,7 +214,10 @@
 
       <section id="tab-itens" class="tab" hidden>
         <nav class="tabs sub" id="subtabs">
-          <button data-sub="compras" class="on">Compras</button>
+          <button data-sub="compras" class="on">Itens</button>
+          <button data-sub="poke">Pokémon</button>
+          <button data-sub="imed">Compra Imediata</button>
+          <button data-sub="cons">Consulta</button>
           <button data-sub="hist">Histórico de compras</button>
         </nav>
         <div id="sub-compras">
@@ -248,6 +251,53 @@
           </div>
         </details>
         </div>
+        <div id="sub-poke" hidden>
+          <div class="card master">
+            <label class="switch big">
+              <input type="checkbox" id="pkOn">
+              <span class="slider"></span>
+              <span class="lbl"><b>Compra automática de Pokémon</b><small id="pkHint">desligada</small></span>
+            </label>
+            <div class="mut" id="pkInfo">Desligada.</div>
+            <div class="row inline">
+              <label>Consultar a cada <input id="pkInt" type="number" min="4" step="0.5" value="5"> s <small>(uma regra por vez, em rodízio)</small></label>
+            </div>
+          </div>
+          <div id="pkRegras"></div>
+          <div class="btns"><button id="pkNova" class="icon">+ Nova regra</button><button id="pkZerar" class="link">zerar contagens</button></div>
+          <h2>REGISTRO <button id="pkLogCopiar" class="link">copiar</button> <button id="pkLogLimpar" class="link">limpar</button></h2>
+          <div id="pkLog" class="log"></div>
+          <div class="mut">Cada regra compra Pokémon do Mercado (em coins) quando o anúncio atende aos critérios e custa até o preço máximo. P = potência, IV = soma dos IVs, Q = qualidade e N = nota (em milésimos, como na Venda automática: 1700, 3500). Campo vazio = ignorado. Preço máximo é obrigatório e vale sempre. Se o anúncio ainda estiver em retenção, a compra é agendada para o instante da liberação.</div>
+        </div>
+        <div id="sub-imed" hidden>
+          <div class="card">
+            <h2>COMPRA IMEDIATA <small id="imHint"></small></h2>
+            <div class="mut">Escolha um Pokémon que está no Mercado aguardando o tempo de retenção. A extensão acompanha o relógio do servidor e envia o pedido de compra no instante em que ele é liberado.</div>
+            <div class="row addn"><input id="imNome" type="text" placeholder="nome do Pokémon (opcional)"><input id="imPreco" type="text" placeholder="preço máx. (opcional)"><button id="imBuscar" class="icon">Buscar em retenção</button></div>
+            <div class="mut" id="imMsg"></div>
+            <div id="imLista" class="list"></div>
+          </div>
+          <div class="card">
+            <h2>ARMADAS <small id="imArmN"></small></h2>
+            <div id="imArmadas" class="list"></div>
+          <h2>REGISTRO <button id="imLogCopiar" class="link">copiar</button> <button id="imLogLimpar" class="link">limpar</button></h2>
+          <div id="imLog" class="log"></div>
+            <div class="row inline"><label>Antecipar o envio em <input id="imAnte" type="number" min="0" max="1000" step="10" value="0"> ms <small>(compensa a demora da rede; 0 = no instante exato)</small></label></div>
+          </div>
+        </div>
+        <div id="sub-cons" hidden>
+          <div class="card">
+            <h2>CONSULTA DE DISPONIBILIDADE</h2>
+            <div class="mut">Mostra o que há à venda no Mercado de acordo com os filtros. Só consulta — não compra nada. Campos vazios são ignorados.</div>
+            <div class="row inline"><label>Espécie <input id="csEsp" type="text" placeholder="ex.: Snorlax"></label><label>Preço máx. <input id="csPreco" type="text" placeholder="ex.: 30M"></label><label><input id="csShiny" type="checkbox"> ✨ só shiny</label></div>
+            <div class="est4" id="csEst"></div>
+            <div class="mut">IV individual (31 = perfeito):</div>
+            <div class="est4" id="csIv"></div>
+            <div class="row inline"><label>Páginas <input id="csPag" type="number" min="1" max="10" value="4"> <small>(24 anúncios cada; ~4 s por página)</small></label><button id="csGo" class="icon">Consultar</button></div>
+            <div class="mut" id="csMsg"></div>
+            <div id="csLista" class="list"></div>
+          </div>
+        </div>
         <div id="sub-hist" hidden>
 
         <div class="hbar">
@@ -263,6 +313,9 @@
       
           <div class="sep"></div>
 
+        <h2>Compras de Pokémon pela extensão <button id="pkLimpar" class="link">limpar</button></h2>
+        <div id="pkHist" class="list tall"></div>
+        <div class="sep"></div>
         <h2>Tentativas de compra <button id="clearTent" class="link">limpar</button></h2>
         <div id="tentSummary" class="summary"></div>
         <div id="tentList" class="list tall"></div>

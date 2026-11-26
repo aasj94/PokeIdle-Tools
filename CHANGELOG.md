@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## v2.3.20
+- **Mercado — compra automática de Pokémon:** nova configuração, separada da de itens, com regras por espécie, preço máximo, quantidade, shiny, potência, IV total, qualidade, nota e **IV individual** (HP, Atk, Def, SpAtk, SpDef, Spd). Modo "todos os critérios" (E) ou "qualquer um" (OU); campo vazio é ignorado.
+- **Compra Imediata:** escolha um Pokémon em retenção; a extensão acompanha o relógio do servidor e envia a compra no instante da liberação.
+- **Consulta:** lista o que há à venda segundo os filtros (sem comprar).
+- **Registro:** log detalhado das compras (consultas, achados, pedidos, respostas do jogo, confirmações) e histórico. Tudo funciona só pela configuração, sem precisar da tela do jogo.
+
 ## v2.3.19
 - Removida a opção "Beast Ball em shiny e lendário" da aba Captura. A captura nos modos Economia/Ultra continua igual, usando a bola escolhida. (A reposição de Beast Ball da loja VIP é outra função e continua.)
 
