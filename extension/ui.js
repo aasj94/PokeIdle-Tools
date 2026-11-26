@@ -975,7 +975,13 @@ function createUI(root) {
     if (!sm) return;
     const r = sm.resumo;
     $('smOn').checked = !!sm.ligado; $('smHint').textContent = sm.ligado ? 'coletando' : 'parado';
-    $('smResumo').textContent = 'Pokémon vistos: ' + fmt(r.spawns) + ' · shinies vistos: ' + r.shinyVistos + ' (capturados ' + r.shinyCapturados + ', fugiram ' + r.shinyFugidos + (r.shinySemCaptura ? ', sem desfecho ' + r.shinySemCaptura : '') + ') · desde o último shiny: ' + fmt(r.spawnsDesdeUltimoShiny) + (r.umShinyACada ? ' · 1 shiny a cada ~' + fmt(r.umShinyACada) : '');
+    const caixa = $('smResumo'); caixa.textContent = '';
+    const lin = (rot, val, dica) => caixa.append(el('div', { className: 'smlin' }, el('span', { className: 'mut', textContent: rot }), el('b', { textContent: val }), dica ? el('small', { className: 'mut', textContent: ' ' + dica }) : ''));
+    lin('Monitorando desde', new Date(r.desde).toLocaleString('pt-BR'));
+    lin('Pokémon que apareceram', fmt(r.spawns), '(todos, shiny ou não)');
+    lin('Shinies que apareceram', String(r.shinyVistos), r.shinyVistos ? '(' + r.shinyCapturados + ' capturados · ' + r.shinyFugidos + ' fugiram' + (r.shinySemCaptura ? ' · ' + r.shinySemCaptura + ' sem desfecho' : '') + ')' : '(nenhum ainda)');
+    lin('Sem shiny há', fmt(r.spawnsDesdeUltimoShiny) + ' Pokémon', r.shinyVistos ? '(desde o último shiny)' : '(desde que o monitor começou)');
+    lin('Média', r.umShinyACada ? '1 shiny a cada ~' + fmt(r.umShinyACada) + ' Pokémon' : 'ainda sem dados', r.umShinyACada ? '' : '(precisa de pelo menos 1 shiny)');
     const box = $('smEnc'); box.textContent = '';
     for (const e of sm.encontros.slice().reverse()) {
       box.append(el('div', { className: 'row-poke ' + (e.fim === 'capturado' ? 'ok' : e.fim === 'fugiu' ? 'bad' : '') },

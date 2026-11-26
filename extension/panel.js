@@ -394,7 +394,7 @@
         </div>
         <div class="card">
           <h2>SHINY MONITOR <small id="smHint"></small></h2>
-          <div class="mut">Só observa (não envia nada ao jogo): guarda dados de cada Pokémon shiny que aparece (nível, bolas usadas, chance informada, resultado, quantos Pokémon apareceram antes) e estatísticas das bolas, para entendermos a captura de shiny. Os dados ficam salvos no navegador.</div>
+          <div class="mut">Anota, sem mexer em nada no jogo, o que acontece em cada encontro com um Pokémon shiny: nível, bolas usadas, chance de captura e se deu certo. Serve para estudarmos como funciona a captura de shiny. Os dados ficam salvos neste navegador; quando quiser analisar, clique em "Copiar relatório" e cole na conversa.</div>
           <label class="switch"><input type="checkbox" id="smOn" checked><span class="slider"></span><span class="lbl"><b>Registrar encontros com shiny</b><small>desligue para parar de coletar</small></span></label>
           <div id="smResumo" class="mut"></div>
           <div id="smEnc" class="list"></div>

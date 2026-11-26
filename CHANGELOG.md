@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.27
+- Shiny Monitor com textos mais claros: resumo em linhas com legenda.
+
 ## v2.3.26
 - Novidades: o botão **Verificar atualização** agora mostra "Verificando…", o resultado e a hora da última checagem; aparece o botão **Baixar atualização** quando há versão nova.
 
