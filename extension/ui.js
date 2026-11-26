@@ -1007,12 +1007,16 @@ function createUI(root) {
   const RELS = window.__ateforpReleases || [];
   const VERSAO = RELS[0] ? RELS[0].v : '';
   const cmpV = (a, b) => { const x = String(a).split('.').map(Number), y = String(b).split('.').map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) - (y[i] || 0); } return 0; };
-  let nova = null, novaErro = '';
+  let nova = null, novaErro = '', novaVerif = 0, novaVerificando = false;
   function renderNovidades() {
     $('novVer').textContent = VERSAO ? 'versão instalada: ' + VERSAO : '';
     const av = $('novAviso');
-    if (nova) av.textContent = 'Nova versão disponível: ' + nova.version + '. Extensão: baixe o ZIP em ' + (nova.download || 'GitHub') + ', substitua a pasta e recarregue a extensão. Userscript: atualize pelo Tampermonkey/Greasy Fork ("Atualizar script agora").';
-    else av.textContent = novaErro ? 'Não consegui verificar agora (' + novaErro + ').' : 'Você está na versão mais recente (ou ainda não verifiquei).';
+    const quando = novaVerif ? ' Última verificação: ' + new Date(novaVerif).toLocaleTimeString('pt-BR') + '.' : '';
+    if (novaVerificando) av.textContent = 'Verificando…';
+    else if (nova) av.textContent = 'Nova versão disponível: ' + nova.version + ' (a sua é a ' + VERSAO + '). A extensão não se atualiza sozinha: clique em "Baixar atualização", extraia o ZIP por cima da pasta da extensão e recarregue em chrome://extensions. No userscript, use "Atualizar script agora" no Tampermonkey/Greasy Fork.' + quando;
+    else av.textContent = novaErro ? 'Não consegui verificar agora (' + novaErro + ').' + quando : 'Você está na versão mais recente (' + VERSAO + ').' + quando;
+    const dl = $('novBaixar'); if (dl) { dl.hidden = !nova; if (nova) dl.href = nova.download || 'https://github.com/aasj94/PokeIdle-Tools/releases/latest'; }
+    const bt = $('novChecar'); if (bt) bt.disabled = novaVerificando;
     const box = $('novLista'); box.textContent = '';
     RELS.forEach((r, i) => {
       const ul = el('ul', {}); for (const t of r.itens) ul.append(el('li', { textContent: t }));
@@ -1027,12 +1031,16 @@ function createUI(root) {
     let canal = null;
     try { canal = chrome.runtime && chrome.runtime.id && chrome.runtime.sendMessage; } catch (e) { canal = null; }
     if (!canal || !VERSAO) { novaErro = 'userscript: o Tampermonkey/Greasy Fork avisa sozinho'; renderNovidades(); return; }
+    novaVerificando = true; renderNovidades();
+    const fim = () => { novaVerificando = false; novaVerif = Date.now(); renderNovidades(); };
+    const limite = setTimeout(() => { if (novaVerificando) { novaErro = 'sem resposta'; fim(); } }, 12000);
     try {
       chrome.runtime.sendMessage({ type: 'ateforp-check-update' }, (r) => {
-        if (chrome.runtime.lastError || !r || !r.ok) { novaErro = (r && r.erro) || 'sem resposta'; renderNovidades(); return; }
-        novaErro = ''; nova = cmpV(r.version, VERSAO) > 0 ? r : null; marcarNova(); renderNovidades();
+        clearTimeout(limite);
+        if (chrome.runtime.lastError || !r || !r.ok) { novaErro = (r && r.erro) || (chrome.runtime.lastError && chrome.runtime.lastError.message) || 'sem resposta'; fim(); return; }
+        novaErro = ''; nova = cmpV(r.version, VERSAO) > 0 ? r : null; marcarNova(); fim();
       });
-    } catch (e) { novaErro = 'extensão recarregada: atualize a página'; }
+    } catch (e) { clearTimeout(limite); novaErro = 'extensão recarregada: atualize a página'; fim(); }
   }
   $('novChecar').addEventListener('click', checarAtualizacao);
   setTimeout(checarAtualizacao, 4000); setInterval(checarAtualizacao, 3 * 3600 * 1000);

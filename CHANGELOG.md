@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.26
+- Novidades: o botão **Verificar atualização** agora mostra "Verificando…", o resultado e a hora da última checagem; aparece o botão **Baixar atualização** quando há versão nova.
+
 ## v2.3.25
 - **Shiny Monitor** (aba Logs): só observa e guarda no navegador os encontros com Pokémon shiny (nível, bolas usadas, chance informada pelo jogo, resultado, quantos Pokémon apareceram antes), estatísticas das bolas e dados do dex. Botão para copiar o relatório. Base para um futuro Shiny Hunter.
 

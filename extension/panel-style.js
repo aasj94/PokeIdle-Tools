@@ -43,6 +43,8 @@ input:focus, select:focus { outline: 1px solid var(--acc); }
 button { cursor: pointer; background: linear-gradient(var(--luz) 0 3px, var(--base) 3px 100%); border: none; box-shadow: 0 2px 0 var(--frameD); color: #0c2340; font-weight: 700; padding: 6px 10px; border-radius: 6px; }
 button:disabled { opacity: .4; cursor: default; }
 button.link { background: none; box-shadow: none; border: none; color: var(--mut); font-weight: normal; text-decoration: underline; padding: 0; margin-left: auto; }
+a.icon { display: inline-block; text-decoration: none; background: none; border: 1px solid var(--line); color: var(--luz); padding: 3px 8px; font-weight: 600; border-radius: 6px; font-size: 12px; }
+a.icon[hidden] { display: none; }
 button.icon { background: none; box-shadow: none; border: 1px solid var(--line); color: var(--luz); padding: 3px 8px; font-weight: 600; }
 header button.icon { border-color: var(--frameD); background: rgba(10,30,60,.35); }
 
