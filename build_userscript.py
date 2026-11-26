@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Gera o userscript único (Tampermonkey/Violentmonkey) a partir dos mesmos arquivos da extensão."""
 import json, os, sys
-root = os.path.dirname(os.path.abspath(__file__))
-d = os.path.join(root, 'extension')
+d = os.path.dirname(os.path.abspath(__file__))
 rd = lambda n: open(os.path.join(d, n), encoding='utf-8').read()
 ver = json.load(open(os.path.join(d, 'manifest.json')))['version']
-out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(root, 'userscript', 'pokeidle-tools-by-ateforp.user.js')
+out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(d, '..', 'pokeidle-ateforp-tools.user.js')
 
 import base64
 icon = 'data:image/png;base64,' + base64.b64encode(open(os.path.join(d, 'icons', 'icon64.png'), 'rb').read()).decode()
@@ -63,10 +62,10 @@ shim = r"""
 })();
 """
 
-ui_part = "\n".join(rd(n) for n in ['gyarados.js', 'qrcode.min.js', 'panel-style.js']) + "\n(() => {\n" + rd('ui.js') + "\n" + rd('panel.js').replace("(() => {\n  'use strict';", "(() => {", 1) + "\n})();\n"
+ui_part = "\n".join(rd(n) for n in ['gyarados.js', 'qrcode.min.js', 'panel-style.js', 'releases.js']) + "\n(() => {\n" + rd('ui.js') + "\n" + rd('panel.js').replace("(() => {\n  'use strict';", "(() => {", 1) + "\n})();\n"
 # painel só depois que o DOM existir
 boot = "(function () {\n  const start = () => {\n" + "".join("    " + l + "\n" for l in ui_part.splitlines()) + "  };\n  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();\n})();\n"
 
-body = "(function () {\n'use strict';\n" + shim + "\n/* ===== motor do Mercado ===== */\n" + rd('engine.js') + "\n/* ===== ponte ===== */\n" + rd('bridge.js') + "\n/* ===== captura / estoque ===== */\n" + rd('catch.js') + "\n/* ===== venda automatica ===== */\n" + rd('autovenda.js') + "\n/* ===== pvp ===== */\n" + rd('pvp.js') + "\n/* ===== painel ===== */\n" + boot + "\n})();\n"
+body = "(function () {\n'use strict';\n" + shim + "\n/* ===== motor do Mercado ===== */\n" + rd('engine.js') + "\n/* ===== ponte ===== */\n" + rd('bridge.js') + "\n/* ===== captura / estoque ===== */\n" + rd('catch.js') + "\n/* ===== venda automatica ===== */\n" + rd('autovenda.js') + "\n/* ===== pvp ===== */\n" + rd('pvp.js') + "\n/* ===== compra de pokemon (RMT) ===== */\n" + rd('rmtpoke.js') + "\n/* ===== painel ===== */\n" + boot + "\n})();\n"
 open(out, 'w', encoding='utf-8').write(head + "\n" + body)
 print('ok', out, len(head + body) // 1024, 'KB')

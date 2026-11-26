@@ -43,6 +43,7 @@
         <button data-tab="pvp">PvP</button>
         <button data-tab="itens">Mercado RMT</button>
         <button data-tab="registro">Logs</button>
+        <button data-tab="novidades" id="novBtn">Novidades</button>
         <button id="pixBtn" class="pixbtn" title="Apoiar o criador (opcional)" aria-label="Apoiar o criador">🤲</button>
       </nav>
 
@@ -211,6 +212,15 @@
         </div>
       </section>
 
+
+      <section id="tab-novidades" class="tab" hidden>
+        <div class="card">
+          <h2>NOVIDADES <small id="novVer"></small></h2>
+          <div class="mut" id="novAviso"></div>
+          <div class="btns"><button id="novChecar" class="icon">Verificar atualização</button></div>
+        </div>
+        <div id="novLista"></div>
+      </section>
 
       <section id="tab-itens" class="tab" hidden>
         <nav class="tabs sub" id="subtabs">

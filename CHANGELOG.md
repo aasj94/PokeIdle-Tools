@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v2.3.22
+- Nova aba **Novidades** com o resumo de cada versão.
+- **Aviso de nova versão** da extensão: ponto vermelho na aba Novidades (checagem ao abrir e a cada 3 horas). No userscript, o aviso é do Tampermonkey/Greasy Fork.
+
 ## v2.3.21
 - Compra de Pokémon: opção **Outland** (omitir, incluir ou somente Outland) em cada regra, na Compra Imediata e na Consulta. Antes, Outland era sempre omitido.
 

@@ -842,10 +842,44 @@ function createUI(root) {
   function showTab(t) {
     tab = t;
     root.querySelectorAll('#tabs button[data-tab]').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
-    ['captura', 'pvp', 'itens', 'registro'].forEach((n) => { $('tab-' + n).hidden = n !== t; });
+    ['captura', 'pvp', 'itens', 'registro', 'novidades'].forEach((n) => { $('tab-' + n).hidden = n !== t; });
     if (t === 'itens') renderMercadoSub();
     if (t === 'registro') renderLog();
+    if (t === 'novidades') renderNovidades();
   }
+  // ---------- Novidades / aviso de nova versão ----------
+  const RELS = window.__ateforpReleases || [];
+  const VERSAO = RELS[0] ? RELS[0].v : '';
+  const cmpV = (a, b) => { const x = String(a).split('.').map(Number), y = String(b).split('.').map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) - (y[i] || 0); } return 0; };
+  let nova = null, novaErro = '';
+  function renderNovidades() {
+    $('novVer').textContent = VERSAO ? 'versão instalada: ' + VERSAO : '';
+    const av = $('novAviso');
+    if (nova) av.textContent = 'Nova versão disponível: ' + nova.version + '. Extensão: baixe o ZIP em ' + (nova.download || 'GitHub') + ', substitua a pasta e recarregue a extensão. Userscript: atualize pelo Tampermonkey/Greasy Fork ("Atualizar script agora").';
+    else av.textContent = novaErro ? 'Não consegui verificar agora (' + novaErro + ').' : 'Você está na versão mais recente (ou ainda não verifiquei).';
+    const box = $('novLista'); box.textContent = '';
+    RELS.forEach((r, i) => {
+      const ul = el('ul', {}); for (const t of r.itens) ul.append(el('li', { textContent: t }));
+      box.append(el('div', { className: 'card' }, el('h2', {}, 'v' + r.v + (i === 0 ? ' — instalada' : '')), ul));
+    });
+  }
+  function marcarNova() {
+    const b = $('novBtn'); if (b) b.textContent = nova ? 'Novidades 🔴' : 'Novidades';
+    if (tab === 'novidades') renderNovidades();
+  }
+  function checarAtualizacao() {
+    let canal = null;
+    try { canal = chrome.runtime && chrome.runtime.id && chrome.runtime.sendMessage; } catch (e) { canal = null; }
+    if (!canal || !VERSAO) { novaErro = 'userscript: o Tampermonkey/Greasy Fork avisa sozinho'; renderNovidades(); return; }
+    try {
+      chrome.runtime.sendMessage({ type: 'ateforp-check-update' }, (r) => {
+        if (chrome.runtime.lastError || !r || !r.ok) { novaErro = (r && r.erro) || 'sem resposta'; renderNovidades(); return; }
+        novaErro = ''; nova = cmpV(r.version, VERSAO) > 0 ? r : null; marcarNova(); renderNovidades();
+      });
+    } catch (e) { novaErro = 'extensão recarregada: atualize a página'; }
+  }
+  $('novChecar').addEventListener('click', checarAtualizacao);
+  setTimeout(checarAtualizacao, 4000); setInterval(checarAtualizacao, 3 * 3600 * 1000);
   function showSub(s) { sub = s; renderMercadoSub(); }
   root.querySelectorAll('#subtabs button').forEach((b) => b.addEventListener('click', () => showSub(b.dataset.sub)));
   root.querySelectorAll('#tabs button[data-tab]').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
