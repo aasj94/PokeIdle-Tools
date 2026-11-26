@@ -481,6 +481,9 @@ function createUI(root) {
     const modo = el('select', {}, el('option', { value: 'e', textContent: 'todos os critérios (E)' }), el('option', { value: 'ou', textContent: 'qualquer um dos critérios (OU)' }));
     modo.value = r.modo === 'ou' ? 'ou' : 'e';
     modo.addEventListener('change', () => { r.modo = modo.value; rpEnviarCfg(); });
+    const outl = el('select', {}, el('option', { value: 'omitir', textContent: 'omitir Outland' }), el('option', { value: 'incluir', textContent: 'incluir Outland' }), el('option', { value: 'so', textContent: 'somente Outland' }));
+    outl.value = r.outland || 'omitir';
+    outl.addEventListener('change', () => { r.outland = outl.value; rpEnviarCfg(); });
     const shiny = el('input', { type: 'checkbox', checked: !!r.shiny });
     shiny.addEventListener('change', () => { r.shiny = shiny.checked; rpEnviarCfg(); });
     const preco = el('input', { type: 'text', placeholder: 'ex.: 30M', value: r.precoMax ? short(r.precoMax) : '' });
@@ -501,7 +504,7 @@ function createUI(root) {
     return el('div', { className: 'card' + (valida ? '' : ' warn') },
       el('div', { className: 'row inline' }, el('label', {}, ativo, ' ligada'), nome, rem),
       el('div', { className: 'row inline' }, el('label', {}, 'Espécie ', esp)),
-      el('div', { className: 'row inline' }, el('label', {}, 'Comprar se bater ', modo)),
+      el('div', { className: 'row inline' }, el('label', {}, 'Comprar se bater ', modo), el('label', {}, 'Outland ', outl)),
       est,
       el('div', { className: 'mut', textContent: 'IV individual (31 = perfeito):' }), estIv,
       el('div', { className: 'row inline' }, el('label', {}, shiny, ' ✨ só shiny'), el('label', {}, 'Preço máx. ', preco), el('label', {}, 'Quantidade ', qtd)),
@@ -575,7 +578,7 @@ function createUI(root) {
       $('csGo').addEventListener('click', () => {
         const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
         const ivs = {}; for (const k of ['hp', 'atk', 'def', 'spAtk', 'spDef', 'speed']) ivs[k] = v('csiv_' + k);
-        rpCmd({ type: 'consultar', filtros: { especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: Number($('csPag').value) || 4 } });
+        rpCmd({ type: 'consultar', filtros: { especie: $('csEsp').value.trim(), precoMax: parseNum($('csPreco').value) || 0, shiny: $('csShiny').checked, outland: $('csOutl').value, modo: 'e', p: v('cs_p'), iv: v('cs_iv'), q: v('cs_q'), n: v('cs_n'), ivs, paginas: Number($('csPag').value) || 4 } });
       });
     }
     const c = rp && rp.cons; if (!c) return;
@@ -638,7 +641,7 @@ function createUI(root) {
   $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
   for (const id of ['pkLogLimpar', 'imLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
   for (const id of ['pkLogCopiar', 'imLogCopiar']) $(id).addEventListener('click', copiarLogPk);
-  $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 3 }));
+  $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 3 }));
   setInterval(() => { if (sub === 'imed' && rp) renderImed(); }, 500);
 
 

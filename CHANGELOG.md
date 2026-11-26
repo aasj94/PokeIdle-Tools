@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.21
+- Compra de Pokémon: opção **Outland** (omitir, incluir ou somente Outland) em cada regra, na Compra Imediata e na Consulta. Antes, Outland era sempre omitido.
+
 ## v2.3.20
 - **Mercado — compra automática de Pokémon:** nova configuração, separada da de itens, com regras por espécie, preço máximo, quantidade, shiny, potência, IV total, qualidade, nota e **IV individual** (HP, Atk, Def, SpAtk, SpDef, Spd). Modo "todos os critérios" (E) ou "qualquer um" (OU); campo vazio é ignorado.
 - **Compra Imediata:** escolha um Pokémon em retenção; a extensão acompanha o relógio do servidor e envia a compra no instante da liberação.

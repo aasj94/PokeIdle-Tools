@@ -46,6 +46,7 @@
       ativo: r.ativo !== false,
       especie: String(r.especie || '').slice(0, 40),
       modo: r.modo === 'ou' ? 'ou' : 'e',
+      outland: r.outland === 'incluir' || r.outland === 'so' ? r.outland : 'omitir',
       p: num(r.p), iv: num(r.iv), q: num(r.q), n: num(r.n),
       ivs: { hp: num(r.ivs && r.ivs.hp), atk: num(r.ivs && r.ivs.atk), def: num(r.ivs && r.ivs.def), spAtk: num(r.ivs && r.ivs.spAtk), spDef: num(r.ivs && r.ivs.spDef), speed: num(r.ivs && r.ivs.speed) },
       shiny: !!r.shiny,
@@ -117,6 +118,8 @@
     if (a.moeda !== 'gold' || a.preco <= 0 || a.preco > r.precoMax) return false;
     if (r.especie && nomeNorm(a.nome).indexOf(nomeNorm(r.especie)) === -1) return false;
     if (r.shiny && !a.shiny) return false;
+    if (r.outland === 'so' && a.speciesId < 2001) return false;
+    if (r.outland === 'omitir' && a.speciesId >= 2001) return false;
     const testes = [];
     if (r.p != null) testes.push(a.p >= r.p);
     if (r.iv != null) testes.push(a.iv >= r.iv);
@@ -260,7 +263,7 @@
     // resultados da busca da tela
     if (pendConsulta && pendConsulta.tipo === 'busca' && Date.now() - pendConsulta.em < 8000) {
       pendConsulta = null;
-      const ret = linhas.filter((a) => a.estado === 'aberto' && a.compravelEm > t);
+      const ret = linhas.filter((a) => a.estado === 'aberto' && a.compravelEm > t && !(busca.outland === 'so' && a.speciesId < 2001) && !(busca.outland === 'omitir' && a.speciesId >= 2001));
       const ids = new Set(busca.rows.map((r) => r.id));
       for (const a of ret) if (!ids.has(a.id)) busca.rows.push(a);
       busca.total = (busca.total || 0) + linhas.length;
@@ -338,6 +341,7 @@
     const r = regras[rotor % regras.length]; rotor++;
     const extra = { precoMax: String(r.precoMax) };
     if (r.shiny) extra.soShiny = true;
+    extra.semOutland = r.outland === 'omitir';
     if (r.especie) extra.busca = r.especie;
     if (!enviar(pedidoLista(extra))) return false;
     marcarReq(); S.consultas++; pendConsulta = { tipo: 'regra', em: Date.now() };
@@ -390,6 +394,7 @@
     if (r.especie) extra.busca = r.especie;
     if (r.precoMax < 1e15) extra.precoMax = String(r.precoMax);
     if (r.shiny) extra.soShiny = true;
+    extra.semOutland = r.outland === 'omitir';
     cons = { rows: [], carregando: true, total: 0, msg: 'Consultando…', em: Date.now(), regra: r, pag: 0, pags: Math.max(1, Math.min(10, Math.floor(num(o.paginas) || 4))), extra };
     pendConsulta = null; fila = [];
     log('Consulta iniciada: ' + (r.especie || 'todas as espécies') + (r.precoMax < 1e15 ? ' até ' + fmtN(r.precoMax) : '') + ', até ' + cons.pags + ' página(s)', 'info');
@@ -399,12 +404,13 @@
     o = o || {};
     if (busca.carregando) return;
     busca = { rows: [], em: Date.now(), carregando: true, total: 0, msg: 'Buscando…' };
-    fila = [];
+    fila = []; busca.outland = o.outland === 'incluir' || o.outland === 'so' ? o.outland : 'omitir';
     const pags = Math.max(1, Math.min(4, Math.floor(num(o.paginas) || 2)));
     for (let p = 1; p <= pags; p++) {
       const extra = { pagina: p };
       if (o.nome) extra.busca = String(o.nome).slice(0, 40);
       if (num(o.precoMax) > 0) extra.precoMax = String(Math.floor(num(o.precoMax)));
+      extra.semOutland = o.outland !== 'incluir' && o.outland !== 'so';
       fila.push(pedidoLista(extra));
     }
     sujo = true;

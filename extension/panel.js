@@ -273,7 +273,7 @@
           <div class="card">
             <h2>COMPRA IMEDIATA <small id="imHint"></small></h2>
             <div class="mut">Escolha um Pokémon que está no Mercado aguardando o tempo de retenção. A extensão acompanha o relógio do servidor e envia o pedido de compra no instante em que ele é liberado.</div>
-            <div class="row addn"><input id="imNome" type="text" placeholder="nome do Pokémon (opcional)"><input id="imPreco" type="text" placeholder="preço máx. (opcional)"><button id="imBuscar" class="icon">Buscar em retenção</button></div>
+            <div class="row addn"><input id="imNome" type="text" placeholder="nome do Pokémon (opcional)"><input id="imPreco" type="text" placeholder="preço máx. (opcional)"><select id="imOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select><button id="imBuscar" class="icon">Buscar em retenção</button></div>
             <div class="mut" id="imMsg"></div>
             <div id="imLista" class="list"></div>
           </div>
@@ -289,7 +289,7 @@
           <div class="card">
             <h2>CONSULTA DE DISPONIBILIDADE</h2>
             <div class="mut">Mostra o que há à venda no Mercado de acordo com os filtros. Só consulta — não compra nada. Campos vazios são ignorados.</div>
-            <div class="row inline"><label>Espécie <input id="csEsp" type="text" placeholder="ex.: Snorlax"></label><label>Preço máx. <input id="csPreco" type="text" placeholder="ex.: 30M"></label><label><input id="csShiny" type="checkbox"> ✨ só shiny</label></div>
+            <div class="row inline"><label>Espécie <input id="csEsp" type="text" placeholder="ex.: Snorlax"></label><label>Preço máx. <input id="csPreco" type="text" placeholder="ex.: 30M"></label><label><input id="csShiny" type="checkbox"> ✨ só shiny</label><select id="csOutl"><option value="omitir">omitir Outland</option><option value="incluir">incluir Outland</option><option value="so">somente Outland</option></select></div>
             <div class="est4" id="csEst"></div>
             <div class="mut">IV individual (31 = perfeito):</div>
             <div class="est4" id="csIv"></div>
