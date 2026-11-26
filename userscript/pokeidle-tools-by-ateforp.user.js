@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.22
+// @version      2.3.23
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -2068,7 +2068,7 @@ function definirCaptura(v) {
   const REFRESCO_MS = 9000;           // antes da liberação, confere de novo o preço do anúncio escolhido
 
   // ---------- configuração ----------
-  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [] };
+  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [] };
   let cfg = JSON.parse(JSON.stringify(PADRAO));
   const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
   function normRegra(r) {
@@ -2088,12 +2088,23 @@ function definirCaptura(v) {
       comprados: Math.max(0, Math.floor(num(r.comprados) || 0))
     };
   }
+  function normRen(r) {
+    r = r || {};
+    const i = (v) => { const n = num(v); return n == null ? 0 : Math.floor(n); };
+    return {
+      id: i(r.id), nome: String(r.nome || '').slice(0, 40), a: i(r.a), b: i(r.b),
+      intervaloMin: Math.max(30, Math.min(1440, i(r.intervaloMin) || 30)), ativo: r.ativo !== false,
+      renovacoes: Math.max(0, i(r.renovacoes)), ultima: Math.max(0, i(r.ultima))
+    };
+  }
+  const renValida = (r) => r.ativo && r.id > 0 && r.a >= 2 && r.b >= 2 && r.a !== r.b;
   function normCfg(c) {
     const o = JSON.parse(JSON.stringify(PADRAO));
     c = c || {};
     if (num(c.intervaloS) >= INTERVALO_MIN && num(c.intervaloS) <= 600) o.intervaloS = num(c.intervaloS);
     if (num(c.antecipaMs) >= 0 && num(c.antecipaMs) <= 1000) o.antecipaMs = Math.floor(num(c.antecipaMs));
     if (Array.isArray(c.regras)) o.regras = c.regras.slice(0, 20).map(normRegra);
+    if (Array.isArray(c.renova)) o.renova = c.renova.slice(0, 30).map(normRen);
     return o;
   }
   try { const c = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (c) cfg = normCfg(c); } catch (e) { /* ignora */ }
@@ -2329,10 +2340,12 @@ function definirCaptura(v) {
     const m6 = d.slice(0, 24);
     if (m6.indexOf('"t":"market"') === 1 || d.indexOf('"t":"market"') === 1) {
       if (/turnstile|captcha/i.test(d)) { ativo = false; S.msg = 'O jogo pediu verificação (anti-bot). Compra automática DESLIGADA — resolva no jogo e ligue de novo.'; log(S.msg, 'erro'); sujo = true; return; }
+      if (d.indexOf('"aba":"meus"') !== -1) { try { aoMeus(JSON.parse(d)); } catch (e) { /* ignora */ } return; }
       if (d.indexOf('"linhas"') !== -1 && d.indexOf('"pokemonId"') !== -1) { try { tratarLista(JSON.parse(d)); } catch (e) { /* ignora */ } }
       else if (emVoo.size) for (const v of emVoo.values()) { if (d.indexOf(String(v.alvo.id)) !== -1) v.alvo.frame = d.slice(0, 200); }
       return;
     }
+    if (ren.voo.size && (d.indexOf('"t":"erro"') === 1 || /"t":"erro"/.test(d.slice(0, 40))) && !/devagar|muitas mensagens/i.test(d)) renErro(d);
     if (emVoo.size) {
       // confirmação: o Pokémon comprado aparece no estado do jogador
       if (d.indexOf('"estado"') !== -1 || d.indexOf('"pkMud"') !== -1 || d.indexOf('"pokemons"') !== -1) {
@@ -2382,7 +2395,7 @@ function definirCaptura(v) {
   }
   function tick() {
     const ws = getWs(); const aberto = !!(ws && ws.readyState === 1);
-    pump();
+    pump(); renTick();
     if (busca.carregando && !fila.length && (!pendConsulta || pendConsulta.tipo !== 'busca' || Date.now() - pendConsulta.em > 10000)) { busca.carregando = false; busca.msg = busca.rows.length + ' anúncio(s) em retenção (algumas páginas não responderam).'; pendConsulta = null; sujo = true; }
     if (cons.carregando && !fila.length && pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em > 10000) { cons.carregando = false; cons.msg = cons.rows.length + ' encontrado(s) (uma página não respondeu).'; pendConsulta = null; sujo = true; }
     if (aberto && lider && cons.carregando && !fila.length && !pendConsulta && cons.pag < cons.pags && podeConsultar(true)) {
@@ -2407,13 +2420,82 @@ function definirCaptura(v) {
     if (sujo && Date.now() - ultEmit > 400) emitir();
   }
 
+  // ---------- renovação automática de anúncios (Meus anúncios) ----------
+  // O jogo só deixa mudar o preço de novo 30 min depois; a edição leva o anúncio ao topo dos recentes.
+  const ren = { ativo: false, meus: [], em: 0, pend: 0, forcar: false, msg: 'Desligada.', voo: new Map(), renovadas: 0 };
+  function aoMeus(m) {
+    ren.pend = 0; ren.em = Date.now();
+    const linhas = (m.linhas || []).filter((l) => l && l.tipo === 'pokemon').map((l) => Object.assign(ln(l), { editavelEm: Number(l.editavelEm) || 0, qtd: l.qtd || 1 }));
+    ren.meus = linhas;
+    const ids = new Set(linhas.map((l) => l.id));
+    // confirmações e anúncios que sumiram
+    for (const [id, v] of [...ren.voo]) {
+      const l = linhas.find((x) => x.id === id);
+      if (l && l.preco === v.preco) {
+        ren.voo.delete(id);
+        const r = cfg.renova.find((x) => x.id === id);
+        if (r) { r.renovacoes++; r.ultima = Date.now(); salvar(); }
+        ren.renovadas++;
+        log('Anúncio renovado: ' + l.nome + ' Nv ' + l.level + ' (' + id + ') agora por ' + fmtN(l.preco) + (r ? ' · renovações: ' + r.renovacoes : ''), 'ok');
+      }
+    }
+    for (const r of cfg.renova) {
+      if (r.ativo && r.id && !ids.has(r.id) && !r.sumiu) { r.sumiu = true; log('Anúncio ' + (r.nome || r.id) + ' não está mais em "Meus anúncios" (vendido, removido ou expirou). Renovação encerrada para ele.', 'info'); }
+    }
+    sujo = true;
+  }
+  function renTick() {
+    if (!ren.ativo || !lider) return;
+    const ws = getWs(); if (!ws || ws.readyState !== 1) { ren.msg = 'Sem conexão com o jogo.'; return; }
+    const regras = cfg.renova.filter((r) => renValida(r) && !r.sumiu);
+    if (!regras.length) { ren.msg = 'Ligada, mas nenhum anúncio configurado (precisa de Preço A e Preço B diferentes, mínimo 2).'; return; }
+    const agoraSrv = agora();
+    // 1) renova o que já pode
+    for (const r of regras) {
+      const l = ren.meus.find((x) => x.id === r.id);
+      if (!l || l.estado !== 'aberto') continue;
+      const v = ren.voo.get(r.id);
+      if (v && Date.now() - v.em < 25000) continue;
+      const devido = Math.max(l.editavelEm, (l.criadoEm || 0) + r.intervaloMin * 60000) + 1500;
+      if (agoraSrv < devido) continue;
+      if (!podeConsultar(true)) continue;
+      const alvoPreco = l.preco === r.a ? r.b : r.a;
+      if (alvoPreco < 2) continue;
+      if (enviar({ t: 'market.editar', id: r.id, preco: alvoPreco, moeda: l.moeda || 'gold' })) {
+        marcarReq(); ren.voo.set(r.id, { em: Date.now(), preco: alvoPreco });
+        log('Renovando ' + l.nome + ' Nv ' + l.level + ' (' + r.id + '): ' + fmtN(l.preco) + ' → ' + fmtN(alvoPreco), 'info');
+        ren.em = 0; // pede a lista de novo logo em seguida para confirmar
+        return;
+      }
+    }
+    // 2) mantém a lista de anúncios atualizada
+    const proximo = regras.map((r) => { const l = ren.meus.find((x) => x.id === r.id); return l ? Math.max(l.editavelEm, (l.criadoEm || 0) + r.intervaloMin * 60000) - agoraSrv : 0; });
+    const urgente = ren.voo.size > 0 || proximo.some((p) => p <= 0 && !ren.meus.length);
+    const espera = ren.forcar || urgente ? 3000 : 60000;
+    if (!ren.pend && Date.now() - ren.em >= espera && podeConsultar(true)) {
+      if (enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); ren.forcar = false; }
+    } else if (ren.pend && Date.now() - ren.pend > 12000) ren.pend = 0;
+    const minP = Math.min.apply(null, proximo.concat([Infinity]));
+    ren.msg = ren.meus.length ? 'Ligada · próxima renovação em ' + (minP <= 0 ? 'instantes' : Math.ceil(minP / 60000) + ' min') + ' · renovados: ' + ren.renovadas : 'Ligada · carregando seus anúncios…';
+  }
+  function renErro(d) {
+    if (!ren.voo.size) return false;
+    let txt = d.slice(0, 160); try { const j = JSON.parse(d); txt = j.msg || j.erro || j.mensagem || txt; } catch (e) { /* ignora */ }
+    let ult = null; for (const [id, v] of ren.voo) if (!ult || v.em > ult.v.em) ult = { id, v };
+    if (!ult || Date.now() - ult.v.em > 8000) return false;
+    ren.voo.delete(ult.id);
+    log('O jogo recusou a renovação do anúncio ' + ult.id + ': ' + String(txt).slice(0, 200), 'erro');
+    ren.em = 0; ren.forcar = true;
+    return true;
+  }
+
   // ---------- painel ----------
   function emitir() {
     sujo = false; ultEmit = Date.now();
     window.postMessage({
       ch: CH, from: 'rmtpoke', type: 'state', state: {
         ativo, lider, conectado: !!(getWs() && getWs().readyState === 1), offset, cfg, msg: S.msg, stats: S,
-        hist: hist.slice(0, 40), log: logs.slice(-80), busca, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
+        hist: hist.slice(0, 40), log: logs.slice(-80), busca, ren: { ativo: ren.ativo, msg: ren.msg, em: ren.em, meus: ren.meus.slice(0, 60), renovadas: ren.renovadas }, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
         alvos: [...alvos.values()].map((a) => ({ id: a.id, nome: a.nome, level: a.level, shiny: a.shiny, vendedor: a.vendedor, preco: a.preco, precoMax: a.precoMax, compravelEm: a.compravelEm, p: a.p, iv: a.iv, q: a.q, n: a.n, origem: a.origem, regraNome: a.regraNome || '', status: a.status, msg: a.msg || '' }))
       }
     }, '*');
@@ -2455,12 +2537,15 @@ function definirCaptura(v) {
     else if (m.type === 'ativo') {
       ativo = !!m.value; S.msg = ativo ? 'Ligado.' : 'Desligado.'; log(ativo ? 'Compra automática de Pokémon LIGADA (' + cfg.regras.filter(regraValida).length + ' regra(s) válida(s))' : 'Compra automática de Pokémon desligada', 'info'); if (ativo) ultReq = 0; sujo = true;
     } else if (m.type === 'cfg') {
-      cfg = normCfg(m.cfg);
+      { const rv = cfg.renova; cfg = normCfg(m.cfg); if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; }
       // preserva a contagem de comprados que a tela não conhece
       salvar(); sujo = true;
     } else if (m.type === 'zerar-contagens') { cfg.regras.forEach((r) => { r.comprados = 0; }); salvar(); sujo = true; }
     else if (m.type === 'buscar') buscar(m);
     else if (m.type === 'consultar') consultar(m.filtros);
+    else if (m.type === 'ren-ativo') { ren.ativo = !!m.value; ren.msg = ren.ativo ? 'Ligada.' : 'Desligada.'; if (ren.ativo) { ren.forcar = true; cfg.renova.forEach((r) => { r.sumiu = false; }); } log(ren.ativo ? 'Renovação automática LIGADA (' + cfg.renova.filter(renValida).length + ' anúncio(s))' : 'Renovação automática desligada', 'info'); sujo = true; }
+    else if (m.type === 'ren-carregar') { ren.forcar = true; ren.em = 0; if (!ren.ativo) { const ws = getWs(); if (ws && ws.readyState === 1 && podeConsultar(true) && enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); } } sujo = true; }
+    else if (m.type === 'ren-cfg') { cfg.renova = (Array.isArray(m.regras) ? m.regras : []).slice(0, 30).map(normRen); salvar(); sujo = true; }
     else if (m.type === 'armar') {
       const a = busca.rows.find((r) => r.id === m.id);
       if (!a) return;
@@ -2727,6 +2812,7 @@ function definirCaptura(v) {
     
     // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
     window.__ateforpReleases = [
+     {"v": "2.3.23", "itens": ["Nova aba Renovação (Mercado RMT): renova sozinha os seus anúncios de Pokémon, alternando o preço entre dois valores (Preço A e Preço B) a cada intervalo (mínimo 30 min, limite do jogo), até vender. Desligada por padrão, com explicação na tela e registro de cada renovação."]},
      {"v": "2.3.22", "itens": ["Nova aba Novidades com o resumo de cada versão. A extensão avisa quando há uma versão nova da própria extensão (ponto vermelho na aba, checagem a cada 3 horas). No userscript, o aviso é do Tampermonkey/Greasy Fork."]},
      {
       "v": "2.3.21",
@@ -3231,12 +3317,14 @@ function definirCaptura(v) {
         $('sub-poke').hidden = sub !== 'poke';
         $('sub-imed').hidden = sub !== 'imed';
         $('sub-cons').hidden = sub !== 'cons';
+        $('sub-ren').hidden = sub !== 'ren';
         $('sub-hist').hidden = sub !== 'hist';
         if (sub === 'hist') { renderHistory(); renderTentativas(); renderPkHist(); }
         if (sub === 'poke') renderPoke(true);
         if (sub === 'imed') renderImed();
         if (sub === 'cons') renderCons();
-        if (sub === 'poke' || sub === 'imed') renderPkLog();
+        if (sub === 'ren') renderRen(true);
+        if (sub === 'poke' || sub === 'imed' || sub === 'ren') renderPkLog();
       }
     
       // ---------- Compra de Pokémon no Mercado (rmtpoke.js) ----------
@@ -3355,6 +3443,53 @@ function definirCaptura(v) {
         if (!alvos.length) arm.append(el('div', { className: 'mut', textContent: 'Nenhuma compra armada.' }));
         $('imHint').textContent = alvos.some((a) => a.status === 'agendado') ? 'armada' : '';
       }
+      let rnRegras = null, rnSig = '', rnEnvio = null;
+      const rnEnviar = () => { clearTimeout(rnEnvio); rnEnvio = setTimeout(() => rpCmd({ type: 'ren-cfg', regras: rnRegras }), 300); };
+      const emFocoRn = () => { const a = root.activeElement; return !!(a && a.closest && a.closest('#rnLista')); };
+      function renderRen(force) {
+        if (!rp || !rp.ren) return;
+        $('rnOn').checked = !!rp.ren.ativo;
+        $('rnHint').textContent = rp.ren.ativo ? 'ligada' : 'desligada';
+        $('rnInfo').textContent = rp.ren.msg || '';
+        if (!rnRegras) rnRegras = JSON.parse(JSON.stringify((rp.cfg && rp.cfg.renova) || []));
+        const sig = JSON.stringify(rp.ren.meus.map((l) => [l.id, l.preco, l.editavelEm, l.criadoEm])) + JSON.stringify(rnRegras.map((r) => [r.id, r.renovacoes]));
+        if (!force && (emFocoRn() || sig === rnSig)) { rnTempos(); return; }
+        rnSig = sig;
+        const box = $('rnLista'); box.textContent = '';
+        if (!rp.ren.meus.length) box.append(el('div', { className: 'card' }, el('div', { className: 'mut', textContent: 'Nenhum anúncio de Pokémon carregado. Clique em "Carregar meus anúncios".' })));
+        for (const l of rp.ren.meus) {
+          let r = rnRegras.find((x) => x.id === l.id);
+          const on = el('input', { type: 'checkbox', checked: !!(r && r.ativo) });
+          const a = el('input', { type: 'text', placeholder: 'Preço A', value: r && r.a ? String(r.a) : '' });
+          const b = el('input', { type: 'text', placeholder: 'Preço B', value: r && r.b ? String(r.b) : '' });
+          const iv = el('input', { type: 'number', min: '30', max: '1440', step: '5', value: String(r ? r.intervaloMin : 30) });
+          const set = () => {
+            if (!r) { r = { id: l.id, nome: l.nome + ' Nv ' + l.level, a: l.preco, b: Math.max(2, l.preco - 1), intervaloMin: 30, ativo: true, renovacoes: 0 }; rnRegras.push(r); a.value = String(r.a); b.value = String(r.b); }
+            r.ativo = on.checked; r.a = Math.floor(parseNum(a.value)) || 0; r.b = Math.floor(parseNum(b.value)) || 0; r.intervaloMin = Math.max(30, Math.floor(Number(iv.value) || 30)); r.nome = l.nome + ' Nv ' + l.level;
+            rnEnviar();
+          };
+          on.addEventListener('change', set); for (const x of [a, b, iv]) x.addEventListener('input', () => { if (r) set(); });
+          const ok = r && r.ativo && r.a >= 2 && r.b >= 2 && r.a !== r.b;
+          box.append(el('div', { className: 'card' + (r && r.ativo && !ok ? ' warn' : '') },
+            el('div', { className: 'row inline' }, el('label', {}, on, ' renovar'), el('b', { textContent: l.nome + (l.shiny ? ' ✨' : '') }), el('span', { className: 'mut', textContent: ' ' + infoPoke(l) })),
+            el('div', { textContent: 'Preço atual: ' + fmt(l.preco) + (l.moeda === 'gold' ? ' coins' : ' ' + l.moeda) }),
+            el('div', { className: 'row inline' }, el('label', {}, 'Preço A ', a), el('label', {}, 'Preço B ', b), el('label', {}, 'Intervalo (min) ', iv)),
+            el('div', { className: 'mut', id: 'rnT_' + l.id, 'data-id': String(l.id) }),
+            el('div', { className: 'mut', textContent: r && r.ativo && !ok ? 'Preencha Preço A e Preço B (diferentes, mínimo 2).' : 'Renovações feitas: ' + (r ? r.renovacoes || 0 : 0) })));
+        }
+        rnTempos();
+      }
+      function rnTempos() {
+        if (!rp || !rp.ren) return;
+        const agoraSrv = Date.now() + (rp.offset || 0);
+        for (const l of rp.ren.meus) {
+          const t = root.getElementById ? root.getElementById('rnT_' + l.id) : $('rnT_' + l.id); if (!t) continue;
+          const r = rnRegras && rnRegras.find((x) => x.id === l.id);
+          const iv = r ? r.intervaloMin : 30;
+          const dev = Math.max(l.editavelEm, (l.criadoEm || 0) + iv * 60000);
+          t.textContent = (l.compravelEm > agoraSrv ? 'Em retenção (' + mmss(l.compravelEm - agoraSrv) + ') · ' : '') + (dev > agoraSrv ? 'próxima renovação em ' + mmss(dev - agoraSrv) : 'pode ser renovado agora');
+        }
+      }
       let csInit = false, csSig = '';
       function renderCons() {
         if (!csInit) {
@@ -3384,7 +3519,7 @@ function definirCaptura(v) {
         if (!c.rows.length) box.append(el('div', { className: 'mut', textContent: c.carregando ? 'Consultando…' : 'Nada encontrado.' }));
       }
       function renderPkLog() {
-        for (const id of ['pkLog', 'imLog']) {
+        for (const id of ['pkLog', 'imLog', 'rnLog']) {
           const box = $(id); if (!box) continue;
           const lg = (rp && rp.log) || [];
           const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);
@@ -3420,17 +3555,20 @@ function definirCaptura(v) {
         if (sub === 'imed') renderImed();
         if (sub === 'hist') renderPkHist();
         if (sub === 'cons') renderCons();
-        if (sub === 'poke' || sub === 'imed') renderPkLog();
+        if (sub === 'ren') renderRen(false);
+        if (sub === 'poke' || sub === 'imed' || sub === 'ren') renderPkLog();
       });
       rpCmd({ type: 'hello' });
+      $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
+      $('rnCarregar').addEventListener('click', () => rpCmd({ type: 'ren-carregar' }));
       $('pkOn').addEventListener('change', (e) => rpCmd({ type: 'ativo', value: e.target.checked }));
       $('pkInt').addEventListener('change', rpEnviarCfg);
       $('imAnte').addEventListener('change', rpEnviarCfg);
       $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; rpRegras.push({ id: 'r' + Date.now().toString(36), nome: '', ativo: true, especie: '', modo: 'e', p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); rpSig = ''; renderPoke(true); rpEnviarCfg(); });
       $('pkZerar').addEventListener('click', () => { rpCmd({ type: 'zerar-contagens' }); rpRegras = null; });
       $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
-      for (const id of ['pkLogLimpar', 'imLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
-      for (const id of ['pkLogCopiar', 'imLogCopiar']) $(id).addEventListener('click', copiarLogPk);
+      for (const id of ['pkLogLimpar', 'imLogLimpar', 'rnLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
+      for (const id of ['pkLogCopiar', 'imLogCopiar', 'rnLogCopiar']) $(id).addEventListener('click', copiarLogPk);
       $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 3 }));
       setInterval(() => { if (sub === 'imed' && rp) renderImed(); }, 500);
     
@@ -3963,6 +4101,7 @@ function definirCaptura(v) {
               <button data-sub="poke">Pokémon</button>
               <button data-sub="imed">Compra Imediata</button>
               <button data-sub="cons">Consulta</button>
+              <button data-sub="ren">Renovação</button>
               <button data-sub="hist">Histórico de compras</button>
             </nav>
             <div id="sub-compras">
@@ -4041,6 +4180,25 @@ function definirCaptura(v) {
                 <div class="row inline"><label>Páginas <input id="csPag" type="number" min="1" max="10" value="4"> <small>(24 anúncios cada; ~4 s por página)</small></label><button id="csGo" class="icon">Consultar</button></div>
                 <div class="mut" id="csMsg"></div>
                 <div id="csLista" class="list"></div>
+              </div>
+            </div>
+            <div id="sub-ren" hidden>
+              <div class="card">
+                <h2>RENOVAÇÃO AUTOMÁTICA DE ANÚNCIOS <small id="rnHint"></small></h2>
+                <div class="mut">
+                  <b>Para que serve:</b> quando você muda o preço de um anúncio, o jogo o leva de volta ao topo dos "recentes", e quem não o tinha visto passa a ver. Esta função faz isso sozinha, trocando o preço entre dois valores.<br>
+                  <b>Como funciona:</b> a cada intervalo, se o anúncio ainda não vendeu, a extensão edita o preço: se estiver em <b>Preço A</b> vai para <b>Preço B</b>, e vice-versa (ex.: A = 100.000.000 e B = 99.999.999). Segue assim até vender, até você remover o anúncio ou desligar.<br>
+                  <b>Preço A / Preço B:</b> os dois valores entre os quais o anúncio alterna (mínimo 2 e diferentes entre si).<br>
+                  <b>Intervalo (min):</b> tempo entre renovações. O jogo só permite um novo ajuste 30 min depois do anterior, então o mínimo é 30.<br>
+                  <b>Atenção:</b> cada renovação reinicia a retenção de 2 min do anúncio (ninguém consegue comprar nesse tempo). Fica desligada até você ligar.
+                </div>
+                <div class="row inline"><label class="switch"><input id="rnOn" type="checkbox"><span class="slider"></span></label> <span id="rnInfo" class="mut"></span></div>
+                <div class="btns"><button id="rnCarregar" class="icon">↻ Carregar meus anúncios</button></div>
+              </div>
+              <div id="rnLista"></div>
+              <div class="card">
+                <h2>REGISTRO <button id="rnLogCopiar" class="link">copiar</button> <button id="rnLogLimpar" class="link">limpar</button></h2>
+                <div id="rnLog" class="log"></div>
               </div>
             </div>
             <div id="sub-hist" hidden>

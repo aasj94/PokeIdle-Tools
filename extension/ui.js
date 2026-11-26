@@ -441,12 +441,14 @@ function createUI(root) {
     $('sub-poke').hidden = sub !== 'poke';
     $('sub-imed').hidden = sub !== 'imed';
     $('sub-cons').hidden = sub !== 'cons';
+    $('sub-ren').hidden = sub !== 'ren';
     $('sub-hist').hidden = sub !== 'hist';
     if (sub === 'hist') { renderHistory(); renderTentativas(); renderPkHist(); }
     if (sub === 'poke') renderPoke(true);
     if (sub === 'imed') renderImed();
     if (sub === 'cons') renderCons();
-    if (sub === 'poke' || sub === 'imed') renderPkLog();
+    if (sub === 'ren') renderRen(true);
+    if (sub === 'poke' || sub === 'imed' || sub === 'ren') renderPkLog();
   }
 
   // ---------- Compra de Pokémon no Mercado (rmtpoke.js) ----------
@@ -565,6 +567,53 @@ function createUI(root) {
     if (!alvos.length) arm.append(el('div', { className: 'mut', textContent: 'Nenhuma compra armada.' }));
     $('imHint').textContent = alvos.some((a) => a.status === 'agendado') ? 'armada' : '';
   }
+  let rnRegras = null, rnSig = '', rnEnvio = null;
+  const rnEnviar = () => { clearTimeout(rnEnvio); rnEnvio = setTimeout(() => rpCmd({ type: 'ren-cfg', regras: rnRegras }), 300); };
+  const emFocoRn = () => { const a = root.activeElement; return !!(a && a.closest && a.closest('#rnLista')); };
+  function renderRen(force) {
+    if (!rp || !rp.ren) return;
+    $('rnOn').checked = !!rp.ren.ativo;
+    $('rnHint').textContent = rp.ren.ativo ? 'ligada' : 'desligada';
+    $('rnInfo').textContent = rp.ren.msg || '';
+    if (!rnRegras) rnRegras = JSON.parse(JSON.stringify((rp.cfg && rp.cfg.renova) || []));
+    const sig = JSON.stringify(rp.ren.meus.map((l) => [l.id, l.preco, l.editavelEm, l.criadoEm])) + JSON.stringify(rnRegras.map((r) => [r.id, r.renovacoes]));
+    if (!force && (emFocoRn() || sig === rnSig)) { rnTempos(); return; }
+    rnSig = sig;
+    const box = $('rnLista'); box.textContent = '';
+    if (!rp.ren.meus.length) box.append(el('div', { className: 'card' }, el('div', { className: 'mut', textContent: 'Nenhum anúncio de Pokémon carregado. Clique em "Carregar meus anúncios".' })));
+    for (const l of rp.ren.meus) {
+      let r = rnRegras.find((x) => x.id === l.id);
+      const on = el('input', { type: 'checkbox', checked: !!(r && r.ativo) });
+      const a = el('input', { type: 'text', placeholder: 'Preço A', value: r && r.a ? String(r.a) : '' });
+      const b = el('input', { type: 'text', placeholder: 'Preço B', value: r && r.b ? String(r.b) : '' });
+      const iv = el('input', { type: 'number', min: '30', max: '1440', step: '5', value: String(r ? r.intervaloMin : 30) });
+      const set = () => {
+        if (!r) { r = { id: l.id, nome: l.nome + ' Nv ' + l.level, a: l.preco, b: Math.max(2, l.preco - 1), intervaloMin: 30, ativo: true, renovacoes: 0 }; rnRegras.push(r); a.value = String(r.a); b.value = String(r.b); }
+        r.ativo = on.checked; r.a = Math.floor(parseNum(a.value)) || 0; r.b = Math.floor(parseNum(b.value)) || 0; r.intervaloMin = Math.max(30, Math.floor(Number(iv.value) || 30)); r.nome = l.nome + ' Nv ' + l.level;
+        rnEnviar();
+      };
+      on.addEventListener('change', set); for (const x of [a, b, iv]) x.addEventListener('input', () => { if (r) set(); });
+      const ok = r && r.ativo && r.a >= 2 && r.b >= 2 && r.a !== r.b;
+      box.append(el('div', { className: 'card' + (r && r.ativo && !ok ? ' warn' : '') },
+        el('div', { className: 'row inline' }, el('label', {}, on, ' renovar'), el('b', { textContent: l.nome + (l.shiny ? ' ✨' : '') }), el('span', { className: 'mut', textContent: ' ' + infoPoke(l) })),
+        el('div', { textContent: 'Preço atual: ' + fmt(l.preco) + (l.moeda === 'gold' ? ' coins' : ' ' + l.moeda) }),
+        el('div', { className: 'row inline' }, el('label', {}, 'Preço A ', a), el('label', {}, 'Preço B ', b), el('label', {}, 'Intervalo (min) ', iv)),
+        el('div', { className: 'mut', id: 'rnT_' + l.id, 'data-id': String(l.id) }),
+        el('div', { className: 'mut', textContent: r && r.ativo && !ok ? 'Preencha Preço A e Preço B (diferentes, mínimo 2).' : 'Renovações feitas: ' + (r ? r.renovacoes || 0 : 0) })));
+    }
+    rnTempos();
+  }
+  function rnTempos() {
+    if (!rp || !rp.ren) return;
+    const agoraSrv = Date.now() + (rp.offset || 0);
+    for (const l of rp.ren.meus) {
+      const t = root.getElementById ? root.getElementById('rnT_' + l.id) : $('rnT_' + l.id); if (!t) continue;
+      const r = rnRegras && rnRegras.find((x) => x.id === l.id);
+      const iv = r ? r.intervaloMin : 30;
+      const dev = Math.max(l.editavelEm, (l.criadoEm || 0) + iv * 60000);
+      t.textContent = (l.compravelEm > agoraSrv ? 'Em retenção (' + mmss(l.compravelEm - agoraSrv) + ') · ' : '') + (dev > agoraSrv ? 'próxima renovação em ' + mmss(dev - agoraSrv) : 'pode ser renovado agora');
+    }
+  }
   let csInit = false, csSig = '';
   function renderCons() {
     if (!csInit) {
@@ -594,7 +643,7 @@ function createUI(root) {
     if (!c.rows.length) box.append(el('div', { className: 'mut', textContent: c.carregando ? 'Consultando…' : 'Nada encontrado.' }));
   }
   function renderPkLog() {
-    for (const id of ['pkLog', 'imLog']) {
+    for (const id of ['pkLog', 'imLog', 'rnLog']) {
       const box = $(id); if (!box) continue;
       const lg = (rp && rp.log) || [];
       const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);
@@ -630,17 +679,20 @@ function createUI(root) {
     if (sub === 'imed') renderImed();
     if (sub === 'hist') renderPkHist();
     if (sub === 'cons') renderCons();
-    if (sub === 'poke' || sub === 'imed') renderPkLog();
+    if (sub === 'ren') renderRen(false);
+    if (sub === 'poke' || sub === 'imed' || sub === 'ren') renderPkLog();
   });
   rpCmd({ type: 'hello' });
+  $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
+  $('rnCarregar').addEventListener('click', () => rpCmd({ type: 'ren-carregar' }));
   $('pkOn').addEventListener('change', (e) => rpCmd({ type: 'ativo', value: e.target.checked }));
   $('pkInt').addEventListener('change', rpEnviarCfg);
   $('imAnte').addEventListener('change', rpEnviarCfg);
   $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; rpRegras.push({ id: 'r' + Date.now().toString(36), nome: '', ativo: true, especie: '', modo: 'e', p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); rpSig = ''; renderPoke(true); rpEnviarCfg(); });
   $('pkZerar').addEventListener('click', () => { rpCmd({ type: 'zerar-contagens' }); rpRegras = null; });
   $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
-  for (const id of ['pkLogLimpar', 'imLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
-  for (const id of ['pkLogCopiar', 'imLogCopiar']) $(id).addEventListener('click', copiarLogPk);
+  for (const id of ['pkLogLimpar', 'imLogLimpar', 'rnLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
+  for (const id of ['pkLogCopiar', 'imLogCopiar', 'rnLogCopiar']) $(id).addEventListener('click', copiarLogPk);
   $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 3 }));
   setInterval(() => { if (sub === 'imed' && rp) renderImed(); }, 500);
 

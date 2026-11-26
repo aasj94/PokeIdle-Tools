@@ -35,7 +35,7 @@
   const REFRESCO_MS = 9000;           // antes da liberação, confere de novo o preço do anúncio escolhido
 
   // ---------- configuração ----------
-  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [] };
+  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [] };
   let cfg = JSON.parse(JSON.stringify(PADRAO));
   const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
   function normRegra(r) {
@@ -55,12 +55,23 @@
       comprados: Math.max(0, Math.floor(num(r.comprados) || 0))
     };
   }
+  function normRen(r) {
+    r = r || {};
+    const i = (v) => { const n = num(v); return n == null ? 0 : Math.floor(n); };
+    return {
+      id: i(r.id), nome: String(r.nome || '').slice(0, 40), a: i(r.a), b: i(r.b),
+      intervaloMin: Math.max(30, Math.min(1440, i(r.intervaloMin) || 30)), ativo: r.ativo !== false,
+      renovacoes: Math.max(0, i(r.renovacoes)), ultima: Math.max(0, i(r.ultima))
+    };
+  }
+  const renValida = (r) => r.ativo && r.id > 0 && r.a >= 2 && r.b >= 2 && r.a !== r.b;
   function normCfg(c) {
     const o = JSON.parse(JSON.stringify(PADRAO));
     c = c || {};
     if (num(c.intervaloS) >= INTERVALO_MIN && num(c.intervaloS) <= 600) o.intervaloS = num(c.intervaloS);
     if (num(c.antecipaMs) >= 0 && num(c.antecipaMs) <= 1000) o.antecipaMs = Math.floor(num(c.antecipaMs));
     if (Array.isArray(c.regras)) o.regras = c.regras.slice(0, 20).map(normRegra);
+    if (Array.isArray(c.renova)) o.renova = c.renova.slice(0, 30).map(normRen);
     return o;
   }
   try { const c = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (c) cfg = normCfg(c); } catch (e) { /* ignora */ }
@@ -296,10 +307,12 @@
     const m6 = d.slice(0, 24);
     if (m6.indexOf('"t":"market"') === 1 || d.indexOf('"t":"market"') === 1) {
       if (/turnstile|captcha/i.test(d)) { ativo = false; S.msg = 'O jogo pediu verificação (anti-bot). Compra automática DESLIGADA — resolva no jogo e ligue de novo.'; log(S.msg, 'erro'); sujo = true; return; }
+      if (d.indexOf('"aba":"meus"') !== -1) { try { aoMeus(JSON.parse(d)); } catch (e) { /* ignora */ } return; }
       if (d.indexOf('"linhas"') !== -1 && d.indexOf('"pokemonId"') !== -1) { try { tratarLista(JSON.parse(d)); } catch (e) { /* ignora */ } }
       else if (emVoo.size) for (const v of emVoo.values()) { if (d.indexOf(String(v.alvo.id)) !== -1) v.alvo.frame = d.slice(0, 200); }
       return;
     }
+    if (ren.voo.size && (d.indexOf('"t":"erro"') === 1 || /"t":"erro"/.test(d.slice(0, 40))) && !/devagar|muitas mensagens/i.test(d)) renErro(d);
     if (emVoo.size) {
       // confirmação: o Pokémon comprado aparece no estado do jogador
       if (d.indexOf('"estado"') !== -1 || d.indexOf('"pkMud"') !== -1 || d.indexOf('"pokemons"') !== -1) {
@@ -349,7 +362,7 @@
   }
   function tick() {
     const ws = getWs(); const aberto = !!(ws && ws.readyState === 1);
-    pump();
+    pump(); renTick();
     if (busca.carregando && !fila.length && (!pendConsulta || pendConsulta.tipo !== 'busca' || Date.now() - pendConsulta.em > 10000)) { busca.carregando = false; busca.msg = busca.rows.length + ' anúncio(s) em retenção (algumas páginas não responderam).'; pendConsulta = null; sujo = true; }
     if (cons.carregando && !fila.length && pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em > 10000) { cons.carregando = false; cons.msg = cons.rows.length + ' encontrado(s) (uma página não respondeu).'; pendConsulta = null; sujo = true; }
     if (aberto && lider && cons.carregando && !fila.length && !pendConsulta && cons.pag < cons.pags && podeConsultar(true)) {
@@ -374,13 +387,82 @@
     if (sujo && Date.now() - ultEmit > 400) emitir();
   }
 
+  // ---------- renovação automática de anúncios (Meus anúncios) ----------
+  // O jogo só deixa mudar o preço de novo 30 min depois; a edição leva o anúncio ao topo dos recentes.
+  const ren = { ativo: false, meus: [], em: 0, pend: 0, forcar: false, msg: 'Desligada.', voo: new Map(), renovadas: 0 };
+  function aoMeus(m) {
+    ren.pend = 0; ren.em = Date.now();
+    const linhas = (m.linhas || []).filter((l) => l && l.tipo === 'pokemon').map((l) => Object.assign(ln(l), { editavelEm: Number(l.editavelEm) || 0, qtd: l.qtd || 1 }));
+    ren.meus = linhas;
+    const ids = new Set(linhas.map((l) => l.id));
+    // confirmações e anúncios que sumiram
+    for (const [id, v] of [...ren.voo]) {
+      const l = linhas.find((x) => x.id === id);
+      if (l && l.preco === v.preco) {
+        ren.voo.delete(id);
+        const r = cfg.renova.find((x) => x.id === id);
+        if (r) { r.renovacoes++; r.ultima = Date.now(); salvar(); }
+        ren.renovadas++;
+        log('Anúncio renovado: ' + l.nome + ' Nv ' + l.level + ' (' + id + ') agora por ' + fmtN(l.preco) + (r ? ' · renovações: ' + r.renovacoes : ''), 'ok');
+      }
+    }
+    for (const r of cfg.renova) {
+      if (r.ativo && r.id && !ids.has(r.id) && !r.sumiu) { r.sumiu = true; log('Anúncio ' + (r.nome || r.id) + ' não está mais em "Meus anúncios" (vendido, removido ou expirou). Renovação encerrada para ele.', 'info'); }
+    }
+    sujo = true;
+  }
+  function renTick() {
+    if (!ren.ativo || !lider) return;
+    const ws = getWs(); if (!ws || ws.readyState !== 1) { ren.msg = 'Sem conexão com o jogo.'; return; }
+    const regras = cfg.renova.filter((r) => renValida(r) && !r.sumiu);
+    if (!regras.length) { ren.msg = 'Ligada, mas nenhum anúncio configurado (precisa de Preço A e Preço B diferentes, mínimo 2).'; return; }
+    const agoraSrv = agora();
+    // 1) renova o que já pode
+    for (const r of regras) {
+      const l = ren.meus.find((x) => x.id === r.id);
+      if (!l || l.estado !== 'aberto') continue;
+      const v = ren.voo.get(r.id);
+      if (v && Date.now() - v.em < 25000) continue;
+      const devido = Math.max(l.editavelEm, (l.criadoEm || 0) + r.intervaloMin * 60000) + 1500;
+      if (agoraSrv < devido) continue;
+      if (!podeConsultar(true)) continue;
+      const alvoPreco = l.preco === r.a ? r.b : r.a;
+      if (alvoPreco < 2) continue;
+      if (enviar({ t: 'market.editar', id: r.id, preco: alvoPreco, moeda: l.moeda || 'gold' })) {
+        marcarReq(); ren.voo.set(r.id, { em: Date.now(), preco: alvoPreco });
+        log('Renovando ' + l.nome + ' Nv ' + l.level + ' (' + r.id + '): ' + fmtN(l.preco) + ' → ' + fmtN(alvoPreco), 'info');
+        ren.em = 0; // pede a lista de novo logo em seguida para confirmar
+        return;
+      }
+    }
+    // 2) mantém a lista de anúncios atualizada
+    const proximo = regras.map((r) => { const l = ren.meus.find((x) => x.id === r.id); return l ? Math.max(l.editavelEm, (l.criadoEm || 0) + r.intervaloMin * 60000) - agoraSrv : 0; });
+    const urgente = ren.voo.size > 0 || proximo.some((p) => p <= 0 && !ren.meus.length);
+    const espera = ren.forcar || urgente ? 3000 : 60000;
+    if (!ren.pend && Date.now() - ren.em >= espera && podeConsultar(true)) {
+      if (enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); ren.forcar = false; }
+    } else if (ren.pend && Date.now() - ren.pend > 12000) ren.pend = 0;
+    const minP = Math.min.apply(null, proximo.concat([Infinity]));
+    ren.msg = ren.meus.length ? 'Ligada · próxima renovação em ' + (minP <= 0 ? 'instantes' : Math.ceil(minP / 60000) + ' min') + ' · renovados: ' + ren.renovadas : 'Ligada · carregando seus anúncios…';
+  }
+  function renErro(d) {
+    if (!ren.voo.size) return false;
+    let txt = d.slice(0, 160); try { const j = JSON.parse(d); txt = j.msg || j.erro || j.mensagem || txt; } catch (e) { /* ignora */ }
+    let ult = null; for (const [id, v] of ren.voo) if (!ult || v.em > ult.v.em) ult = { id, v };
+    if (!ult || Date.now() - ult.v.em > 8000) return false;
+    ren.voo.delete(ult.id);
+    log('O jogo recusou a renovação do anúncio ' + ult.id + ': ' + String(txt).slice(0, 200), 'erro');
+    ren.em = 0; ren.forcar = true;
+    return true;
+  }
+
   // ---------- painel ----------
   function emitir() {
     sujo = false; ultEmit = Date.now();
     window.postMessage({
       ch: CH, from: 'rmtpoke', type: 'state', state: {
         ativo, lider, conectado: !!(getWs() && getWs().readyState === 1), offset, cfg, msg: S.msg, stats: S,
-        hist: hist.slice(0, 40), log: logs.slice(-80), busca, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
+        hist: hist.slice(0, 40), log: logs.slice(-80), busca, ren: { ativo: ren.ativo, msg: ren.msg, em: ren.em, meus: ren.meus.slice(0, 60), renovadas: ren.renovadas }, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
         alvos: [...alvos.values()].map((a) => ({ id: a.id, nome: a.nome, level: a.level, shiny: a.shiny, vendedor: a.vendedor, preco: a.preco, precoMax: a.precoMax, compravelEm: a.compravelEm, p: a.p, iv: a.iv, q: a.q, n: a.n, origem: a.origem, regraNome: a.regraNome || '', status: a.status, msg: a.msg || '' }))
       }
     }, '*');
@@ -422,12 +504,15 @@
     else if (m.type === 'ativo') {
       ativo = !!m.value; S.msg = ativo ? 'Ligado.' : 'Desligado.'; log(ativo ? 'Compra automática de Pokémon LIGADA (' + cfg.regras.filter(regraValida).length + ' regra(s) válida(s))' : 'Compra automática de Pokémon desligada', 'info'); if (ativo) ultReq = 0; sujo = true;
     } else if (m.type === 'cfg') {
-      cfg = normCfg(m.cfg);
+      { const rv = cfg.renova; cfg = normCfg(m.cfg); if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; }
       // preserva a contagem de comprados que a tela não conhece
       salvar(); sujo = true;
     } else if (m.type === 'zerar-contagens') { cfg.regras.forEach((r) => { r.comprados = 0; }); salvar(); sujo = true; }
     else if (m.type === 'buscar') buscar(m);
     else if (m.type === 'consultar') consultar(m.filtros);
+    else if (m.type === 'ren-ativo') { ren.ativo = !!m.value; ren.msg = ren.ativo ? 'Ligada.' : 'Desligada.'; if (ren.ativo) { ren.forcar = true; cfg.renova.forEach((r) => { r.sumiu = false; }); } log(ren.ativo ? 'Renovação automática LIGADA (' + cfg.renova.filter(renValida).length + ' anúncio(s))' : 'Renovação automática desligada', 'info'); sujo = true; }
+    else if (m.type === 'ren-carregar') { ren.forcar = true; ren.em = 0; if (!ren.ativo) { const ws = getWs(); if (ws && ws.readyState === 1 && podeConsultar(true) && enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); } } sujo = true; }
+    else if (m.type === 'ren-cfg') { cfg.renova = (Array.isArray(m.regras) ? m.regras : []).slice(0, 30).map(normRen); salvar(); sujo = true; }
     else if (m.type === 'armar') {
       const a = busca.rows.find((r) => r.id === m.id);
       if (!a) return;

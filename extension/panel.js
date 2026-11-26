@@ -228,6 +228,7 @@
           <button data-sub="poke">Pokémon</button>
           <button data-sub="imed">Compra Imediata</button>
           <button data-sub="cons">Consulta</button>
+          <button data-sub="ren">Renovação</button>
           <button data-sub="hist">Histórico de compras</button>
         </nav>
         <div id="sub-compras">
@@ -306,6 +307,25 @@
             <div class="row inline"><label>Páginas <input id="csPag" type="number" min="1" max="10" value="4"> <small>(24 anúncios cada; ~4 s por página)</small></label><button id="csGo" class="icon">Consultar</button></div>
             <div class="mut" id="csMsg"></div>
             <div id="csLista" class="list"></div>
+          </div>
+        </div>
+        <div id="sub-ren" hidden>
+          <div class="card">
+            <h2>RENOVAÇÃO AUTOMÁTICA DE ANÚNCIOS <small id="rnHint"></small></h2>
+            <div class="mut">
+              <b>Para que serve:</b> quando você muda o preço de um anúncio, o jogo o leva de volta ao topo dos "recentes", e quem não o tinha visto passa a ver. Esta função faz isso sozinha, trocando o preço entre dois valores.<br>
+              <b>Como funciona:</b> a cada intervalo, se o anúncio ainda não vendeu, a extensão edita o preço: se estiver em <b>Preço A</b> vai para <b>Preço B</b>, e vice-versa (ex.: A = 100.000.000 e B = 99.999.999). Segue assim até vender, até você remover o anúncio ou desligar.<br>
+              <b>Preço A / Preço B:</b> os dois valores entre os quais o anúncio alterna (mínimo 2 e diferentes entre si).<br>
+              <b>Intervalo (min):</b> tempo entre renovações. O jogo só permite um novo ajuste 30 min depois do anterior, então o mínimo é 30.<br>
+              <b>Atenção:</b> cada renovação reinicia a retenção de 2 min do anúncio (ninguém consegue comprar nesse tempo). Fica desligada até você ligar.
+            </div>
+            <div class="row inline"><label class="switch"><input id="rnOn" type="checkbox"><span class="slider"></span></label> <span id="rnInfo" class="mut"></span></div>
+            <div class="btns"><button id="rnCarregar" class="icon">↻ Carregar meus anúncios</button></div>
+          </div>
+          <div id="rnLista"></div>
+          <div class="card">
+            <h2>REGISTRO <button id="rnLogCopiar" class="link">copiar</button> <button id="rnLogLimpar" class="link">limpar</button></h2>
+            <div id="rnLog" class="log"></div>
           </div>
         </div>
         <div id="sub-hist" hidden>

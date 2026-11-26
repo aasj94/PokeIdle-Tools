@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.23
+- Nova aba **Renovação** (Mercado RMT): renova sozinha os seus anúncios de Pokémon, alternando o preço entre dois valores (Preço A e Preço B) a cada intervalo (mínimo 30 min, limite do jogo), até vender. Desligada por padrão, com explicação na tela e registro de cada renovação.
+
 ## v2.3.22
 - Nova aba **Novidades** com o resumo de cada versão.
 - **Aviso de nova versão** da extensão: ponto vermelho na aba Novidades (checagem ao abrir e a cada 3 horas). No userscript, o aviso é do Tampermonkey/Greasy Fork.
