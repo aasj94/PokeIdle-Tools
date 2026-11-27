@@ -23,7 +23,7 @@
     { n: 'Sinnoh', nivel: 1000, de: 387, ate: 493 }, { n: 'Unova', nivel: 5000, de: 494, ate: 649 }, { n: 'Kalos', nivel: 10000, de: 650, ate: 721 },
     { n: 'Alola', nivel: 25000, de: 722, ate: 809 }, { n: 'Galar', nivel: 40000, de: 810, ate: 905 }, { n: 'Paldea', nivel: 75000, de: 906, ate: 1025 }
   ];
-  const PADRAO = { passoMs: 1500, olharMs: 700, parar: false };
+  const PADRAO = { passoMs: 1000, olharMs: 300, parar: false };
 
   let cfg = Object.assign({}, PADRAO);
   let idx = 0;
@@ -91,6 +91,7 @@
   let alvoShiny = new Set(), tShiny = 0;
   const mobs = new Map();   // slot -> {n, sh, em}
   let sujo = true, ultEmit = 0;
+  let noCentro = false, bloqueioAte = 0, trocaLivreAt = 0, offSrv = 0;   // regras do servidor: sem combate ~3 s para sair; ~10 s entre trocas de mapa
 
   const log = (txt, lvl) => { logs.push({ t: Date.now(), msg: txt, lvl: lvl || 'info' }); if (logs.length > 120) logs.shift(); sujo = true; try { console.log('[Ateforp Shiny Hunt] ' + txt); } catch (e) { /* ignora */ } };
   function parar(motivo) { ligado = false; est = 'parado'; msg = motivo || 'Desligado.'; log(motivo || 'Shiny Hunt desligado', 'info'); sujo = true; }
@@ -103,6 +104,10 @@
     if (d.indexOf('"t":"welcome"') === 1) {
       try { const m = JSON.parse(d); normalizar(m.hunts); const lv = m.estado && num(m.estado.level); if (lv != null) nivel = lv; sujo = true; } catch (e) { /* ignora */ }
       return;
+    }
+    if (d.indexOf('"t":"estado"') === 1) {
+      const a = /"servidorAgora":(\d+)/.exec(d); if (a) offSrv = Number(a[1]) - Date.now();
+      const c = /"noCentro":(true|false)/.exec(d); if (c) { noCentro = c[1] === 'true'; sujo = true; }
     }
     if (d.indexOf('"t":"estado"') === 1 && d.indexOf('"level"') !== -1 && d.length < 200000) {
       try { const m = JSON.parse(d); const lv = m.estado && num(m.estado.level); if (lv != null && lv !== nivel) { nivel = lv; sujo = true; } } catch (e) { /* ignora */ }
@@ -127,6 +132,11 @@
       try {
         const j = JSON.parse(d); let ult = null;
         for (const e of j.ev || []) {
+          if (e.k === 'aviso' && typeof e.msg === 'string') {
+            const w = /espere\s+([\d.]+)\s*s/i.exec(e.msg);
+            if (w && /combate/i.test(e.msg)) { bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }
+          } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; }
+          else if (e.k === 'centro') { noCentro = true; }
           if (e.k === 'spawn' && e.slot !== undefined) { if (e.slot > maxSlot) maxSlot = e.slot; if (!mobs.has(e.slot)) mobs.set(e.slot, { em: Date.now(), n: e.nome }); if (e.shiny || e.sh) mobs.get(e.slot).sh = true; }
           else if (e.k === 'bola') { ult = e.slot; if (e.shiny && alvoShiny.has(e.slot)) { if (e.sucesso) { /* o "capturado" vem em seguida */ } } }
           else if (e.k === 'capturado' && e.slot !== undefined && alvoShiny.has(e.slot)) { alvoShiny.delete(e.slot); shinies.capturados++; log('✨ SHINY CAPTURADO! (' + (e.pokemon && e.pokemon.nome || '') + ')', 'ok'); }
@@ -175,19 +185,18 @@
           alvoShiny = new Set(sh.map(([s]) => s)); tShiny = agora; shinies.achados += sh.length; est = 'cacando'; errosSeguidos = 0;
           log('✨ SHINY achado em ' + (atual ? atual.nome : '?') + ' (' + (sh[0][1].n || '?') + ')! Ficando no mapa para derrotar e capturar.', 'ok'); return;
         }
-        if (agora - tPrimeiro >= cfg.olharMs) { errosSeguidos = 0; sair('sem shiny'); }
-      } else if (agora - tEntrada > 8000) { sair('nenhum Pokémon apareceu em 8 s'); }
+        if (agora - tPrimeiro >= cfg.olharMs) { errosSeguidos = 0; log((atual ? atual.nome : '?') + ': sem shiny — saindo', 'info'); est = 'espera'; sujo = true; }
+      } else if (agora - tEntrada > 12000) { log((atual ? atual.nome : '?') + ': nenhum Pokémon apareceu em 12 s — saindo', 'info'); est = 'espera'; sujo = true; }
       return;
     }
-    // espera/parado: escolhe o próximo mapa
+    // espera/parado: 1) sair do mapa (Centro) quando o servidor deixar (sem combate); 2) esperar a troca de mapa liberar; 3) entrar no próximo
+    if (agora < bloqueioAte) { msg = 'Esperando o combate acabar para sair…'; return; }
+    if (!noCentro) { if (mandar({ t: 'centro.ir' }, 'centro.ir')) { msg = 'Saindo do mapa…'; bloqueioAte = agora + 900; } return; }
+    if (agora < trocaLivreAt) { msg = 'Esperando a troca de mapa liberar (' + Math.ceil((trocaLivreAt - agora) / 1000) + ' s)…'; return; }
     const h = proximoMapa(); if (!h) return;
     maxSlotAntes = maxSlot; tPrimeiro = 0; tEntrada = agora; atual = h; visitados++;
-    if (mandar({ t: 'hunt.select', slug: h.slug }, 'hunt.select ' + h.slug)) { est = 'olhando'; msg = 'Olhando ' + h.nome + '…'; sujo = true; }
+    if (mandar({ t: 'hunt.select', slug: h.slug }, 'hunt.select ' + h.slug)) { est = 'olhando'; noCentro = false; msg = 'Olhando ' + h.nome + '…'; sujo = true; }
     else { idx--; visitados--; }
-  }
-  function sair(motivo) {
-    log((atual ? atual.nome : '?') + ': ' + motivo + ' — saindo', 'info');
-    if (mandar({ t: 'centro.ir' }, 'centro.ir')) { est = 'espera'; sujo = true; }
   }
   setInterval(tick, 200);
 

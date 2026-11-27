@@ -1053,7 +1053,7 @@ function createUI(root) {
   // ---------- Shiny Hunt (shinyhunt.js) ----------
   let hn = null, hnLogSig = '';
   const hnCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-hunt', from: 'ui' }, o), '*');
-  const hnEnviarCfg = () => hnCmd({ type: 'cfg', passoMs: Math.round((Number($('hnPasso').value) || 1.5) * 1000), olharMs: Math.round((Number($('hnOlhar').value) || 0.7) * 1000), parar: $('hnParar').checked });
+  const hnEnviarCfg = () => hnCmd({ type: 'cfg', passoMs: Math.round((Number($('hnPasso').value) || 1) * 1000), olharMs: Math.round((Number($('hnOlhar').value) || 0.3) * 1000), parar: $('hnParar').checked });
   function renderHunt() {
     if (!hn) return;
     $('hnOn').checked = !!hn.ligado;
@@ -1061,8 +1061,8 @@ function createUI(root) {
     $('hnHint').textContent = hn.ligado ? ESTADO[hn.est] || 'ligado' : (hn.msg && hn.msg !== 'Desligado.' ? hn.msg : 'desligado');
     const m = hn.mapas;
     $('hnInfo').textContent = !hn.conectado ? 'Sem conexão com o jogo.' : !m.total ? 'O jogo ainda não mandou a lista de mapas: recarregue a página do jogo (F5) com a extensão atualizada.' : 'Nível da conta: ' + (hn.nivel != null ? fmt(hn.nivel) : '?') + ' · mapas liberados: ' + m.elegiveis + ' de ' + m.total + (m.regioes.length ? ' (' + m.regioes.join(', ') + ')' : '') + ' · Outland ignorado (' + m.outland + ')' + (m.semRegiao ? ' · sem região identificada: ' + m.semRegiao : '');
-    if (root.activeElement !== $('hnPasso')) $('hnPasso').value = String((hn.cfg.passoMs || 1500) / 1000);
-    if (root.activeElement !== $('hnOlhar')) $('hnOlhar').value = String((hn.cfg.olharMs || 700) / 1000);
+    if (root.activeElement !== $('hnPasso')) $('hnPasso').value = String((hn.cfg.passoMs || 1000) / 1000);
+    if (root.activeElement !== $('hnOlhar')) $('hnOlhar').value = String((hn.cfg.olharMs || 300) / 1000);
     $('hnParar').checked = !!hn.cfg.parar;
     $('hnStats').textContent = 'Mapa atual: ' + (hn.atual || '—') + ' · mapas visitados: ' + fmt(hn.visitados) + ' · rodadas completas: ' + hn.rodadas + ' · shinies achados: ' + hn.shinies.achados + ' (capturados ' + hn.shinies.capturados + ', fugiram ' + hn.shinies.fugiram + ')';
     const box = $('hnLog'); const lg = hn.log || []; const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);

@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.39
+- Shiny Hunt: respeita as regras do servidor (sair só após ~3 s sem combate; troca de mapa a cada ~10 s), confere os Pokémon assim que o mapa carrega e sai antes de atacar quando não há shiny.
+
 ## v2.3.38
 - **Shiny Hunt** (PvE > Shiny Hunt, beta, desligado por padrão): percorre os mapas liberados pelo nível da conta (sem Outland), sai na hora quando não há shiny e fica para derrotar/capturar quando há. Botão **Escape imediato** abaixo de Desistir do Combate.
 
