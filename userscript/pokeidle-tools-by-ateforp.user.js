@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.35
+// @version      2.3.36
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -748,7 +748,7 @@
   const CHAVE = 'autocaptura_ativo';
   const CHAVE_CFG = 'autocaptura_cfg3';
   const PADRAO = { ativo: true, intervaloMs: 2000 };
-  const CFG_PADRAO = { autoLigar: false, captura: { bolaTela: 0, hudEco: true, hudSec: { recursos: true, captura: true, pvp: true, compras: true } }, estoque: { ativo: false, intervaloMin: 5, itens: {}, beast: { ativo: false, abaixo: 0, ate: 0 } } };
+  const CFG_PADRAO = { autoLigar: false, captura: { bolaTela: 0, bolaShiny: 0, hudEco: true, hudSec: { recursos: true, captura: true, pvp: true, compras: true } }, estoque: { ativo: false, intervaloMin: 5, itens: {}, beast: { ativo: false, abaixo: 0, ate: 0 } } };
   const INICIO = Date.now();
 
   // ---------- configuração ----------
@@ -760,7 +760,7 @@
       const s = JSON.parse(localStorage.getItem(CHAVE_CFG) || 'null') || {};
       return {
         autoLigar: !!s.autoLigar,
-        captura: { bolaTela: Number(s.captura && s.captura.bolaTela) || 0, hudEco: !(s.captura && s.captura.hudEco === false), hudSec: { recursos: !(s.captura && s.captura.hudSec && s.captura.hudSec.recursos === false), captura: !(s.captura && s.captura.hudSec && s.captura.hudSec.captura === false), pvp: !(s.captura && s.captura.hudSec && s.captura.hudSec.pvp === false), compras: !(s.captura && s.captura.hudSec && s.captura.hudSec.compras === false) } },
+        captura: { bolaTela: Number(s.captura && s.captura.bolaTela) || 0, bolaShiny: Number(s.captura && s.captura.bolaShiny) || 0, hudEco: !(s.captura && s.captura.hudEco === false), hudSec: { recursos: !(s.captura && s.captura.hudSec && s.captura.hudSec.recursos === false), captura: !(s.captura && s.captura.hudSec && s.captura.hudSec.captura === false), pvp: !(s.captura && s.captura.hudSec && s.captura.hudSec.pvp === false), compras: !(s.captura && s.captura.hudSec && s.captura.hudSec.compras === false) } },
         estoque: {
           ...CFG_PADRAO.estoque, ...(s.estoque || {}),
           itens: { ...((s.estoque && s.estoque.itens) || {}) },
@@ -933,12 +933,37 @@ const capEsp = { vistos: new Map() };   // último lançamento por slot (evita l
 // Sem a lista da tela (modo Economia / Ultra do jogo escondem ou não desenham os caídos): captura direto pela conexão,
 // com os dados do campo que o próprio jogo envia. A bola é a que você escolheu aqui (ou a 1ª com estoque, como o jogo faz).
 let ultSemTela = 0;
-function bolaNormal(bolas) {
+function bolaNormal(bolas, shiny) {
+  const sh = cfg2.captura.bolaShiny;
+  if (shiny && sh && (Number(bolas[sh]) || 0) > 0) return sh;   // shiny: só há uma tentativa (se falhar, ele foge), então usa a bola que você escolheu para isso
   const esc = cfg2.captura.bolaTela;
   if (esc && (Number(bolas[esc]) || 0) > 0) return esc;
   const cat = (dados.w && dados.w.catalogoBolas) || [];
   const b = cat.find((x) => (Number(bolas[x.id]) || 0) > 0);
   return b ? b.id : null;
+}
+// Shiny com a lista de caídos visível: o clique do jogo lança a bola que está selecionada na tela do jogo.
+// Se você escolheu uma "Bola para shiny", lançamos direto pela conexão (uma única vez por Pokémon) com ela.
+function capturarShinyEscolhido() {
+  const sh = cfg2.captura.bolaShiny; if (!sh) return false;
+  const agora = Date.now(); const e = eu(); const bolas = (e && e.balls) || {};
+  if ((Number(bolas[sh]) || 0) <= 0) return false;
+  for (const [slot, m] of mobsInfo) {
+    if (!m.shiny || !m.morto || (m.tentShiny || 0) >= 1) continue;
+    if (m.expira && m.expira - agora < 500) continue;
+    if (!enviarJogo({ t: 'ball.throw', ballId: sh, slot })) return false;
+    m.tentShiny = 1; m.tent = (m.tent || 0) + 1; capEsp.vistos.set(slot, agora); ultLancado.slot = slot; ultLancado.em = agora;
+    try { console.info('[Ateforp] shiny: lancei a bola ' + sh + ' no slot ' + slot); } catch (e2) { /* ignora */ }
+    sujo = true; return true;
+  }
+  return false;
+}
+function shinyPendenteEscolhido() {
+  const sh = cfg2.captura.bolaShiny; if (!sh) return false;
+  const e = eu(); const bolas = (e && e.balls) || {};
+  if ((Number(bolas[sh]) || 0) <= 0) return false;
+  for (const m of mobsInfo.values()) if (m.shiny && m.morto && (m.tentShiny || 0) < 1) return true;
+  return false;
 }
 function capturarSemTela() {
   const agora = Date.now();
@@ -956,7 +981,7 @@ function capturarSemTela() {
   if (!cand.length) return false;
   cand.sort((a, b) => ((a.m.tent || 0) - (b.m.tent || 0)) || (a.resta - b.resta));   // quem ainda não foi tentado primeiro; depois quem some antes
   const { slot, m } = cand[0];
-  const ballId = bolaNormal(bolas);
+  const ballId = bolaNormal(bolas, !!m.shiny);
   if (!ballId) return false;
   if (!enviarJogo({ t: 'ball.throw', ballId, slot })) return false;
   m.tent = (m.tent || 0) + 1;
@@ -1167,6 +1192,7 @@ function iniciarCaptura() {
     const linhas = Array.from(document.querySelectorAll('#caidos-lista .caido'));
     const b = linhas[0];
     if (!b || b.offsetParent === null) return;       // sem a lista visível, quem captura é a vigia rápida (por conexão)
+    if (shinyPendenteEscolhido()) return;            // há um shiny caído: a vigia rápida lança a bola escolhida para ele
     b.click();
   }, Math.max(500, PADRAO.intervaloMs));
   // vigia rápida (0,2 s): sem a lista na tela (modo Economia/Ultra), captura pela conexão
@@ -1174,6 +1200,7 @@ function iniciarCaptura() {
     const linhas = Array.from(document.querySelectorAll('#caidos-lista .caido'));
     const visivel = linhas.length && linhas[0].offsetParent !== null;
     try {
+      if (capturarShinyEscolhido()) return;
       if (!visivel) capturarSemTela();
     } catch (err) { /* ignora */ }
   }, 200);
@@ -1589,7 +1616,7 @@ function definirCaptura(v) {
     post({
       type: 'state',
       state: {
-        ativo, autoLigar: !!cfg2.autoLigar, capBolaTela: cfg2.captura.bolaTela, capHud: !!cfg2.captura.hudEco, capHudSec: cfg2.captura.hudSec, capSemTela: capSemTela.lancadas,
+        ativo, autoLigar: !!cfg2.autoLigar, capBolaTela: cfg2.captura.bolaTela, capBolaShiny: cfg2.captura.bolaShiny, capHud: !!cfg2.captura.hudEco, capHudSec: cfg2.captura.hudSec, capSemTela: capSemTela.lancadas,
         conectado: !!(ws && ws.readyState === 1),
         pronto: pronto(),
         estoque: { ativo: cfg2.estoque.ativo, intervaloMin: cfg2.estoque.intervaloMin, itens: cfg2.estoque.itens, beast: cfg2.estoque.beast, status: status.estoque },
@@ -1612,6 +1639,7 @@ function definirCaptura(v) {
       case 'cap-hud': cfg2.captura.hudEco = !!m.value; salvarCfg2(); sujo = true; atualizarHud(); break;
       case 'cap-hud-sec': if (cfg2.captura.hudSec && m.chave in cfg2.captura.hudSec) { cfg2.captura.hudSec[m.chave] = !!m.value; salvarCfg2(); sujo = true; atualizarHud(); } break;
       case 'cap-bola': cfg2.captura.bolaTela = Math.max(0, Math.floor(Number(m.value)) || 0); salvarCfg2(); sujo = true; break;
+      case 'cap-bola-shiny': cfg2.captura.bolaShiny = Math.max(0, Math.floor(Number(m.value)) || 0); salvarCfg2(); sujo = true; break;
       case 'auto-ligar': cfg2.autoLigar = !!m.value; salvarCfg2(); sujo = true; break;
       case 'estoque-ativo': cfg2.estoque.ativo = !!m.value; ultEstoque = 0; salvarCfg2(); setStatus(m.value ? 'Ligado: confere já.' : 'Desligado.'); break;
       case 'estoque-intervalo': cfg2.estoque.intervaloMin = [1, 2, 5, 10, 30].includes(Number(m.value)) ? Number(m.value) : 5; salvarCfg2(); break;
@@ -3000,6 +3028,7 @@ function definirCaptura(v) {
     
     // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
     window.__ateforpReleases = [
+     {"v": "2.3.36", "itens": ["Captura: nova opção \"Bola para Pokémon shiny\" (aba Captura, desligada por padrão). Um shiny só dá uma tentativa (se a bola falha ele foge), então a extensão lança nele a bola que você escolher (por exemplo, a Beast Ball), uma única vez. Os Pokémon comuns seguem com a bola normal."]},
      {"v": "2.3.35", "itens": ["Consulta e auto-compra mais rápidas: a extensão agora pede ao próprio servidor do jogo só os anúncios com a potência, os IVs individuais e o nível mínimos da regra (como o filtro do front-end do jogo), em vez de varrer dezenas de páginas. Vale no modo \"todos os critérios (E)\"; a conferência final continua sendo feita pela extensão."]},
      {"v": "2.3.34", "itens": ["Consulta: quando não há Pokémon com os filtros (por exemplo, shiny que não existe à venda), agora termina e mostra \"Nenhum Pokémon disponível com esses filtros\" em vez de ficar consultando para sempre. A quantidade máxima de resultados só limita o que é mostrado (a busca percorre até 30 páginas do mercado). A Consulta confere se a resposta do jogo é da página pedida."]},
      {"v": "2.3.33", "itens": ["Correção importante no mercado: o jogo conta as páginas a partir de 0 e a extensão pedia a partir de 1, então nunca via a primeira página (os anúncios mais baratos ou mais novos). Corrigido na Consulta, nas regras de auto-compra e na Compra Imediata."]},
@@ -3292,6 +3321,7 @@ function definirCaptura(v) {
         $('capOn').checked = !!cs.ativo;
         $('capAuto').checked = !!cs.autoLigar;
         if (root.activeElement !== $('capBolaTela')) $('capBolaTela').value = String(cs.capBolaTela || 0);
+        if (root.activeElement !== $('capBolaShiny')) $('capBolaShiny').value = String(cs.capBolaShiny || 0);
         $('capHud').checked = cs.capHud !== false;
         root.querySelectorAll('#hudSec input').forEach((i) => { i.checked = !cs.capHudSec || cs.capHudSec[i.dataset.hs] !== false; });
         $('capTelaInfo').textContent = cs.capSemTela ? 'Capturas feitas sem a lista da tela: ' + cs.capSemTela : '';
@@ -3358,6 +3388,7 @@ function definirCaptura(v) {
       root.querySelectorAll('#hudSec input').forEach((i) => i.addEventListener('change', () => catchCmd({ type: 'cap-hud-sec', chave: i.dataset.hs, value: i.checked })));
       $('capHud').addEventListener('change', (e) => catchCmd({ type: 'cap-hud', value: e.target.checked }));
       $('capBolaTela').addEventListener('change', (e) => catchCmd({ type: 'cap-bola', value: Number(e.target.value) }));
+      $('capBolaShiny').addEventListener('change', (e) => catchCmd({ type: 'cap-bola-shiny', value: Number(e.target.value) }));
       $('capAuto').addEventListener('change', (e) => catchCmd({ type: 'auto-ligar', value: e.target.checked }));
       $('capOn').addEventListener('change', (e) => catchCmd({ type: 'captura', value: e.target.checked }));
       $('estOn').addEventListener('change', (e) => catchCmd({ type: 'estoque-ativo', value: e.target.checked }));
@@ -4375,6 +4406,10 @@ function definirCaptura(v) {
               <label class="row" style="display:flex;align-items:center;gap:8px;margin-top:8px">
                 <span class="lbl"><b>Bola quando a tela do jogo está no modo Economia/Ultra</b><small>nesses modos a lista de caídos some e a captura é feita direto; escolha a bola (sem estoque, usa a primeira que tiver)</small></span>
                 <select id="capBolaTela"><option value="0">Automática (como o jogo)</option><option value="1">Poke Ball</option><option value="2">Great Ball</option><option value="3">Super Ball</option><option value="4">Ultra Ball</option></select>
+              </label>
+              <label class="row" style="display:flex;align-items:center;gap:8px;margin-top:8px">
+                <span class="lbl"><b>Bola para Pokémon shiny</b><small>um shiny só dá uma tentativa: se a bola falhar ele foge. Escolha a bola mais forte que você tem para ele (a Beast Ball costuma ser a melhor). Sem estoque dela, usa a bola normal.</small></span>
+                <select id="capBolaShiny"><option value="0">Não mudar (como está)</option><option value="1">Poke Ball</option><option value="2">Great Ball</option><option value="3">Super Ball</option><option value="4">Ultra Ball</option><option value="5">Beast Ball</option></select>
               </label>
               <div class="mut" id="capTelaInfo"></div>
               <label class="switch">

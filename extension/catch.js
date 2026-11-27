@@ -14,7 +14,7 @@
   const CHAVE = 'autocaptura_ativo';
   const CHAVE_CFG = 'autocaptura_cfg3';
   const PADRAO = { ativo: true, intervaloMs: 2000 };
-  const CFG_PADRAO = { autoLigar: false, captura: { bolaTela: 0, hudEco: true, hudSec: { recursos: true, captura: true, pvp: true, compras: true } }, estoque: { ativo: false, intervaloMin: 5, itens: {}, beast: { ativo: false, abaixo: 0, ate: 0 } } };
+  const CFG_PADRAO = { autoLigar: false, captura: { bolaTela: 0, bolaShiny: 0, hudEco: true, hudSec: { recursos: true, captura: true, pvp: true, compras: true } }, estoque: { ativo: false, intervaloMin: 5, itens: {}, beast: { ativo: false, abaixo: 0, ate: 0 } } };
   const INICIO = Date.now();
 
   // ---------- configuração ----------
@@ -26,7 +26,7 @@
       const s = JSON.parse(localStorage.getItem(CHAVE_CFG) || 'null') || {};
       return {
         autoLigar: !!s.autoLigar,
-        captura: { bolaTela: Number(s.captura && s.captura.bolaTela) || 0, hudEco: !(s.captura && s.captura.hudEco === false), hudSec: { recursos: !(s.captura && s.captura.hudSec && s.captura.hudSec.recursos === false), captura: !(s.captura && s.captura.hudSec && s.captura.hudSec.captura === false), pvp: !(s.captura && s.captura.hudSec && s.captura.hudSec.pvp === false), compras: !(s.captura && s.captura.hudSec && s.captura.hudSec.compras === false) } },
+        captura: { bolaTela: Number(s.captura && s.captura.bolaTela) || 0, bolaShiny: Number(s.captura && s.captura.bolaShiny) || 0, hudEco: !(s.captura && s.captura.hudEco === false), hudSec: { recursos: !(s.captura && s.captura.hudSec && s.captura.hudSec.recursos === false), captura: !(s.captura && s.captura.hudSec && s.captura.hudSec.captura === false), pvp: !(s.captura && s.captura.hudSec && s.captura.hudSec.pvp === false), compras: !(s.captura && s.captura.hudSec && s.captura.hudSec.compras === false) } },
         estoque: {
           ...CFG_PADRAO.estoque, ...(s.estoque || {}),
           itens: { ...((s.estoque && s.estoque.itens) || {}) },
@@ -199,12 +199,37 @@ const capEsp = { vistos: new Map() };   // último lançamento por slot (evita l
 // Sem a lista da tela (modo Economia / Ultra do jogo escondem ou não desenham os caídos): captura direto pela conexão,
 // com os dados do campo que o próprio jogo envia. A bola é a que você escolheu aqui (ou a 1ª com estoque, como o jogo faz).
 let ultSemTela = 0;
-function bolaNormal(bolas) {
+function bolaNormal(bolas, shiny) {
+  const sh = cfg2.captura.bolaShiny;
+  if (shiny && sh && (Number(bolas[sh]) || 0) > 0) return sh;   // shiny: só há uma tentativa (se falhar, ele foge), então usa a bola que você escolheu para isso
   const esc = cfg2.captura.bolaTela;
   if (esc && (Number(bolas[esc]) || 0) > 0) return esc;
   const cat = (dados.w && dados.w.catalogoBolas) || [];
   const b = cat.find((x) => (Number(bolas[x.id]) || 0) > 0);
   return b ? b.id : null;
+}
+// Shiny com a lista de caídos visível: o clique do jogo lança a bola que está selecionada na tela do jogo.
+// Se você escolheu uma "Bola para shiny", lançamos direto pela conexão (uma única vez por Pokémon) com ela.
+function capturarShinyEscolhido() {
+  const sh = cfg2.captura.bolaShiny; if (!sh) return false;
+  const agora = Date.now(); const e = eu(); const bolas = (e && e.balls) || {};
+  if ((Number(bolas[sh]) || 0) <= 0) return false;
+  for (const [slot, m] of mobsInfo) {
+    if (!m.shiny || !m.morto || (m.tentShiny || 0) >= 1) continue;
+    if (m.expira && m.expira - agora < 500) continue;
+    if (!enviarJogo({ t: 'ball.throw', ballId: sh, slot })) return false;
+    m.tentShiny = 1; m.tent = (m.tent || 0) + 1; capEsp.vistos.set(slot, agora); ultLancado.slot = slot; ultLancado.em = agora;
+    try { console.info('[Ateforp] shiny: lancei a bola ' + sh + ' no slot ' + slot); } catch (e2) { /* ignora */ }
+    sujo = true; return true;
+  }
+  return false;
+}
+function shinyPendenteEscolhido() {
+  const sh = cfg2.captura.bolaShiny; if (!sh) return false;
+  const e = eu(); const bolas = (e && e.balls) || {};
+  if ((Number(bolas[sh]) || 0) <= 0) return false;
+  for (const m of mobsInfo.values()) if (m.shiny && m.morto && (m.tentShiny || 0) < 1) return true;
+  return false;
 }
 function capturarSemTela() {
   const agora = Date.now();
@@ -222,7 +247,7 @@ function capturarSemTela() {
   if (!cand.length) return false;
   cand.sort((a, b) => ((a.m.tent || 0) - (b.m.tent || 0)) || (a.resta - b.resta));   // quem ainda não foi tentado primeiro; depois quem some antes
   const { slot, m } = cand[0];
-  const ballId = bolaNormal(bolas);
+  const ballId = bolaNormal(bolas, !!m.shiny);
   if (!ballId) return false;
   if (!enviarJogo({ t: 'ball.throw', ballId, slot })) return false;
   m.tent = (m.tent || 0) + 1;
@@ -433,6 +458,7 @@ function iniciarCaptura() {
     const linhas = Array.from(document.querySelectorAll('#caidos-lista .caido'));
     const b = linhas[0];
     if (!b || b.offsetParent === null) return;       // sem a lista visível, quem captura é a vigia rápida (por conexão)
+    if (shinyPendenteEscolhido()) return;            // há um shiny caído: a vigia rápida lança a bola escolhida para ele
     b.click();
   }, Math.max(500, PADRAO.intervaloMs));
   // vigia rápida (0,2 s): sem a lista na tela (modo Economia/Ultra), captura pela conexão
@@ -440,6 +466,7 @@ function iniciarCaptura() {
     const linhas = Array.from(document.querySelectorAll('#caidos-lista .caido'));
     const visivel = linhas.length && linhas[0].offsetParent !== null;
     try {
+      if (capturarShinyEscolhido()) return;
       if (!visivel) capturarSemTela();
     } catch (err) { /* ignora */ }
   }, 200);
@@ -855,7 +882,7 @@ function definirCaptura(v) {
     post({
       type: 'state',
       state: {
-        ativo, autoLigar: !!cfg2.autoLigar, capBolaTela: cfg2.captura.bolaTela, capHud: !!cfg2.captura.hudEco, capHudSec: cfg2.captura.hudSec, capSemTela: capSemTela.lancadas,
+        ativo, autoLigar: !!cfg2.autoLigar, capBolaTela: cfg2.captura.bolaTela, capBolaShiny: cfg2.captura.bolaShiny, capHud: !!cfg2.captura.hudEco, capHudSec: cfg2.captura.hudSec, capSemTela: capSemTela.lancadas,
         conectado: !!(ws && ws.readyState === 1),
         pronto: pronto(),
         estoque: { ativo: cfg2.estoque.ativo, intervaloMin: cfg2.estoque.intervaloMin, itens: cfg2.estoque.itens, beast: cfg2.estoque.beast, status: status.estoque },
@@ -878,6 +905,7 @@ function definirCaptura(v) {
       case 'cap-hud': cfg2.captura.hudEco = !!m.value; salvarCfg2(); sujo = true; atualizarHud(); break;
       case 'cap-hud-sec': if (cfg2.captura.hudSec && m.chave in cfg2.captura.hudSec) { cfg2.captura.hudSec[m.chave] = !!m.value; salvarCfg2(); sujo = true; atualizarHud(); } break;
       case 'cap-bola': cfg2.captura.bolaTela = Math.max(0, Math.floor(Number(m.value)) || 0); salvarCfg2(); sujo = true; break;
+      case 'cap-bola-shiny': cfg2.captura.bolaShiny = Math.max(0, Math.floor(Number(m.value)) || 0); salvarCfg2(); sujo = true; break;
       case 'auto-ligar': cfg2.autoLigar = !!m.value; salvarCfg2(); sujo = true; break;
       case 'estoque-ativo': cfg2.estoque.ativo = !!m.value; ultEstoque = 0; salvarCfg2(); setStatus(m.value ? 'Ligado: confere já.' : 'Desligado.'); break;
       case 'estoque-intervalo': cfg2.estoque.intervaloMin = [1, 2, 5, 10, 30].includes(Number(m.value)) ? Number(m.value) : 5; salvarCfg2(); break;

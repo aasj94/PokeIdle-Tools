@@ -216,6 +216,7 @@ function createUI(root) {
     $('capOn').checked = !!cs.ativo;
     $('capAuto').checked = !!cs.autoLigar;
     if (root.activeElement !== $('capBolaTela')) $('capBolaTela').value = String(cs.capBolaTela || 0);
+    if (root.activeElement !== $('capBolaShiny')) $('capBolaShiny').value = String(cs.capBolaShiny || 0);
     $('capHud').checked = cs.capHud !== false;
     root.querySelectorAll('#hudSec input').forEach((i) => { i.checked = !cs.capHudSec || cs.capHudSec[i.dataset.hs] !== false; });
     $('capTelaInfo').textContent = cs.capSemTela ? 'Capturas feitas sem a lista da tela: ' + cs.capSemTela : '';
@@ -282,6 +283,7 @@ function createUI(root) {
   root.querySelectorAll('#hudSec input').forEach((i) => i.addEventListener('change', () => catchCmd({ type: 'cap-hud-sec', chave: i.dataset.hs, value: i.checked })));
   $('capHud').addEventListener('change', (e) => catchCmd({ type: 'cap-hud', value: e.target.checked }));
   $('capBolaTela').addEventListener('change', (e) => catchCmd({ type: 'cap-bola', value: Number(e.target.value) }));
+  $('capBolaShiny').addEventListener('change', (e) => catchCmd({ type: 'cap-bola-shiny', value: Number(e.target.value) }));
   $('capAuto').addEventListener('change', (e) => catchCmd({ type: 'auto-ligar', value: e.target.checked }));
   $('capOn').addEventListener('change', (e) => catchCmd({ type: 'captura', value: e.target.checked }));
   $('estOn').addEventListener('change', (e) => catchCmd({ type: 'estoque-ativo', value: e.target.checked }));
