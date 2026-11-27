@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.47
+- Shiny Hunt: texto explicando a opção do Centro Pokémon.
+
 ## v2.3.46
 - Shiny Hunt: troca direta de mapa (sem Centro Pokémon), com retentativa quando o jogo recusa por combate; Centro virou opção.
 
