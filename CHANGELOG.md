@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v2.3.58
+- Aba Logs virou Histórico (Compras e Logs); histórico do Mercado RMT e registros de Regras/Renovação movidos para Histórico > Compras.
+- Registro volta a ter uma linha por consulta, com horário.
+
 ## v2.3.57
 - Compra de Pokémon: o Registro mostra cada consulta das regras (repetições viram uma linha com ×N).
 - Shiny Hunt (dock): Shinx parado quando desligado; Luxio brilhando quando ligado.

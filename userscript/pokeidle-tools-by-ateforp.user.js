@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.57
+// @version      2.3.58
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -2148,14 +2148,8 @@ function definirCaptura(v) {
   let logs = [];                      // registro detalhado (guardado no navegador)
   try { const l = JSON.parse(localStorage.getItem(CHAVE + '_log') || '[]'); if (Array.isArray(l)) logs = l.slice(-200); } catch (e) { /* ignora */ }
   let logSujo = false;
-  // consultas repetidas com o mesmo resultado viram uma linha só (com contagem), para não encher o registro
-  let ultConsLog = null;
-  function logConsulta(msg, lvl) {
-    if (ultConsLog && ultConsLog.msg === msg && logs[logs.length - 1] === ultConsLog.e) {
-      ultConsLog.n++; ultConsLog.e.t = Date.now(); ultConsLog.e.msg = msg + ' (×' + ultConsLog.n + ')'; logSujo = true; sujo = true; return;
-    }
-    log(msg, lvl); ultConsLog = { msg, n: 1, e: logs[logs.length - 1] };
-  }
+  // cada consulta vira uma linha própria, com o horário
+  function logConsulta(msg, lvl) { log(msg, lvl); }
   function log(msg, lvl) {
     logs.push({ t: Date.now(), lvl: lvl || 'info', msg: String(msg).slice(0, 400) });
     if (logs.length > 200) logs.shift();
@@ -3368,6 +3362,7 @@ function definirCaptura(v) {
     
     // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
     window.__ateforpReleases = [
+     {"v": "2.3.58", "itens": ["A aba Logs agora se chama Histórico e tem duas partes: Compras (compras de itens e de Pokémon, tentativas e o Registro das consultas) e Logs (conexão, Shiny Monitor e logs). O histórico saiu do Mercado RMT e os registros saíram de Regras e Renovação, ficando todos em Histórico > Compras. O Registro volta a ter uma linha por consulta, com o horário."]},
      {"v": "2.3.57", "itens": ["Compra automática de Pokémon: o Registro agora mostra cada consulta das regras (por exemplo: Consulta · Rapela P5: nenhum anúncio com esses filtros no mercado agora). Consultas seguidas com o mesmo resultado viram uma linha só com a contagem (×N) e a hora da última, para não encher o registro.", "Botão do Shiny Hunt na caixa de ferramentas: agora o Shinx fica parado quando desligado e, ao ligar, vira Luxio e passa a brilhar."]},
      {"v": "2.3.56", "itens": ["Compra automática de Pokémon: corrigido o ritmo das consultas das regras. Elas contavam também os pedidos do motor de compra de itens e podiam ficar até o dobro do tempo configurado (ou sem vez) sem consultar; agora cada regra segue só o intervalo que você definiu. O painel mostra quantas consultas já foram feitas e há quantos segundos foi a última."]},
      {"v": "2.3.55", "itens": ["Renovação de anúncios: o botão Carregar meus anúncios agora mostra Carregando… (piscando e desabilitado) até a lista chegar e avisa quantos anúncios foram carregados, ou que o jogo não respondeu. Corrigido o contador Renovações feitas, que ficava em 0 no card mesmo com a renovação registrada no log, e uma edição na tela não zera mais o contador."]},
@@ -3916,13 +3911,10 @@ function definirCaptura(v) {
         $('sub-imed').hidden = sub !== 'imed';
         $('sub-cons').hidden = sub !== 'cons';
         $('sub-ren').hidden = sub !== 'ren';
-        $('sub-hist').hidden = sub !== 'hist';
-        if (sub === 'hist') { renderHistory(); renderTentativas(); renderPkHist(); }
         if (sub === 'poke') renderPoke(true);
         if (sub === 'imed') renderImed();
         if (sub === 'cons') renderCons();
         if (sub === 'ren') renderRen(true);
-        if (sub === 'poke' || sub === 'imed' || sub === 'ren') renderPkLog();
       }
     
       // ---------- Compra de Pokémon no Mercado (rmtpoke.js) ----------
@@ -4223,7 +4215,7 @@ function definirCaptura(v) {
         if (!c.rows.length) box.append(el('div', { className: 'mut', textContent: c.carregando ? 'Consultando…' : 'Nada encontrado.' }));
       }
       function renderPkLog() {
-        for (const id of ['pkLog', 'imLog', 'rnLog']) {
+        for (const id of ['pkLog']) {
           const box = $(id); if (!box) continue;
           const lg = (rp && rp.log) || [];
           const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);
@@ -4257,10 +4249,9 @@ function definirCaptura(v) {
         rp = m.state; listeners.forEach((f) => { try { f(); } catch (e2) { /* ignora */ } });
         if (sub === 'poke') renderPoke(false);
         if (sub === 'imed') renderImed();
-        if (sub === 'hist') renderPkHist();
+        if (tab === 'registro' && navHs === 'compras') { renderPkHist(); renderPkLog(); }
         if (sub === 'cons') renderCons();
         if (sub === 'ren') renderRen(false);
-        if (sub === 'poke' || sub === 'imed' || sub === 'ren') renderPkLog();
       });
       rpCmd({ type: 'hello' });
       $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
@@ -4287,8 +4278,8 @@ function definirCaptura(v) {
       $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; { const nid = 'r' + Date.now().toString(36); rpCol[nid] = false; rpRegras.push({ id: nid, nome: '', ativo: true, especie: '', modo: 'e', outland: 'omitir', ivs: {}, p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); } rpSig = ''; renderPoke(true); rpEnviarCfg(); });
       $('pkZerar').addEventListener('click', () => { rpCmd({ type: 'zerar-contagens' }); rpRegras = null; });
       $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
-      for (const id of ['pkLogLimpar', 'imLogLimpar', 'rnLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
-      for (const id of ['pkLogCopiar', 'imLogCopiar', 'rnLogCopiar']) $(id).addEventListener('click', copiarLogPk);
+      for (const id of ['pkLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
+      for (const id of ['pkLogCopiar']) $(id).addEventListener('click', copiarLogPk);
       $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, ordem: $('imOrdem').value, limite: Number($('imLim').value) || 5, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 4 }));
       $('imLim').addEventListener('input', () => rpCmd({ type: 'imed-limite', limite: Number($('imLim').value) || 5 }));
       $('imOn').addEventListener('change', async (e) => {
@@ -4517,12 +4508,21 @@ function definirCaptura(v) {
         }));
       });
     
+      let navHs = 'compras';
+      function renderHistAba() {
+        root.querySelectorAll('#hsnav button').forEach((b) => b.classList.toggle('on', b.dataset.hs === navHs));
+        $('hs-compras').hidden = navHs !== 'compras';
+        $('hs-logs').hidden = navHs !== 'logs';
+        if (navHs === 'compras') { renderHistory(); renderTentativas(); renderPkHist(); renderPkLog(); }
+        else renderLog();
+      }
+      root.querySelectorAll('#hsnav button').forEach((b) => b.addEventListener('click', () => { navHs = b.dataset.hs; renderHistAba(); }));
       function showTab(t) {
         tab = t;
         root.querySelectorAll('#tabs button[data-tab]').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
         ['captura', 'pvp', 'itens', 'registro', 'novidades'].forEach((n) => { $('tab-' + n).hidden = n !== t; });
         if (t === 'itens') renderMercadoSub();
-        if (t === 'registro') renderLog();
+        if (t === 'registro') { renderHistAba(); renderLog(); }
         if (t === 'novidades') renderNovidades();
       }
       // ---------- Shiny Hunt (shinyhunt.js) ----------
@@ -4673,7 +4673,7 @@ function definirCaptura(v) {
       }
       $('novChecar').addEventListener('click', checarAtualizacao);
       setTimeout(checarAtualizacao, 4000); setInterval(checarAtualizacao, 3 * 3600 * 1000);
-      function showSub(s) { if (s === 'compras' || s === 'hist' || s === 'pokemon') navTop = s; sub = calcSub(); renderMercadoSub(); }
+      function showSub(s) { if (s === 'compras' || s === 'pokemon') navTop = s; sub = calcSub(); renderMercadoSub(); }
       root.querySelectorAll('#pknav button').forEach((b) => b.addEventListener('click', () => { navPk = b.dataset.pk; renderMercadoSub(); }));
       root.querySelectorAll('#autonav button').forEach((b) => b.addEventListener('click', () => { navAu = b.dataset.au; renderMercadoSub(); }));
       root.querySelectorAll('#subtabs button').forEach((b) => b.addEventListener('click', () => showSub(b.dataset.sub)));
@@ -4720,8 +4720,7 @@ function definirCaptura(v) {
           renderStatus();
           refreshRules();
           if (tab === 'itens' && sub === 'compras') renderPicker();
-          if (tab === 'itens' && sub === 'hist') { renderHistory(); renderTentativas(); }
-          if (tab === 'registro') renderLog();
+          if (tab === 'registro') { renderHistAba(); renderLog(); }
         }
       });
     
@@ -4795,7 +4794,7 @@ function definirCaptura(v) {
             <button data-tab="captura" class="on">PvE</button>
             <button data-tab="pvp">PvP</button>
             <button data-tab="itens">Mercado RMT</button>
-            <button data-tab="registro">Logs</button>
+            <button data-tab="registro">Histórico</button>
             <button data-tab="novidades" id="novBtn">Novidades</button>
             <button id="pixBtn" class="pixbtn" title="Apoiar o criador (opcional)" aria-label="Apoiar o criador">🤲</button>
           </nav>
@@ -5010,7 +5009,6 @@ function definirCaptura(v) {
             <nav class="tabs sub" id="subtabs">
               <button data-sub="compras" class="on">Itens</button>
               <button data-sub="pokemon">Pokémon</button>
-              <button data-sub="hist">Histórico</button>
             </nav>
             <div id="sub-compras">
             <div class="card master">
@@ -5086,8 +5084,6 @@ function definirCaptura(v) {
               </div>
               <div id="pkRegras"></div>
               <div class="btns"><button id="pkNova" class="icon">+ Nova regra</button><button id="pkZerar" class="link">zerar contagens</button></div>
-              <h2>REGISTRO <button id="pkLogCopiar" class="link">copiar</button> <button id="pkLogLimpar" class="link">limpar</button></h2>
-              <div id="pkLog" class="log"></div>
               <div class="mut">Cada regra compra Pokémon do Mercado (em coins) quando o anúncio atende aos critérios e custa até o preço máximo. P = potência, IV = soma dos IVs, Q = qualidade e N = nota (em milésimos, como na Venda automática: 1700, 3500). Campo vazio = ignorado. Preço máximo é obrigatório e vale sempre. Se o anúncio ainda estiver em retenção, a compra é agendada para o instante da liberação.</div>
             </div>
             <div id="sub-imed" hidden>
@@ -5115,10 +5111,6 @@ function definirCaptura(v) {
                 <div id="imArmadas" class="list"></div>
                 <div class="row inline"><label>Antecipar o envio em <input id="imAnte" type="number" min="0" max="1000" step="10" value="0"> ms <small>(compensa a demora da rede; 0 = no instante exato)</small></label></div>
               </div>
-              <div class="card">
-                <h2>REGISTRO <button id="imLogCopiar" class="link">copiar</button> <button id="imLogLimpar" class="link">limpar</button></h2>
-                <div id="imLog" class="log"></div>
-              </div>
             </div>
               </div>
             <div id="sub-ren" hidden>
@@ -5135,13 +5127,17 @@ function definirCaptura(v) {
                 <div class="btns"><button id="rnCarregar" class="icon">↻ Carregar meus anúncios</button></div>
               </div>
               <div id="rnLista"></div>
-              <div class="card">
-                <h2>REGISTRO <button id="rnLogCopiar" class="link">copiar</button> <button id="rnLogLimpar" class="link">limpar</button></h2>
-                <div id="rnLog" class="log"></div>
-              </div>
             </div>
             </div>
-            <div id="sub-hist" hidden>
+          </section>
+    
+          <section id="tab-registro" class="tab" hidden>
+            <nav class="tabs sub" id="hsnav">
+              <button data-hs="compras" class="on">Compras</button>
+              <button data-hs="logs">Logs</button>
+            </nav>
+            <div id="hs-compras">
+    
     
             <div class="hbar">
               <button id="hRefresh">↻ Atualizar</button>
@@ -5163,10 +5159,13 @@ function definirCaptura(v) {
             <div id="tentSummary" class="summary"></div>
             <div id="tentList" class="list tall"></div>
           
+            
+              <div class="sep"></div>
+              <h2>Registro das compras de Pokémon <button id="pkLogCopiar" class="link">copiar</button> <button id="pkLogLimpar" class="link">limpar</button></h2>
+              <div class="mut">Uma linha por consulta das regras, compra imediata e renovação de anúncios, com o horário de cada uma.</div>
+              <div id="pkLog" class="log"></div>
             </div>
-          </section>
-    
-          <section id="tab-registro" class="tab" hidden>
+            <div id="hs-logs" hidden>
             <div class="card">
               <h2>Conexão com o jogo <small id="conHint"></small></h2>
               <div class="mut" id="conInfo">Fecha sozinho o popup do Discord e "destrava" o jogo quando a aba fica parada.</div>
@@ -5182,6 +5181,7 @@ function definirCaptura(v) {
             </div>
             <h2>Logs <button id="resetAll" class="link">zerar contagens</button></h2>
             <div id="log" class="log"></div>
+            </div>
           </section>
         </div>
       </div>
@@ -5497,8 +5497,8 @@ function definirCaptura(v) {
           '',
           'PvE: reposição de itens, captura (Auto Captura), Shiny Hunt e venda de Pokémon',
           'PvP: PvP automático e histórico',
-          'Mercado RMT: compra de itens, compra e renovação de Pokémon (Consulta e Compra Imediata) e histórico',
-          'Logs: conexão com o jogo, Shiny Monitor e registros',
+          'Mercado RMT: compra de itens, compra e renovação de Pokémon (Consulta e Compra Imediata)',
+          'Histórico: Compras (itens e Pokémon, tentativas e registro das regras) e Logs (conexão, Shiny Monitor e registros)',
           '',
           'Cor da chave: verde = nenhuma função extra ligada · vermelho = há função ativa · amarelo = aguardando o jogo',
           'Agora: ' + (cor === '#ffd166' ? 'aguardando o jogo / atenção' : extras.length ? 'ativo: ' + extras.join(', ') : 'nenhuma função extra ativa (PvP, Auto Captura e Shiny Hunt não contam)')

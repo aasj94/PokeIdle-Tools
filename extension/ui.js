@@ -451,13 +451,10 @@ function createUI(root) {
     $('sub-imed').hidden = sub !== 'imed';
     $('sub-cons').hidden = sub !== 'cons';
     $('sub-ren').hidden = sub !== 'ren';
-    $('sub-hist').hidden = sub !== 'hist';
-    if (sub === 'hist') { renderHistory(); renderTentativas(); renderPkHist(); }
     if (sub === 'poke') renderPoke(true);
     if (sub === 'imed') renderImed();
     if (sub === 'cons') renderCons();
     if (sub === 'ren') renderRen(true);
-    if (sub === 'poke' || sub === 'imed' || sub === 'ren') renderPkLog();
   }
 
   // ---------- Compra de Pokémon no Mercado (rmtpoke.js) ----------
@@ -758,7 +755,7 @@ function createUI(root) {
     if (!c.rows.length) box.append(el('div', { className: 'mut', textContent: c.carregando ? 'Consultando…' : 'Nada encontrado.' }));
   }
   function renderPkLog() {
-    for (const id of ['pkLog', 'imLog', 'rnLog']) {
+    for (const id of ['pkLog']) {
       const box = $(id); if (!box) continue;
       const lg = (rp && rp.log) || [];
       const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);
@@ -792,10 +789,9 @@ function createUI(root) {
     rp = m.state; listeners.forEach((f) => { try { f(); } catch (e2) { /* ignora */ } });
     if (sub === 'poke') renderPoke(false);
     if (sub === 'imed') renderImed();
-    if (sub === 'hist') renderPkHist();
+    if (tab === 'registro' && navHs === 'compras') { renderPkHist(); renderPkLog(); }
     if (sub === 'cons') renderCons();
     if (sub === 'ren') renderRen(false);
-    if (sub === 'poke' || sub === 'imed' || sub === 'ren') renderPkLog();
   });
   rpCmd({ type: 'hello' });
   $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
@@ -822,8 +818,8 @@ function createUI(root) {
   $('pkNova').addEventListener('click', () => { if (!rpRegras) rpRegras = []; { const nid = 'r' + Date.now().toString(36); rpCol[nid] = false; rpRegras.push({ id: nid, nome: '', ativo: true, especie: '', modo: 'e', outland: 'omitir', ivs: {}, p: null, iv: null, q: null, n: null, shiny: false, precoMax: 0, qtd: 1, comprados: 0 }); } rpSig = ''; renderPoke(true); rpEnviarCfg(); });
   $('pkZerar').addEventListener('click', () => { rpCmd({ type: 'zerar-contagens' }); rpRegras = null; });
   $('pkLimpar').addEventListener('click', () => rpCmd({ type: 'limpar-hist' }));
-  for (const id of ['pkLogLimpar', 'imLogLimpar', 'rnLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
-  for (const id of ['pkLogCopiar', 'imLogCopiar', 'rnLogCopiar']) $(id).addEventListener('click', copiarLogPk);
+  for (const id of ['pkLogLimpar']) $(id).addEventListener('click', () => rpCmd({ type: 'limpar-log' }));
+  for (const id of ['pkLogCopiar']) $(id).addEventListener('click', copiarLogPk);
   $('imBuscar').addEventListener('click', () => rpCmd({ type: 'buscar', outland: $('imOutl').value, ordem: $('imOrdem').value, limite: Number($('imLim').value) || 5, nome: $('imNome').value.trim(), precoMax: parseNum($('imPreco').value) || 0, paginas: 4 }));
   $('imLim').addEventListener('input', () => rpCmd({ type: 'imed-limite', limite: Number($('imLim').value) || 5 }));
   $('imOn').addEventListener('change', async (e) => {
@@ -1052,12 +1048,21 @@ function createUI(root) {
     }));
   });
 
+  let navHs = 'compras';
+  function renderHistAba() {
+    root.querySelectorAll('#hsnav button').forEach((b) => b.classList.toggle('on', b.dataset.hs === navHs));
+    $('hs-compras').hidden = navHs !== 'compras';
+    $('hs-logs').hidden = navHs !== 'logs';
+    if (navHs === 'compras') { renderHistory(); renderTentativas(); renderPkHist(); renderPkLog(); }
+    else renderLog();
+  }
+  root.querySelectorAll('#hsnav button').forEach((b) => b.addEventListener('click', () => { navHs = b.dataset.hs; renderHistAba(); }));
   function showTab(t) {
     tab = t;
     root.querySelectorAll('#tabs button[data-tab]').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
     ['captura', 'pvp', 'itens', 'registro', 'novidades'].forEach((n) => { $('tab-' + n).hidden = n !== t; });
     if (t === 'itens') renderMercadoSub();
-    if (t === 'registro') renderLog();
+    if (t === 'registro') { renderHistAba(); renderLog(); }
     if (t === 'novidades') renderNovidades();
   }
   // ---------- Shiny Hunt (shinyhunt.js) ----------
@@ -1208,7 +1213,7 @@ function createUI(root) {
   }
   $('novChecar').addEventListener('click', checarAtualizacao);
   setTimeout(checarAtualizacao, 4000); setInterval(checarAtualizacao, 3 * 3600 * 1000);
-  function showSub(s) { if (s === 'compras' || s === 'hist' || s === 'pokemon') navTop = s; sub = calcSub(); renderMercadoSub(); }
+  function showSub(s) { if (s === 'compras' || s === 'pokemon') navTop = s; sub = calcSub(); renderMercadoSub(); }
   root.querySelectorAll('#pknav button').forEach((b) => b.addEventListener('click', () => { navPk = b.dataset.pk; renderMercadoSub(); }));
   root.querySelectorAll('#autonav button').forEach((b) => b.addEventListener('click', () => { navAu = b.dataset.au; renderMercadoSub(); }));
   root.querySelectorAll('#subtabs button').forEach((b) => b.addEventListener('click', () => showSub(b.dataset.sub)));
@@ -1255,8 +1260,7 @@ function createUI(root) {
       renderStatus();
       refreshRules();
       if (tab === 'itens' && sub === 'compras') renderPicker();
-      if (tab === 'itens' && sub === 'hist') { renderHistory(); renderTentativas(); }
-      if (tab === 'registro') renderLog();
+      if (tab === 'registro') { renderHistAba(); renderLog(); }
     }
   });
 

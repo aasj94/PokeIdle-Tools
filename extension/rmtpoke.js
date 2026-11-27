@@ -87,14 +87,8 @@
   let logs = [];                      // registro detalhado (guardado no navegador)
   try { const l = JSON.parse(localStorage.getItem(CHAVE + '_log') || '[]'); if (Array.isArray(l)) logs = l.slice(-200); } catch (e) { /* ignora */ }
   let logSujo = false;
-  // consultas repetidas com o mesmo resultado viram uma linha só (com contagem), para não encher o registro
-  let ultConsLog = null;
-  function logConsulta(msg, lvl) {
-    if (ultConsLog && ultConsLog.msg === msg && logs[logs.length - 1] === ultConsLog.e) {
-      ultConsLog.n++; ultConsLog.e.t = Date.now(); ultConsLog.e.msg = msg + ' (×' + ultConsLog.n + ')'; logSujo = true; sujo = true; return;
-    }
-    log(msg, lvl); ultConsLog = { msg, n: 1, e: logs[logs.length - 1] };
-  }
+  // cada consulta vira uma linha própria, com o horário
+  function logConsulta(msg, lvl) { log(msg, lvl); }
   function log(msg, lvl) {
     logs.push({ t: Date.now(), lvl: lvl || 'info', msg: String(msg).slice(0, 400) });
     if (logs.length > 200) logs.shift();

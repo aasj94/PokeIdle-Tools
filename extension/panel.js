@@ -42,7 +42,7 @@
         <button data-tab="captura" class="on">PvE</button>
         <button data-tab="pvp">PvP</button>
         <button data-tab="itens">Mercado RMT</button>
-        <button data-tab="registro">Logs</button>
+        <button data-tab="registro">Histórico</button>
         <button data-tab="novidades" id="novBtn">Novidades</button>
         <button id="pixBtn" class="pixbtn" title="Apoiar o criador (opcional)" aria-label="Apoiar o criador">🤲</button>
       </nav>
@@ -257,7 +257,6 @@
         <nav class="tabs sub" id="subtabs">
           <button data-sub="compras" class="on">Itens</button>
           <button data-sub="pokemon">Pokémon</button>
-          <button data-sub="hist">Histórico</button>
         </nav>
         <div id="sub-compras">
         <div class="card master">
@@ -333,8 +332,6 @@
           </div>
           <div id="pkRegras"></div>
           <div class="btns"><button id="pkNova" class="icon">+ Nova regra</button><button id="pkZerar" class="link">zerar contagens</button></div>
-          <h2>REGISTRO <button id="pkLogCopiar" class="link">copiar</button> <button id="pkLogLimpar" class="link">limpar</button></h2>
-          <div id="pkLog" class="log"></div>
           <div class="mut">Cada regra compra Pokémon do Mercado (em coins) quando o anúncio atende aos critérios e custa até o preço máximo. P = potência, IV = soma dos IVs, Q = qualidade e N = nota (em milésimos, como na Venda automática: 1700, 3500). Campo vazio = ignorado. Preço máximo é obrigatório e vale sempre. Se o anúncio ainda estiver em retenção, a compra é agendada para o instante da liberação.</div>
         </div>
         <div id="sub-imed" hidden>
@@ -362,10 +359,6 @@
             <div id="imArmadas" class="list"></div>
             <div class="row inline"><label>Antecipar o envio em <input id="imAnte" type="number" min="0" max="1000" step="10" value="0"> ms <small>(compensa a demora da rede; 0 = no instante exato)</small></label></div>
           </div>
-          <div class="card">
-            <h2>REGISTRO <button id="imLogCopiar" class="link">copiar</button> <button id="imLogLimpar" class="link">limpar</button></h2>
-            <div id="imLog" class="log"></div>
-          </div>
         </div>
           </div>
         <div id="sub-ren" hidden>
@@ -382,13 +375,17 @@
             <div class="btns"><button id="rnCarregar" class="icon">↻ Carregar meus anúncios</button></div>
           </div>
           <div id="rnLista"></div>
-          <div class="card">
-            <h2>REGISTRO <button id="rnLogCopiar" class="link">copiar</button> <button id="rnLogLimpar" class="link">limpar</button></h2>
-            <div id="rnLog" class="log"></div>
-          </div>
         </div>
         </div>
-        <div id="sub-hist" hidden>
+      </section>
+
+      <section id="tab-registro" class="tab" hidden>
+        <nav class="tabs sub" id="hsnav">
+          <button data-hs="compras" class="on">Compras</button>
+          <button data-hs="logs">Logs</button>
+        </nav>
+        <div id="hs-compras">
+
 
         <div class="hbar">
           <button id="hRefresh">↻ Atualizar</button>
@@ -410,10 +407,13 @@
         <div id="tentSummary" class="summary"></div>
         <div id="tentList" class="list tall"></div>
       
+        
+          <div class="sep"></div>
+          <h2>Registro das compras de Pokémon <button id="pkLogCopiar" class="link">copiar</button> <button id="pkLogLimpar" class="link">limpar</button></h2>
+          <div class="mut">Uma linha por consulta das regras, compra imediata e renovação de anúncios, com o horário de cada uma.</div>
+          <div id="pkLog" class="log"></div>
         </div>
-      </section>
-
-      <section id="tab-registro" class="tab" hidden>
+        <div id="hs-logs" hidden>
         <div class="card">
           <h2>Conexão com o jogo <small id="conHint"></small></h2>
           <div class="mut" id="conInfo">Fecha sozinho o popup do Discord e "destrava" o jogo quando a aba fica parada.</div>
@@ -429,6 +429,7 @@
         </div>
         <h2>Logs <button id="resetAll" class="link">zerar contagens</button></h2>
         <div id="log" class="log"></div>
+        </div>
       </section>
     </div>
   </div>
@@ -744,8 +745,8 @@
       '',
       'PvE: reposição de itens, captura (Auto Captura), Shiny Hunt e venda de Pokémon',
       'PvP: PvP automático e histórico',
-      'Mercado RMT: compra de itens, compra e renovação de Pokémon (Consulta e Compra Imediata) e histórico',
-      'Logs: conexão com o jogo, Shiny Monitor e registros',
+      'Mercado RMT: compra de itens, compra e renovação de Pokémon (Consulta e Compra Imediata)',
+      'Histórico: Compras (itens e Pokémon, tentativas e registro das regras) e Logs (conexão, Shiny Monitor e registros)',
       '',
       'Cor da chave: verde = nenhuma função extra ligada · vermelho = há função ativa · amarelo = aguardando o jogo',
       'Agora: ' + (cor === '#ffd166' ? 'aguardando o jogo / atenção' : extras.length ? 'ativo: ' + extras.join(', ') : 'nenhuma função extra ativa (PvP, Auto Captura e Shiny Hunt não contam)')
