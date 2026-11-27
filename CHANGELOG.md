@@ -1,7 +1,7 @@
 # Histórico de versões
 
-## v2.3.36
-- Captura: opção **Bola para Pokémon shiny** (desligada por padrão). Lança a bola escolhida (ex.: Beast Ball) uma única vez no shiny, que só dá uma tentativa.
+## v2.3.37
+- Captura (PvE > Captura): chave **Usar Beast Ball para capturar shiny** (desligada por padrão). Ligada, lança a Beast Ball uma única vez no shiny (só com as que você já tem). O Shiny Monitor registra o resultado.
 
 ## v2.3.35
 - Consulta e auto-compra enviam ao servidor do jogo os filtros de potência, IVs individuais e nível mínimos (modo E), em vez de varrer dezenas de páginas.

@@ -97,9 +97,10 @@
             <span class="lbl"><b>Bola quando a tela do jogo está no modo Economia/Ultra</b><small>nesses modos a lista de caídos some e a captura é feita direto; escolha a bola (sem estoque, usa a primeira que tiver)</small></span>
             <select id="capBolaTela"><option value="0">Automática (como o jogo)</option><option value="1">Poke Ball</option><option value="2">Great Ball</option><option value="3">Super Ball</option><option value="4">Ultra Ball</option></select>
           </label>
-          <label class="row" style="display:flex;align-items:center;gap:8px;margin-top:8px">
-            <span class="lbl"><b>Bola para Pokémon shiny</b><small>um shiny só dá uma tentativa: se a bola falhar ele foge. Escolha a bola mais forte que você tem para ele (a Beast Ball costuma ser a melhor). Sem estoque dela, usa a bola normal.</small></span>
-            <select id="capBolaShiny"><option value="0">Não mudar (como está)</option><option value="1">Poke Ball</option><option value="2">Great Ball</option><option value="3">Super Ball</option><option value="4">Ultra Ball</option><option value="5">Beast Ball</option></select>
+          <label class="switch">
+            <input type="checkbox" id="capBeastShiny">
+            <span class="slider"></span>
+            <span class="lbl"><b>Usar Beast Ball para capturar shiny</b><small>desligado por padrão. Ligado: quando um Pokémon shiny cai, a Beast Ball é lançada nele (uma única vez, pois se falhar o shiny foge). Só usa as que você já tem; não compra. Sem estoque, usa a bola normal. Os Pokémon comuns não mudam.</small></span>
           </label>
           <div class="mut" id="capTelaInfo"></div>
           <label class="switch">
