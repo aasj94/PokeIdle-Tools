@@ -1063,7 +1063,7 @@ function createUI(root) {
       if ($('hnRota').dataset.sig !== sigR) {
         $('hnRota').dataset.sig = sigR; $('hnRota').textContent = '';
         $('hnRotaResumo').textContent = rota.length + ' mapas · próximo: ' + (rota.length ? rota[hn.prox][0] : '—');
-        rota.forEach(([nome, r, nv], i) => { const cls = i === hn.cur ? 'atual' : i === hn.prox ? 'prox' : i < hn.prox ? 'feito' : 'falta'; $('hnRota').append(el('div', { className: 'rt ' + cls, textContent: (i + 1) + '. ' + nome + ' · ' + (r || '?') + (nv ? ' · Nv ' + nv : '') })); });
+        rota.forEach(([nome, r, nv, av, sh], i) => { const cls = i === hn.cur ? 'atual' : i === hn.prox ? 'prox' : i < hn.prox ? 'feito' : 'falta'; $('hnRota').append(el('div', { className: 'rt ' + cls, textContent: (i + 1) + '. ' + nome + ' · ' + (r || '?') + (nv ? ' · Nv ' + nv : '') + (av ? ' · ' + fmt(av) + ' avistados' + (sh ? ' · ✨ ' + sh : ' · 0 shiny') : '') })); });
         const a = $('hnRota').querySelector('.atual,.prox'); if (a && !$('hnRota').dataset.rolou) { $('hnRota').dataset.rolou = '1'; $('hnRota').scrollTop = Math.max(0, a.offsetTop - 60); }
       }
     }

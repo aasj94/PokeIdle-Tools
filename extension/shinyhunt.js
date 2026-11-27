@@ -29,9 +29,10 @@
   let idx = 0;
   try { const s = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (s) { cfg = Object.assign({}, PADRAO, s.cfg || {}); idx = Number(s.idx) || 0; } } catch (e) { /* ignora */ }
   let avistados = 0, desde = Date.now();
-  let niveis = {};   // slug -> 'min-max' do nível dos Pokémon vistos no mapa
-  try { const s2 = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (s2 && s2.niveis) niveis = s2.niveis; if (s2 && s2.avistados) avistados = Number(s2.avistados) || 0; if (s2 && s2.desde) desde = Number(s2.desde) || desde; } catch (e) { /* ignora */ }
-  const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify({ cfg, idx, niveis, avistados, desde })); } catch (e) { /* ignora */ } };
+  let niveis = {};
+  let mapaStats = {};   // slug -> { v: visitas, a: Pokémon avistados, s: shinies achados }   // slug -> 'min-max' do nível dos Pokémon vistos no mapa
+  try { const s2 = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (s2 && s2.niveis) niveis = s2.niveis; if (s2 && s2.mapaStats) mapaStats = s2.mapaStats; if (s2 && s2.avistados) avistados = Number(s2.avistados) || 0; if (s2 && s2.desde) desde = Number(s2.desde) || desde; } catch (e) { /* ignora */ }
+  const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify({ cfg, idx, niveis, avistados, desde, mapaStats })); } catch (e) { /* ignora */ } };
 
   const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
   const getWs = () => { try { return BUS.ws && BUS.ws(); } catch (e) { return null; } };
@@ -166,6 +167,11 @@
   }
   BUS.on(aoMensagem);
 
+  function contaMapa(slug, vistos, shinies) {
+    if (!slug) return;
+    const m = mapaStats[slug] || (mapaStats[slug] = { v: 0, a: 0, s: 0 });
+    m.v += 1; m.a += vistos; m.s += shinies; salvar();
+  }
   function faixaNivel(lista) {
     const v = lista.map(([, m]) => m.nv).filter((x) => Number.isFinite(x));
     if (!v.length) return '';
@@ -205,10 +211,10 @@
         if (!tPrimeiro) tPrimeiro = agora;
         const sh = novos.filter(([, m]) => m.sh);
         if (sh.length) {
-          alvoShiny = new Set(sh.map(([s]) => s)); tShiny = agora; shinies.achados += sh.length; est = 'cacando'; errosSeguidos = 0; avistados += novos.length;
+          alvoShiny = new Set(sh.map(([s]) => s)); tShiny = agora; shinies.achados += sh.length; est = 'cacando'; errosSeguidos = 0; avistados += novos.length; contaMapa(atual && atual.slug, novos.length, sh.length);
           log('✨ SHINY achado em ' + (atual ? atual.nome : '?') + ' (' + (sh[0][1].n || '?') + ') entre ' + novos.length + ' avistados' + (faixaNivel(novos) ? ' (Nv ' + faixaNivel(novos) + ')' : '') + '! Ficando no mapa para derrotar e capturar.', 'ok'); return;
         }
-        if (agora - tPrimeiro >= cfg.olharMs) { errosSeguidos = 0; log((atual ? atual.nome : '?') + ': ' + novos.length + ' Pokémon avistados' + (faixaNivel(novos) ? ' (Nv ' + faixaNivel(novos) + ')' : '') + ', nenhum shiny — saindo', 'info'); if (atual && faixaNivel(novos)) { niveis[atual.slug] = faixaNivel(novos); salvar(); } est = 'espera'; avistados += novos.length; sujo = true; }
+        if (agora - tPrimeiro >= cfg.olharMs) { errosSeguidos = 0; log((atual ? atual.nome : '?') + ': ' + novos.length + ' Pokémon avistados' + (faixaNivel(novos) ? ' (Nv ' + faixaNivel(novos) + ')' : '') + ', nenhum shiny — saindo', 'info'); if (atual && faixaNivel(novos)) { niveis[atual.slug] = faixaNivel(novos); salvar(); } est = 'espera'; avistados += novos.length; contaMapa(atual && atual.slug, novos.length, 0); sujo = true; }
       } else if (agora - tEntrada > 12000) { log((atual ? atual.nome : '?') + ': nenhum Pokémon avistado em 12 s — saindo', 'info'); est = 'espera'; sujo = true; }
       return;
     }
@@ -267,7 +273,7 @@
     window.postMessage({ ch: CH, from: 'hunt', type: 'state', state: {
       ligado, est, msg, nivel, conectado: aberto(), atual: atual ? atual.nome : '', visitados, rodadas, shinies, cfg,
       mapas: { total: mapas.total, elegiveis: el.length, outland: mapas.outland, semRegiao: mapas.semRegiao, semSlug: mapas.semSlug, regioes: [...new Set(el.map((h) => h.regiao))] },
-      avistados, desde, rota: el.map((h) => [h.nome, h.regiao, niveis[h.slug] || '']), prox: idx >= el.length ? 0 : idx, cur: (est === 'olhando' || est === 'cacando') ? idx - 1 : -1,
+      avistados, desde, rota: el.map((h) => [h.nome, h.regiao, niveis[h.slug] || '', (mapaStats[h.slug] || {}).a || 0, (mapaStats[h.slug] || {}).s || 0]), prox: idx >= el.length ? 0 : idx, cur: (est === 'olhando' || est === 'cacando') ? idx - 1 : -1,
       bloqueados: (() => { const g = {}; for (const h of hunts) { if (h.outland || elSet.has(h)) continue; const k = (h.regiao || '?') + '|' + (h.req != null ? h.req : '?'); g[k] = (g[k] || 0) + 1; } return Object.keys(g).map((k) => { const [r, n] = k.split('|'); return { r, nivel: n === '?' ? null : Number(n), qtd: g[k] }; }); })(),
       log: logs.slice(-60)
     } }, '*');
@@ -288,7 +294,7 @@
       salvar(); sujo = true;
     } else if (m.type === 'limpar-log') { logs = []; sujo = true; }
     else if (m.type === 'resetar-rota') { idx = 0; if (ligado && est === 'olhando') est = 'espera'; log('Rota reiniciada do primeiro mapa', 'info'); sujo = true; salvar(); }
-    else if (m.type === 'zerar') { idx = 0; visitados = 0; rodadas = 0; avistados = 0; desde = Date.now(); shinies = { achados: 0, capturados: 0, fugiram: 0 }; sujo = true; salvar(); }
+    else if (m.type === 'zerar') { idx = 0; visitados = 0; rodadas = 0; avistados = 0; mapaStats = {}; desde = Date.now(); shinies = { achados: 0, capturados: 0, fugiram: 0 }; sujo = true; salvar(); }
     else if (m.type === 'diag') { window.postMessage({ ch: CH, from: 'hunt', type: 'diag', diag: diag() }, '*'); }
   });
   window.__ateforpHuntDbg = { diag, hunts: () => hunts, estado: () => ({ ligado, est, atual, idx }) };

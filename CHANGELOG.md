@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.53
+- Shiny Hunt: avistados e shinies por mapa na Rota esperada.
+
 ## v2.3.52
 - Shiny Hunt: opção Ligar automaticamente ao se logar.
 
