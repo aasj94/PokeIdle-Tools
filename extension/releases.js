@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.49", "itens": ["O ícone do PvP agora usa a arte do Zacian (espada) quando desligado e do Zamazenta (escudo) quando ligado."]},
  {"v": "2.3.48", "itens": ["Caixa de ferramentas em duas linhas: em cima Auto Captura (Gyarados) e Shiny Hunt; embaixo PvP (esquerda) e a chave (direita). Novo botão do Shiny Hunt com o Shinx brilhando quando desligado (borda azul) e o Luxio quando ligado (borda vermelha), liga sem alerta. O ícone da Auto Captura agora usa a arte do Gyarados normal (desligado) e do shiny vermelho (ligado). Shiny Hunt: contador de Pokémon avistados desde o último zerar (aparece com a data de início)."]},
  {"v": "2.3.47", "itens": ["Shiny Hunt: o painel agora explica, junto da opção do Centro Pokémon, que passar pelo Centro costuma ser um pouco mais rápido e constante."]},
  {"v": "2.3.46", "itens": ["Shiny Hunt: agora troca direto para o próximo mapa, sem passar pelo Centro Pokémon (testado no seu jogo: o servidor aceita a troca direta quando o herói está sem combater; quando recusa por combate, a extensão espera o tempo que o jogo pede e tenta de novo). Enquanto espera a troca liberar (~10 s), continua olhando os Pokémon do mapa e fica se aparecer shiny. O Centro virou opção (caixa no painel)."]},

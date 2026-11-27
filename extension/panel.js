@@ -623,6 +623,7 @@
 .ate-dock .at-btn:hover { filter: brightness(1.12); box-shadow: inset 0 1px 0 #fff, inset 0 -3px 0 rgba(6,22,48,.45), inset 0 0 0 1px #8fd0ff, 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 18px rgba(110,200,255,.8); }
 .ate-dock .at-btn:active { transform: translateY(1px); }
 .ate-dock .at-gy { width: 56px; height: 40px; padding: 0; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; background: radial-gradient(circle at 50% 35%, #1d3a63, #0b1b33); }
+.ate-dock .at-gy:not(.at-sh):not(.at-open) img { object-fit: contain; }
 .ate-dock .at-gy:not(.at-sh):not(.at-open) img { height: 34px !important; max-width: 50px !important; }
 .ate-dock .at-sh img { height: 32px; width: auto; max-width: 48px; pointer-events: none; image-rendering: auto; }
 .ate-dock .at-sh:not(.sh-on) img { animation: ate-brilho 1.8s ease-in-out infinite; }
@@ -646,7 +647,11 @@
   const pvpSvg = (on) => on
     ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22" style="pointer-events:none">${sword(5, 4, 25, 24, '#ffd9a0')}${sword(27, 4, 7, 24, '#ffd9a0')}${ball(6, 26, 4.6)}${ball(26, 26, 4.6)}${ball(16, 15, 5.2)}</svg>`
     : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22" style="pointer-events:none">${sword(27, 4, 14, 17, '#bcd2ec')}${ball(11, 21, 8.2)}</svg>`;
-  const pvpIcon = (on) => { const d = new DOMParser().parseFromString(pvpSvg(on), 'image/svg+xml'); return document.importNode(d.documentElement, true); };
+  const pvpIcon = (on) => {
+    if (window.__ATE.pvpImg) { const im = document.createElement('img'); im.src = on ? window.__ATE.pvpImg.on : window.__ATE.pvpImg.off; im.alt = on ? 'Zamazenta' : 'Zacian'; im.draggable = false; return im; }
+    return pvpIconSvg(on);
+  };
+  const pvpIconSvg = (on) => { const d = new DOMParser().parseFromString(pvpSvg(on), 'image/svg+xml'); return document.importNode(d.documentElement, true); };
   let pvBtn = null, pvShown = null, shBtn = null, shShown = null;
 
   const toolSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="pointer-events:none"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" fill="#cfe3ff" stroke="#14202e" stroke-width="1.5" stroke-linejoin="round"/></svg>';
@@ -703,7 +708,7 @@
       pvBtn.title = pon ? 'PvP automático LIGADO - busca partida sozinho (clique para desligar)' : 'PvP automático DESLIGADO (clique para ligar)';
       pvBtn.style.borderColor = pon ? '#5a1a1f' : '#0b1b33';
       pvBtn.style.boxShadow = pon ? 'inset 0 0 0 1px #ff7b85, 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 12px rgba(230,70,80,.65)' : '';
-      const old = pvBtn.querySelector('svg');
+      const old = pvBtn.querySelector('svg,img');
       const nv = pvpIcon(pon);
       if (old) pvBtn.replaceChild(nv, old); else pvBtn.appendChild(nv);
     }
