@@ -579,8 +579,7 @@ function createUI(root) {
     if (!rp && !rpRegras) return;
     if (rp) {
       $('pkOn').checked = !!rp.ativo;
-      $('pkHint').textContent = rp.ativo ? (rp.cfg.simular ? 'ligada — SIMULAÇÃO (não compra)' : 'ligada — comprando de verdade') : 'desligada — nada é avaliado, nem em simulação';
-      $('pkSim').checked = rp.cfg.simular !== false; $('pkSimHint').textContent = rp.cfg.simular !== false ? 'só avisa no registro o que compraria, sem comprar nada' : 'DESLIGADO: as regras compram de verdade';
+      $('pkHint').textContent = rp.ativo ? 'ligada — comprando de verdade' : 'desligada — nada é avaliado';
       $('pkInfo').textContent = !rp.conectado ? 'Sem conexão com o jogo.' : !rp.lider ? 'Outra aba do jogo está cuidando das compras.' : (rp.msg || '') + (rp.stats && rp.stats.comprados ? ' · comprados: ' + rp.stats.comprados : '') + (rp.stats && rp.stats.falhas ? ' · falhas: ' + rp.stats.falhas : '');
       if (!emFocoRp() && root.activeElement !== $('pkInt')) $('pkInt').value = String(rp.cfg.intervaloS || 5);
       if (root.activeElement !== $('imAnte')) $('imAnte').value = String(rp.cfg.antecipaMs || 0);
@@ -727,7 +726,7 @@ function createUI(root) {
           rpRegras.push(Object.assign({ id: nid2, nome, ativo: true, especie: esp, comprados: 0 }, filtros));
         }
         rpSig = ''; rpEnviarCfg(); navTop = 'pokemon'; navPk = 'auto'; navAu = 'poke'; renderMercadoSub();
-        $('pkInfo').textContent = atualiza ? 'Regra "' + (atualiza.nome || atualiza.especie) + '" atualizada com os filtros da consulta. Confira, e use o modo simulação antes de comprar de verdade.' : 'Regra criada a partir da consulta. Confira, e use o modo simulação antes de comprar de verdade.';
+        $('pkInfo').textContent = atualiza ? 'Regra "' + (atualiza.nome || atualiza.especie) + '" atualizada com os filtros da consulta. Confira com o botão Consultar Pokémon disponíveis antes de ligar a compra.' : 'Regra criada a partir da consulta. Confira com o botão Consultar Pokémon disponíveis antes de ligar a compra.';
       });
       $('csGo').addEventListener('click', () => {
         const v = (id) => { const x = $(id).value.trim(); return x === '' ? null : Number(x); };
@@ -795,17 +794,11 @@ function createUI(root) {
     if (on) {
       const regs = (rpRegras || []).filter((r) => r.ativo !== false && r.precoMax > 0);
       if (!regs.length) { e.target.checked = false; $('pkInfo').textContent = 'Crie ao menos uma regra com preço máximo e um filtro antes de ligar.'; return; }
-      const sim = $('pkSim').checked;
       const total = regs.reduce((s, r) => s + r.precoMax * (r.qtd || 1), 0);
-      const ok = await confirmar(sim ? regs.length + ' regra(s) ativa(s). MODO SIMULAÇÃO: só vou avisar no registro o que compraria; nada será comprado.' : regs.length + ' regra(s) ativa(s). Vou COMPRAR DE VERDADE Pokémon que atendam às regras. Gasto máximo possível: ' + fmt(total) + ' coins.', 'Ligar compra automática', 'Ligar');
+      const ok = await confirmar(regs.length + ' regra(s) ativa(s). Vou COMPRAR DE VERDADE Pokémon que atendam às regras. Gasto máximo possível: ' + fmt(total) + ' coins.', 'Ligar compra automática', 'Ligar');
       if (!ok) { e.target.checked = false; return; }
     }
     rpCmd({ type: 'ativo', value: on });
-  });
-  $('pkSim').addEventListener('change', async (e) => {
-    const sim = e.target.checked;
-    if (!sim) { const ok = await confirmar('Desligar a simulação? A partir de agora, ao ligar a compra automática, as regras vão COMPRAR de verdade.', 'Sair do modo simulação', 'Comprar de verdade'); if (!ok) { e.target.checked = true; return; } }
-    rpCmd({ type: 'simular', value: sim });
   });
   $('pkInt').addEventListener('change', rpEnviarCfg);
   $('imAnte').addEventListener('change', rpEnviarCfg);
@@ -1070,7 +1063,7 @@ function createUI(root) {
       if ($('hnRota').dataset.sig !== sigR) {
         $('hnRota').dataset.sig = sigR; $('hnRota').textContent = '';
         $('hnRotaResumo').textContent = rota.length + ' mapas · próximo: ' + (rota.length ? rota[hn.prox][0] : '—');
-        rota.forEach(([nome, r], i) => { const cls = i === hn.cur ? 'atual' : i === hn.prox ? 'prox' : i < hn.prox ? 'feito' : 'falta'; $('hnRota').append(el('div', { className: 'rt ' + cls, textContent: (i + 1) + '. ' + nome + ' · ' + (r || '?') })); });
+        rota.forEach(([nome, r, nv], i) => { const cls = i === hn.cur ? 'atual' : i === hn.prox ? 'prox' : i < hn.prox ? 'feito' : 'falta'; $('hnRota').append(el('div', { className: 'rt ' + cls, textContent: (i + 1) + '. ' + nome + ' · ' + (r || '?') + (nv ? ' · Nv ' + nv : '') })); });
         const a = $('hnRota').querySelector('.atual,.prox'); if (a && !$('hnRota').dataset.rolou) { $('hnRota').dataset.rolou = '1'; $('hnRota').scrollTop = Math.max(0, a.offsetTop - 60); }
       }
     }

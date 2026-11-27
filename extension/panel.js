@@ -321,11 +321,6 @@
               <span class="lbl"><b>Compra automática de Pokémon</b><small id="pkHint">desligada</small></span>
             </label>
             <div class="mut" id="pkInfo">Desligada.</div>
-            <label class="switch">
-              <input type="checkbox" id="pkSim" checked>
-              <span class="slider"></span>
-              <span class="lbl"><b>Modo simulação (recomendado para testar)</b><small id="pkSimHint">só avisa o que compraria, sem comprar nada</small></span>
-            </label>
             <div class="row inline">
               <label>Consultar a cada <input id="pkInt" type="number" min="4" step="0.5" value="5"> s <small>(uma regra por vez, em rodízio)</small></label>
             </div>

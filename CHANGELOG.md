@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v2.3.45
+- Shiny Hunt: nível dos Pokémon no registro e na rota.
+- Compra de Pokémon: removido o modo simulação.
+
 ## v2.3.44
 - Shiny Hunt: corrige espera de 12 s por mapa (slots recomeçam em 1), rota colorida, Resetar rota, avistados no registro, painel mais limpo.
 

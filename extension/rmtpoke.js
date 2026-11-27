@@ -35,7 +35,7 @@
   const REFRESCO_MS = 9000;           // antes da liberação, confere de novo o preço do anúncio escolhido
 
   // ---------- configuração ----------
-  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], simular: true };
+  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], simular: false };
   let cfg = JSON.parse(JSON.stringify(PADRAO));
   const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
   function normRegra(r) {
@@ -71,7 +71,6 @@
     if (num(c.intervaloS) >= INTERVALO_MIN && num(c.intervaloS) <= 600) o.intervaloS = num(c.intervaloS);
     if (num(c.antecipaMs) >= 0 && num(c.antecipaMs) <= 1000) o.antecipaMs = Math.floor(num(c.antecipaMs));
     if (Array.isArray(c.regras)) o.regras = c.regras.slice(0, 20).map(normRegra);
-    if (c.simular === false) o.simular = false;
     if (Array.isArray(c.renova)) o.renova = c.renova.slice(0, 30).map(normRen);
     return o;
   }
@@ -550,7 +549,8 @@
     else if (m.type === 'consultar') consultar(m.filtros);
     else if (m.type === 'imed-ativo') { IMED.ativo = !!m.value; if (num(m.limite) > 0) IMED.limite = Math.floor(num(m.limite)); log(IMED.ativo ? 'Compra Imediata LIGADA (até ' + IMED.limite + ' compra(s))' : 'Compra Imediata desligada', 'info'); sujo = true; }
     else if (m.type === 'imed-limite') { if (num(m.limite) > 0) IMED.limite = Math.floor(num(m.limite)); sujo = true; }
-    else if (m.type === 'simular') { cfg.simular = !!m.value; salvar(); log(cfg.simular ? 'Modo SIMULAÇÃO ligado: as regras só avisam, não compram' : 'Modo SIMULAÇÃO desligado: as regras COMPRAM de verdade', 'info'); sujo = true; }
+    else if (m.type === 'simular') { /* modo simulação removido */ }
+    else if (m.type === 'simular-antigo') { cfg.simular = !!m.value; salvar(); log(cfg.simular ? 'Modo SIMULAÇÃO ligado: as regras só avisam, não compram' : 'Modo SIMULAÇÃO desligado: as regras COMPRAM de verdade', 'info'); sujo = true; }
     else if (m.type === 'ren-ativo') { ren.ativo = !!m.value; ren.msg = ren.ativo ? 'Ligada.' : 'Desligada.'; if (ren.ativo) { ren.forcar = true; cfg.renova.forEach((r) => { r.sumiu = false; }); } log(ren.ativo ? 'Renovação automática LIGADA (' + cfg.renova.filter(renValida).length + ' anúncio(s))' : 'Renovação automática desligada', 'info'); sujo = true; }
     else if (m.type === 'ren-carregar') { ren.forcar = true; ren.em = 0; if (!ren.ativo) { const ws = getWs(); if (ws && ws.readyState === 1 && podeConsultar(true) && enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); } } sujo = true; }
     else if (m.type === 'ren-cfg') { cfg.renova = (Array.isArray(m.regras) ? m.regras : []).slice(0, 30).map(normRen); salvar(); sujo = true; }

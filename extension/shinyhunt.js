@@ -28,7 +28,9 @@
   let cfg = Object.assign({}, PADRAO);
   let idx = 0;
   try { const s = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (s) { cfg = Object.assign({}, PADRAO, s.cfg || {}); idx = Number(s.idx) || 0; } } catch (e) { /* ignora */ }
-  const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify({ cfg, idx })); } catch (e) { /* ignora */ } };
+  let niveis = {};   // slug -> 'min-max' do nível dos Pokémon vistos no mapa
+  try { const s2 = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (s2 && s2.niveis) niveis = s2.niveis; } catch (e) { /* ignora */ }
+  const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify({ cfg, idx, niveis })); } catch (e) { /* ignora */ } };
 
   const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
   const getWs = () => { try { return BUS.ws && BUS.ws(); } catch (e) { return null; } };
@@ -122,6 +124,7 @@
           if (!b || b.s === undefined) continue;
           const e = mobs.get(b.s) || { em: Date.now() };
           if (b.n !== undefined) e.n = b.n;
+          if (b.nv !== undefined) e.nv = Number(b.nv);
           if (b.sh !== undefined) e.sh = !!b.sh;
           mobs.set(b.s, e);
           if (b.s > maxSlot) maxSlot = b.s;
@@ -141,7 +144,7 @@
             if (w && /combate/i.test(e.msg)) { tentouCentro = 0; bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }
           } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; mobs.clear(); }
           else if (e.k === 'centro') { noCentro = true; }
-          if (e.k === 'spawn' && e.slot !== undefined) { if (e.slot > maxSlot) maxSlot = e.slot; if (!mobs.has(e.slot)) mobs.set(e.slot, { em: Date.now(), n: e.nome }); if (e.shiny || e.sh) mobs.get(e.slot).sh = true; }
+          if (e.k === 'spawn' && e.slot !== undefined) { if (e.slot > maxSlot) maxSlot = e.slot; if (!mobs.has(e.slot)) mobs.set(e.slot, { em: Date.now(), n: e.nome, nv: e.level !== undefined ? Number(e.level) : undefined }); if (e.shiny || e.sh) mobs.get(e.slot).sh = true; }
           else if (e.k === 'bola') { ult = e.slot; if (e.shiny && alvoShiny.has(e.slot)) { if (e.sucesso) { /* o "capturado" vem em seguida */ } } }
           else if (e.k === 'capturado' && e.slot !== undefined && alvoShiny.has(e.slot)) { alvoShiny.delete(e.slot); shinies.capturados++; log('✨ SHINY CAPTURADO! (' + (e.pokemon && e.pokemon.nome || '') + ')', 'ok'); }
           else if (e.k === 'fugiu' && ult != null && alvoShiny.has(ult)) { alvoShiny.delete(ult); shinies.fugiram++; log('O shiny fugiu depois da tentativa de captura.', 'erro'); }
@@ -162,6 +165,12 @@
   }
   BUS.on(aoMensagem);
 
+  function faixaNivel(lista) {
+    const v = lista.map(([, m]) => m.nv).filter((x) => Number.isFinite(x));
+    if (!v.length) return '';
+    const a = Math.min(...v), b = Math.max(...v);
+    return a === b ? String(a) : a + '-' + b;
+  }
   // ---------- laço ----------
   function proximoMapa() {
     const lista = elegiveis();
@@ -187,9 +196,9 @@
         const sh = novos.filter(([, m]) => m.sh);
         if (sh.length) {
           alvoShiny = new Set(sh.map(([s]) => s)); tShiny = agora; shinies.achados += sh.length; est = 'cacando'; errosSeguidos = 0;
-          log('✨ SHINY achado em ' + (atual ? atual.nome : '?') + ' (' + (sh[0][1].n || '?') + ') entre ' + novos.length + ' avistados! Ficando no mapa para derrotar e capturar.', 'ok'); return;
+          log('✨ SHINY achado em ' + (atual ? atual.nome : '?') + ' (' + (sh[0][1].n || '?') + ') entre ' + novos.length + ' avistados' + (faixaNivel(novos) ? ' (Nv ' + faixaNivel(novos) + ')' : '') + '! Ficando no mapa para derrotar e capturar.', 'ok'); return;
         }
-        if (agora - tPrimeiro >= cfg.olharMs) { errosSeguidos = 0; log((atual ? atual.nome : '?') + ': ' + novos.length + ' Pokémon avistados, nenhum shiny — saindo', 'info'); est = 'espera'; sujo = true; }
+        if (agora - tPrimeiro >= cfg.olharMs) { errosSeguidos = 0; log((atual ? atual.nome : '?') + ': ' + novos.length + ' Pokémon avistados' + (faixaNivel(novos) ? ' (Nv ' + faixaNivel(novos) + ')' : '') + ', nenhum shiny — saindo', 'info'); if (atual && faixaNivel(novos)) { niveis[atual.slug] = faixaNivel(novos); salvar(); } est = 'espera'; sujo = true; }
       } else if (agora - tEntrada > 12000) { log((atual ? atual.nome : '?') + ': nenhum Pokémon avistado em 12 s — saindo', 'info'); est = 'espera'; sujo = true; }
       return;
     }
@@ -239,7 +248,7 @@
     window.postMessage({ ch: CH, from: 'hunt', type: 'state', state: {
       ligado, est, msg, nivel, conectado: aberto(), atual: atual ? atual.nome : '', visitados, rodadas, shinies, cfg,
       mapas: { total: mapas.total, elegiveis: el.length, outland: mapas.outland, semRegiao: mapas.semRegiao, semSlug: mapas.semSlug, regioes: [...new Set(el.map((h) => h.regiao))] },
-      rota: el.map((h) => [h.nome, h.regiao]), prox: idx >= el.length ? 0 : idx, cur: (est === 'olhando' || est === 'cacando') ? idx - 1 : -1,
+      rota: el.map((h) => [h.nome, h.regiao, niveis[h.slug] || '']), prox: idx >= el.length ? 0 : idx, cur: (est === 'olhando' || est === 'cacando') ? idx - 1 : -1,
       bloqueados: (() => { const g = {}; for (const h of hunts) { if (h.outland || elSet.has(h)) continue; const k = (h.regiao || '?') + '|' + (h.req != null ? h.req : '?'); g[k] = (g[k] || 0) + 1; } return Object.keys(g).map((k) => { const [r, n] = k.split('|'); return { r, nivel: n === '?' ? null : Number(n), qtd: g[k] }; }); })(),
       log: logs.slice(-60)
     } }, '*');
