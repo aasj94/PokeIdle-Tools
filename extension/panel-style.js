@@ -106,6 +106,8 @@ header button.icon { border-color: var(--frameD); background: rgba(10,30,60,.35)
 .rota .rt.atual { color: #60a5fa; font-weight: 700; }
 .rota .rt.prox { color: #c084fc; font-weight: 700; }
 .rota .rt.falta { color: #facc15; }
+.girando { opacity: .85; cursor: progress; animation: ate-pulsa 1s ease-in-out infinite; }
+@keyframes ate-pulsa { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
 .log .ok { color: var(--ok); }
 .log .erro { color: var(--bad); }
 .log .debug { color: var(--mut); }

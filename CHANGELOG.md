@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.55
+- Renovação: botão Carregar com estado Carregando…; contador Renovações feitas corrigido.
+
 ## v2.3.54
 - Rota esperada: mapa atual sempre azul (lido do jogo), próximo roxo; shinies como ✨ N.
 

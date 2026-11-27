@@ -634,12 +634,23 @@ function createUI(root) {
   let rnRegras = null, rnSig = '', rnEnvio = null;
   const rnEnviar = () => { clearTimeout(rnEnvio); rnEnvio = setTimeout(() => rpCmd({ type: 'ren-cfg', regras: rnRegras }), 300); };
   const emFocoRn = () => { const a = root.activeElement; return !!(a && a.closest && a.closest('#rnLista')); };
+  let rnCarga = null, rnFeito = 0;
   function renderRen(force) {
     if (!rp || !rp.ren) return;
     $('rnOn').checked = !!rp.ren.ativo;
     $('rnHint').textContent = rp.ren.ativo ? 'ligada' : 'desligada';
-    $('rnInfo').textContent = rp.ren.msg || '';
+    // botão "Carregar meus anúncios": mostra que está carregando até a lista chegar (ou dar 12 s)
+    if (rnCarga) {
+      if (rp.ren.em !== rnCarga.emAntes) { rnCarga = null; rnFeito = Date.now(); }
+      else if (Date.now() - rnCarga.desde > 12000) { rnCarga = null; rnFeito = -Date.now(); }
+    }
+    $('rnCarregar').disabled = !!rnCarga;
+    $('rnCarregar').classList.toggle('girando', !!rnCarga);
+    $('rnCarregar').textContent = rnCarga ? '↻ Carregando…' : '↻ Carregar meus anúncios';
+    $('rnInfo').textContent = rnCarga ? 'Carregando seus anúncios…' : rnFeito > 0 && Date.now() - rnFeito < 5000 ? rp.ren.meus.length + ' anúncio(s) carregado(s).' : rnFeito < 0 && Date.now() + rnFeito < 6000 ? 'O jogo não respondeu a tempo. Tente de novo em alguns segundos.' : (rp.ren.msg || '');
     if (!rnRegras) rnRegras = JSON.parse(JSON.stringify((rp.cfg && rp.cfg.renova) || []));
+    // a contagem de renovações é do módulo: traz para a cópia da tela
+    for (const r of rnRegras) { const m = ((rp.cfg && rp.cfg.renova) || []).find((x) => x.id === r.id); if (m) { r.renovacoes = m.renovacoes; r.ultima = m.ultima; } }
     const sig = JSON.stringify(rp.ren.meus.map((l) => [l.id, l.preco, l.editavelEm, l.criadoEm])) + JSON.stringify(rnRegras.map((r) => [r.id, r.renovacoes]));
     if (!force && (emFocoRn() || sig === rnSig)) { rnTempos(); return; }
     rnSig = sig;
@@ -788,7 +799,13 @@ function createUI(root) {
   });
   rpCmd({ type: 'hello' });
   $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
-  $('rnCarregar').addEventListener('click', () => rpCmd({ type: 'ren-carregar' }));
+  $('rnCarregar').addEventListener('click', () => {
+    if (rnCarga) return;
+    rnCarga = { desde: Date.now(), emAntes: rp && rp.ren ? rp.ren.em : 0 }; rnFeito = 0;
+    rpCmd({ type: 'ren-carregar' }); renderRen(true);
+    const t = setInterval(() => { if (!rnCarga) { clearInterval(t); return; } renderRen(true); }, 500);
+    setTimeout(() => { renderRen(true); }, 5200);
+  });
   $('pkOn').addEventListener('change', async (e) => {
     const on = e.target.checked;
     if (on) {
