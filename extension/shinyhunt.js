@@ -132,6 +132,7 @@
       try {
         const j = JSON.parse(d); let ult = null;
         for (const e of j.ev || []) {
+          if (e.k === 'ataque') { bloqueioAte = Math.max(bloqueioAte, Date.now() + 2900); }   // o servidor só deixa sair ~2,8 s depois do último dano dado ou levado
           if (e.k === 'aviso' && typeof e.msg === 'string') {
             const w = /espere\s+([\d.]+)\s*s/i.exec(e.msg);
             if (w && /combate/i.test(e.msg)) { bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }

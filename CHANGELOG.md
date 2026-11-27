@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.40
+- Shiny Hunt: acompanha os ataques e só tenta sair ~3 s depois do último dano.
+
 ## v2.3.39
 - Shiny Hunt: respeita as regras do servidor (sair só após ~3 s sem combate; troca de mapa a cada ~10 s), confere os Pokémon assim que o mapa carrega e sai antes de atacar quando não há shiny.
 
