@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.42
+- Shiny Hunt: usa area/nivel da lista de mapas do jogo; não trava quando já está no Centro.
+
 ## v2.3.41
 - Shiny Hunt movido para dentro de PvE > Captura.
 

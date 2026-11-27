@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.42", "itens": ["Shiny Hunt corrigido: a lista de mapas do jogo informa a área e o nível mínimo de cada mapa, e agora a extensão usa isso para saber quais estão liberados (antes só reconhecia parte deles). Também não trava mais quando você já está no Centro Pokémon ao ligar."]},
  {"v": "2.3.41", "itens": ["O Shiny Hunt agora fica dentro de PvE > Captura (no fim da página), em vez de ter aba própria."]},
  {"v": "2.3.40", "itens": ["Shiny Hunt: acompanha os ataques do combate e só tenta sair quando o jogo vai deixar (cerca de 3 s depois do último dano), sem insistir em pedidos que o servidor recusaria."]},
  {"v": "2.3.39", "itens": ["Shiny Hunt ajustado com o que o servidor do jogo realmente exige (testado na sua conta): só dá para sair do mapa depois de ~3 s sem batalhar (o Centro Pokémon também) e só dá para trocar de mapa a cada ~10 s. Agora a extensão entra no mapa, confere os Pokémon assim que aparecem, sai antes de o herói atacar quando não há shiny, espera a troca liberar e entra no próximo. Tempo de olhar padrão 0,3 s."]},

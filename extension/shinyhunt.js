@@ -65,12 +65,13 @@
       for (const k of ['speciesId', 'especieId', 'pokemonId', 'sid', 'pid', 'id']) { const v = num(h[k]); if (v != null) { sid = v; break; } }
       const nome = String(h.nome || h.name || h.pokemon || h.especie || slug);
       const txtRegiao = String(h.regiao || h.region || '').toLowerCase();
-      const outland = (sid != null && sid >= 2001) || /outland/.test(txtRegiao) || /^outland/.test(slug);
+      const area = String(h.area || '').toLowerCase();
+      const outland = (sid != null && sid >= 2001) || /outland/.test(txtRegiao) || /outland/.test(area) || /^outland/.test(slug);
       const x = { slug, nome, sid, outland };
       const r = regiaoDe(x.sid != null || txtRegiao ? Object.assign({}, h, { sid }) : h);
-      x.regiao = r ? r.n : '';
+      x.regiao = r ? r.n : (area ? area.charAt(0).toUpperCase() + area.slice(1) : '');
       let req = null;
-      for (const k of Object.keys(h)) if (/^(nivelReq|reqNivel|nivelMin|minNivel|minLevel|levelReq|requiredLevel|unlockLevel|liberaNivel)$/i.test(k) && num(h[k]) != null) { req = num(h[k]); break; }
+      for (const k of Object.keys(h)) if (/^(nivel|nivelReq|reqNivel|nivelMin|minNivel|minLevel|levelReq|requiredLevel|unlockLevel|liberaNivel)$/i.test(k) && num(h[k]) != null) { req = num(h[k]); break; }
       x.req = req != null ? req : (r ? r.nivel : null);
       if (outland) { mapas.outland++; }
       else if (x.req == null) mapas.semRegiao++;
@@ -91,6 +92,7 @@
   let alvoShiny = new Set(), tShiny = 0;
   const mobs = new Map();   // slot -> {n, sh, em}
   let sujo = true, ultEmit = 0;
+  let tentouCentro = 0;
   let noCentro = false, bloqueioAte = 0, trocaLivreAt = 0, offSrv = 0;   // regras do servidor: sem combate ~3 s para sair; ~10 s entre trocas de mapa
 
   const log = (txt, lvl) => { logs.push({ t: Date.now(), msg: txt, lvl: lvl || 'info' }); if (logs.length > 120) logs.shift(); sujo = true; try { console.log('[Ateforp Shiny Hunt] ' + txt); } catch (e) { /* ignora */ } };
@@ -102,6 +104,7 @@
   function aoMensagem(d) {
     if (typeof d !== 'string' || d.charCodeAt(0) !== 123) return;
     if (d.indexOf('"t":"welcome"') === 1) {
+      { const a = /"servidorAgora":(\d+)/.exec(d); if (a) offSrv = Number(a[1]) - Date.now(); const c = /"noCentro":(true|false)/.exec(d); if (c) noCentro = c[1] === 'true'; }
       try { const m = JSON.parse(d); normalizar(m.hunts); const lv = m.estado && num(m.estado.level); if (lv != null) nivel = lv; sujo = true; } catch (e) { /* ignora */ }
       return;
     }
@@ -135,7 +138,7 @@
           if (e.k === 'ataque') { bloqueioAte = Math.max(bloqueioAte, Date.now() + 2900); }   // o servidor só deixa sair ~2,8 s depois do último dano dado ou levado
           if (e.k === 'aviso' && typeof e.msg === 'string') {
             const w = /espere\s+([\d.]+)\s*s/i.exec(e.msg);
-            if (w && /combate/i.test(e.msg)) { bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }
+            if (w && /combate/i.test(e.msg)) { tentouCentro = 0; bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }
           } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; }
           else if (e.k === 'centro') { noCentro = true; }
           if (e.k === 'spawn' && e.slot !== undefined) { if (e.slot > maxSlot) maxSlot = e.slot; if (!mobs.has(e.slot)) mobs.set(e.slot, { em: Date.now(), n: e.nome }); if (e.shiny || e.sh) mobs.get(e.slot).sh = true; }
@@ -192,7 +195,12 @@
     }
     // espera/parado: 1) sair do mapa (Centro) quando o servidor deixar (sem combate); 2) esperar a troca de mapa liberar; 3) entrar no próximo
     if (agora < bloqueioAte) { msg = 'Esperando o combate acabar para sair…'; return; }
-    if (!noCentro) { if (mandar({ t: 'centro.ir' }, 'centro.ir')) { msg = 'Saindo do mapa…'; bloqueioAte = agora + 900; } return; }
+    if (!noCentro) {
+      // se já estávamos no Centro, o servidor não responde ao centro.ir: sem aviso em ~2,5 s, consideramos que já saímos
+      if (tentouCentro && agora - tentouCentro > 2500 && ultAcao === 'centro.ir' && agora >= bloqueioAte) { noCentro = true; tentouCentro = 0; log('Já estava no Centro Pokémon', 'info'); return; }
+      if (mandar({ t: 'centro.ir' }, 'centro.ir')) { msg = 'Saindo do mapa…'; bloqueioAte = agora + 900; if (!tentouCentro) tentouCentro = agora; } return;
+    }
+    tentouCentro = 0;
     if (agora < trocaLivreAt) { msg = 'Esperando a troca de mapa liberar (' + Math.ceil((trocaLivreAt - agora) / 1000) + ' s)…'; return; }
     const h = proximoMapa(); if (!h) return;
     maxSlotAntes = maxSlot; tPrimeiro = 0; tEntrada = agora; atual = h; visitados++;
