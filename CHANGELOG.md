@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.50
+- Chave inglesa: vermelha só com função extra ativa (além de PvP, Auto Captura e Shiny Hunt) e conectado; senão verde.
+
 ## v2.3.49
 - Ícone do PvP: Zacian (desligado) e Zamazenta (ligado).
 

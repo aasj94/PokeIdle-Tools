@@ -778,7 +778,7 @@ function createUI(root) {
   window.addEventListener('message', (ev) => {
     const m = ev.data;
     if (ev.source !== window || !m || m.ch !== 'ateforp-rmtpoke' || m.from !== 'rmtpoke' || m.type !== 'state') return;
-    rp = m.state;
+    rp = m.state; listeners.forEach((f) => { try { f(); } catch (e2) { /* ignora */ } });
     if (sub === 'poke') renderPoke(false);
     if (sub === 'imed') renderImed();
     if (sub === 'hist') renderPkHist();
@@ -966,7 +966,7 @@ function createUI(root) {
   window.addEventListener('message', (ev) => {
     const m = ev.data;
     if (ev.source !== window || !m || m.ch !== 'ateforp-venda' || m.from !== 'venda' || m.type !== 'state') return;
-    vd = m.state; renderVenda(); renderRegistroVenda();
+    vd = m.state; renderVenda(); renderRegistroVenda(); listeners.forEach((f) => { try { f(); } catch (e2) { /* ignora */ } });
   });
   vdCmd({ type: 'hello' });
   function enviarCfg() {
@@ -1253,6 +1253,17 @@ function createUI(root) {
     setCaptura: (v) => { catchCmd({ type: 'captura', value: !!v }); if (cs) { cs.ativo = !!v; renderCatch(); } },
     pvp: () => !!(pvp && pvp.ativo),
     setPvp: (v) => pvpCmd({ type: 'ativo', value: !!v }),
+    // funcionalidades ativas que NÃO são PvP, Auto Captura nem Shiny Hunt (a chave inglesa fica vermelha quando há alguma)
+    outrasAtivas: () => {
+      const l = [];
+      if (cfg.enabled) l.push('compra de itens');
+      if (cs && cs.estoque && cs.estoque.ativo) l.push('reposição de itens');
+      if (rp && rp.ativo) l.push('compra de Pokémon');
+      if (rp && rp.imed && rp.imed.ativo) l.push('compra imediata');
+      if (rp && rp.ren && rp.ren.ativo) l.push('renovação de anúncios');
+      if (vd && vd.ativo) l.push('venda de Pokémon');
+      return l;
+    },
     shiny: () => !!(hn && hn.ligado),
     setShiny: (v) => hnCmd({ type: 'ligar', value: !!v }),
     onChange: (f) => listeners.push(f)

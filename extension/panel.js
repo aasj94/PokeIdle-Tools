@@ -728,11 +728,13 @@
     wrap.title = online ? 'Jogo conectado' : 'Jogo sem conexão';
     // chave inglesa: verde / amarelo / vermelho (a regra do status da extensão)
     const st = host.dataset.status || 'off';
-    const cor = st === 'on' ? '#6fd08a' : st === 'warn' ? '#ffd166' : '#ff4d4f';
+    // chave inglesa: vermelha só quando conectado E há alguma funcionalidade ativa além de PvP, Auto Captura e Shiny Hunt; senão verde
+    const extras = api.outrasAtivas();
+    const cor = st === 'warn' || !online ? '#ffd166' : extras.length ? '#ff4d4f' : '#6fd08a';
     openBtn.style.borderColor = cor;
     openBtn.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px ' + cor + ', 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 12px ' + cor + (panel.hidden ? '88' : 'ff');
     const tp = openBtn.querySelector('svg path'); if (tp) tp.setAttribute('fill', cor);
-    openBtn.title = 'Abrir/fechar o PokeIdle Tools by Ateforp · ' + (st === 'on' ? 'compra automática ligada e conectado' : st === 'warn' ? 'aguardando o jogo / atenção' : 'compra automática desligada');
+    openBtn.title = 'Abrir/fechar o PokeIdle Tools by Ateforp · ' + (cor === '#ffd166' ? 'aguardando o jogo / atenção' : extras.length ? 'ativo: ' + extras.join(', ') : 'nenhuma função extra ativa');
     openBtn.classList.toggle('on', !panel.hidden);
   }
 
