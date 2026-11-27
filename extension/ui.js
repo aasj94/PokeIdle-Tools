@@ -1065,6 +1065,16 @@ function createUI(root) {
     if (root.activeElement !== $('hnOlhar')) $('hnOlhar').value = String((hn.cfg.olharMs || 300) / 1000);
     $('hnParar').checked = !!hn.cfg.parar;
     $('hnStats').textContent = 'Mapa atual: ' + (hn.atual || '—') + ' · mapas visitados: ' + fmt(hn.visitados) + ' · rodadas completas: ' + hn.rodadas + ' · shinies achados: ' + hn.shinies.achados + ' (capturados ' + hn.shinies.capturados + ', fugiram ' + hn.shinies.fugiram + ')';
+    { // rota esperada
+      const rota = hn.rota || []; const sigR = rota.length + ':' + hn.prox + ':' + (hn.atual || '');
+      if ($('hnRota').dataset.sig !== sigR) {
+        $('hnRota').dataset.sig = sigR; $('hnRota').textContent = '';
+        const cont = {}; for (const [, r] of rota) cont[r || '?'] = (cont[r || '?'] || 0) + 1;
+        const bl = (hn.bloqueados || []).map((b) => b.r + ' (nível ' + (b.nivel != null ? fmt(b.nivel) : '?') + '): ' + b.qtd).join(' · ');
+        $('hnRotaResumo').textContent = rota.length + ' mapas na rota: ' + Object.keys(cont).map((r) => r + ' ' + cont[r]).join(' · ') + (bl ? ' · Ainda bloqueados: ' + bl : '') + '. Próximo: ' + (rota.length ? (rota[hn.prox % rota.length] || rota[0])[0] : '—');
+        rota.forEach(([nome, r], i) => { const feito = i < hn.prox; const prox = i === hn.prox % rota.length; $('hnRota').append(el('div', { className: prox ? 'ok' : '' }, (prox ? '▶ ' : feito ? '✓ ' : '   ') + (i + 1) + '. ' + nome + ' (' + (r || '?') + ')')); });
+      }
+    }
     const box = $('hnLog'); const lg = hn.log || []; const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);
     if (box.dataset.sig !== sig) {
       box.dataset.sig = sig; const fim = box.scrollTop + box.clientHeight >= box.scrollHeight - 8; box.textContent = '';
@@ -1094,6 +1104,7 @@ function createUI(root) {
     hnCmd({ type: 'ligar', value: on });
   });
   for (const id of ['hnPasso', 'hnOlhar', 'hnParar']) $(id).addEventListener('change', hnEnviarCfg);
+  $('hnRotaCopiar').addEventListener('click', () => copiarTextoHunt(((hn && hn.rota) || []).map(([n, r], i) => (i + 1) + '. ' + n + ' (' + r + ')').join('\n'), 'Rota copiada.'));
   $('hnDiag').addEventListener('click', () => hnCmd({ type: 'diag' }));
   $('hnZerar').addEventListener('click', () => hnCmd({ type: 'zerar' }));
   $('hnLogLimpar').addEventListener('click', () => hnCmd({ type: 'limpar-log' }));

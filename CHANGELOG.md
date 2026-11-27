@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.43
+- Shiny Hunt: seção Rota esperada (ordem dos mapas, por região, bloqueados por nível, copiar).
+
 ## v2.3.42
 - Shiny Hunt: usa area/nivel da lista de mapas do jogo; não trava quando já está no Centro.
 

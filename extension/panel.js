@@ -129,6 +129,11 @@
           <div class="fld"><label><input id="hnParar" type="checkbox"> parar depois de resolver um shiny (capturado ou fugiu)</label></div>
           <div class="resumo" id="hnStats"></div>
           <div class="btns"><button id="hnDiag" class="icon">Copiar diagnóstico dos mapas</button><button id="hnZerar" class="link">zerar contagens</button></div>
+          <details class="rotabox"><summary>Rota esperada (ordem dos mapas)</summary>
+            <div class="mut" id="hnRotaResumo"></div>
+            <div id="hnRota" class="log"></div>
+            <div class="btns"><button id="hnRotaCopiar" class="link">copiar rota</button></div>
+          </details>
           <h2>REGISTRO <button id="hnLogCopiar" class="link">copiar</button> <button id="hnLogLimpar" class="link">limpar</button></h2>
           <div id="hnLog" class="log"></div>
         </div>

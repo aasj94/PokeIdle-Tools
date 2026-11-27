@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.43", "itens": ["Shiny Hunt: nova seção "Rota esperada" (PvE > Captura > Shiny Hunt) com a lista de mapas na ordem em que serão visitados (marca o próximo e os já feitos), quantos mapas por região, o que ainda está bloqueado pelo nível da conta e botão para copiar a rota. Funciona para qualquer conta, com mais ou menos mapas liberados."]},
  {"v": "2.3.42", "itens": ["Shiny Hunt corrigido: a lista de mapas do jogo informa a área e o nível mínimo de cada mapa, e agora a extensão usa isso para saber quais estão liberados (antes só reconhecia parte deles). Também não trava mais quando você já está no Centro Pokémon ao ligar."]},
  {"v": "2.3.41", "itens": ["O Shiny Hunt agora fica dentro de PvE > Captura (no fim da página), em vez de ter aba própria."]},
  {"v": "2.3.40", "itens": ["Shiny Hunt: acompanha os ataques do combate e só tenta sair quando o jogo vai deixar (cerca de 3 s depois do último dano), sem insistir em pedidos que o servidor recusaria."]},

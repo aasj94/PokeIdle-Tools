@@ -235,10 +235,12 @@
   }
   function emitir() {
     sujo = false; ultEmit = Date.now();
-    const el = elegiveis();
+    const el = elegiveis(); const elSet = new Set(el);
     window.postMessage({ ch: CH, from: 'hunt', type: 'state', state: {
       ligado, est, msg, nivel, conectado: aberto(), atual: atual ? atual.nome : '', visitados, rodadas, shinies, cfg,
       mapas: { total: mapas.total, elegiveis: el.length, outland: mapas.outland, semRegiao: mapas.semRegiao, semSlug: mapas.semSlug, regioes: [...new Set(el.map((h) => h.regiao))] },
+      rota: el.map((h) => [h.nome, h.regiao]), prox: idx,
+      bloqueados: (() => { const g = {}; for (const h of hunts) { if (h.outland || elSet.has(h)) continue; const k = (h.regiao || '?') + '|' + (h.req != null ? h.req : '?'); g[k] = (g[k] || 0) + 1; } return Object.keys(g).map((k) => { const [r, n] = k.split('|'); return { r, nivel: n === '?' ? null : Number(n), qtd: g[k] }; }); })(),
       log: logs.slice(-60)
     } }, '*');
   }
