@@ -631,7 +631,7 @@
 .ate-dock .at-gy:not(.at-sh):not(.at-open) img { object-fit: contain; }
 .ate-dock .at-gy:not(.at-sh):not(.at-open) img { height: 34px !important; max-width: 50px !important; }
 .ate-dock .at-sh img { height: 32px; width: auto; max-width: 48px; pointer-events: none; image-rendering: auto; }
-.ate-dock .at-sh:not(.sh-on) img { animation: ate-brilho 1.8s ease-in-out infinite; }
+.ate-dock .at-sh.sh-on img { animation: ate-brilho 1.8s ease-in-out infinite; }
 .ate-dock .at-sh.sh-on { box-shadow: inset 0 0 0 1px #ff7b85, 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 12px rgba(230,70,80,.65); }
 .ate-dock .at-sh.sh-on img { filter: drop-shadow(0 0 3px rgba(255,110,120,.8)); }
 @keyframes ate-brilho { 0%, 100% { filter: drop-shadow(0 0 1px rgba(255,220,120,.4)) brightness(1); } 50% { filter: drop-shadow(0 0 7px rgba(255,225,120,.95)) brightness(1.18); } }
@@ -720,7 +720,7 @@
     const son = api.shiny();
     if (force || shShown !== son) {
       shShown = son;
-      shBtn.title = son ? 'Shiny Hunt LIGADO - Luxio (clique para desligar)' : 'Shiny Hunt DESLIGADO - Shinx brilhando (clique para ligar)';
+      shBtn.title = son ? 'Shiny Hunt LIGADO - Luxio brilhando (clique para desligar)' : 'Shiny Hunt DESLIGADO - Shinx (clique para ligar)';
       shBtn.classList.toggle('sh-on', son);
       shBtn.style.borderColor = son ? '#5a1a1f' : '#0b1b33';
       shBtn.textContent = '';

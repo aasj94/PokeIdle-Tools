@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v2.3.57
+- Compra de Pokémon: o Registro mostra cada consulta das regras (repetições viram uma linha com ×N).
+- Shiny Hunt (dock): Shinx parado quando desligado; Luxio brilhando quando ligado.
+
 ## v2.3.56
 - Compra de Pokémon: ritmo das consultas das regras corrigido (não depende mais dos pedidos do motor de itens); painel mostra consultas feitas e última.
 

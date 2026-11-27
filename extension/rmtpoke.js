@@ -87,6 +87,14 @@
   let logs = [];                      // registro detalhado (guardado no navegador)
   try { const l = JSON.parse(localStorage.getItem(CHAVE + '_log') || '[]'); if (Array.isArray(l)) logs = l.slice(-200); } catch (e) { /* ignora */ }
   let logSujo = false;
+  // consultas repetidas com o mesmo resultado viram uma linha só (com contagem), para não encher o registro
+  let ultConsLog = null;
+  function logConsulta(msg, lvl) {
+    if (ultConsLog && ultConsLog.msg === msg && logs[logs.length - 1] === ultConsLog.e) {
+      ultConsLog.n++; ultConsLog.e.t = Date.now(); ultConsLog.e.msg = msg + ' (×' + ultConsLog.n + ')'; logSujo = true; sujo = true; return;
+    }
+    log(msg, lvl); ultConsLog = { msg, n: 1, e: logs[logs.length - 1] };
+  }
   function log(msg, lvl) {
     logs.push({ t: Date.now(), lvl: lvl || 'info', msg: String(msg).slice(0, 400) });
     if (logs.length > 200) logs.shift();
@@ -291,7 +299,11 @@
       busca.total = (busca.total || 0) + linhas.length;
       if (fila.length) busca.msg = 'Buscando… ' + busca.rows.length + ' em retenção até agora.';
       else { busca.carregando = false; busca.em = Date.now(); busca.msg = busca.rows.length ? busca.rows.length + ' anúncio(s) em retenção (de ' + busca.total + ' vistos).' : 'Nenhum anúncio em retenção nas páginas olhadas (' + busca.total + ' vistos).'; }
-    } else if (pendConsulta && pendConsulta.tipo === 'regra' && Date.now() - pendConsulta.em < 8000) pendConsulta = null;
+    } else if (pendConsulta && pendConsulta.tipo === 'regra' && Date.now() - pendConsulta.em < 8000) {
+      const rr = pendConsulta.regra; pendConsulta = null;
+      const abertos = linhas.filter((a) => a.estado === 'aberto'); const casam = rr ? abertos.filter((a) => casa(rr, a)).length : 0; const tot = Number(m.total);
+      logConsulta('Consulta · ' + (rr ? (rr.nome || rr.especie || 'regra') : 'regra') + ': ' + (abertos.length ? abertos.length + ' anúncio(s) vistos' + (Number.isFinite(tot) && tot > abertos.length ? ' (de ' + tot + ' no mercado)' : '') + ', ' + (casam ? casam + ' batem na regra' : 'nenhum bate na regra') : 'nenhum anúncio com esses filtros no mercado agora'), casam ? 'ok' : 'info');
+    }
     else if (pendConsulta && pendConsulta.tipo === 'refresco' && Date.now() - pendConsulta.em < 8000) pendConsulta = null;
     // compra automática por regras
     if (ativo && lider) {
@@ -388,7 +400,7 @@
     extra.semOutland = r.outland === 'omitir';
     if (r.especie) extra.busca = r.especie;
     if (!enviar(pedidoLista(extra))) return false;
-    marcarReq(); S.consultas++; pendConsulta = { tipo: 'regra', em: Date.now() };
+    marcarReq(); S.consultas++; pendConsulta = { tipo: 'regra', em: Date.now(), regra: r };
     return true;
   }
   function tick() {
