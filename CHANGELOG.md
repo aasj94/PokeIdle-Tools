@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.51
+- Descrição da chave inglesa por menu (PvE, PvP, Mercado RMT, Logs), cores e estado atual.
+
 ## v2.3.50
 - Chave inglesa: vermelha só com função extra ativa (além de PvP, Auto Captura e Shiny Hunt) e conectado; senão verde.
 

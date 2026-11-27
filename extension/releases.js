@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.51", "itens": ["Descrição da chave inglesa reformulada: mostra o que cada menu principal faz (PvE, PvP, Mercado RMT e Logs), o significado das cores e o que está ativo agora."]},
  {"v": "2.3.50", "itens": ["A chave inglesa agora fica vermelha só quando o jogo está conectado e há alguma função ativa além de PvP, Auto Captura e Shiny Hunt (compra de itens, reposição de itens, compra de Pokémon, compra imediata, renovação de anúncios ou venda de Pokémon). Sem isso fica verde; amarela se estiver aguardando o jogo ou houver aviso. O texto ao passar o mouse lista o que está ativo."]},
  {"v": "2.3.49", "itens": ["O ícone do PvP agora usa a arte do Zacian (espada) quando desligado e do Zamazenta (escudo) quando ligado."]},
  {"v": "2.3.48", "itens": ["Caixa de ferramentas em duas linhas: em cima Auto Captura (Gyarados) e Shiny Hunt; embaixo PvP (esquerda) e a chave (direita). Novo botão do Shiny Hunt com o Shinx brilhando quando desligado (borda azul) e o Luxio quando ligado (borda vermelha), liga sem alerta. O ícone da Auto Captura agora usa a arte do Gyarados normal (desligado) e do shiny vermelho (ligado). Shiny Hunt: contador de Pokémon avistados desde o último zerar (aparece com a data de início)."]},

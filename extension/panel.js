@@ -734,7 +734,17 @@
     openBtn.style.borderColor = cor;
     openBtn.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px ' + cor + ', 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 12px ' + cor + (panel.hidden ? '88' : 'ff');
     const tp = openBtn.querySelector('svg path'); if (tp) tp.setAttribute('fill', cor);
-    openBtn.title = 'Abrir/fechar o PokeIdle Tools by Ateforp · ' + (cor === '#ffd166' ? 'aguardando o jogo / atenção' : extras.length ? 'ativo: ' + extras.join(', ') : 'nenhuma função extra ativa');
+    openBtn.title = [
+      'PokeIdle Tools by Ateforp — clique para abrir ou fechar o painel',
+      '',
+      'PvE: reposição de itens, captura (Auto Captura), Shiny Hunt e venda de Pokémon',
+      'PvP: PvP automático e histórico',
+      'Mercado RMT: compra de itens, compra e renovação de Pokémon (Consulta e Compra Imediata) e histórico',
+      'Logs: conexão com o jogo, Shiny Monitor e registros',
+      '',
+      'Cor da chave: verde = nenhuma função extra ligada · vermelho = há função ativa · amarelo = aguardando o jogo',
+      'Agora: ' + (cor === '#ffd166' ? 'aguardando o jogo / atenção' : extras.length ? 'ativo: ' + extras.join(', ') : 'nenhuma função extra ativa (PvP, Auto Captura e Shiny Hunt não contam)')
+    ].join('\n');
     openBtn.classList.toggle('on', !panel.hidden);
   }
 
