@@ -161,9 +161,10 @@
       return agoraMs - ultReq >= INTERVALO_MIN * 1000 + penalidade && agoraMs - (e ? e.lastReq || 0 : 0) >= 1200;
     }
     const base = Math.max(INTERVALO_MIN, cfg.intervaloS) * 1000;
-    const ult = Math.max(ultReq, e ? e.lastReq || 0 : 0);
+    // o ritmo das regras conta só os MEUS pedidos (antes contava também os do motor de compra de itens, que pedem a cada poucos
+    // segundos e deixavam as regras sem vez); do motor só respeito uma folga curta, para os pedidos não saírem colados
     const pen = penalidade + (e ? e.penalty || 0 : 0);
-    return Date.now() - ult >= base + pen;
+    return Date.now() - ultReq >= base + pen && Date.now() - (e ? e.lastReq || 0 : 0) >= 1200;
   }
   function marcarReq() { ultReq = Date.now(); const e = eng(); if (e) e.lastReq = ultReq; }
   function pedidoLista(extra) {

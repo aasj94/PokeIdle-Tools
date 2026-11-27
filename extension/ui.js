@@ -580,7 +580,7 @@ function createUI(root) {
     if (rp) {
       $('pkOn').checked = !!rp.ativo;
       $('pkHint').textContent = rp.ativo ? 'ligada — comprando de verdade' : 'desligada — nada é avaliado';
-      $('pkInfo').textContent = !rp.conectado ? 'Sem conexão com o jogo.' : !rp.lider ? 'Outra aba do jogo está cuidando das compras.' : (rp.msg || '') + (rp.stats && rp.stats.comprados ? ' · comprados: ' + rp.stats.comprados : '') + (rp.stats && rp.stats.falhas ? ' · falhas: ' + rp.stats.falhas : '');
+      $('pkInfo').textContent = !rp.conectado ? 'Sem conexão com o jogo.' : !rp.lider ? 'Outra aba do jogo está cuidando das compras.' : (rp.msg || '') + (rp.stats && rp.stats.consultas ? ' · consultas: ' + fmt(rp.stats.consultas) + (rp.stats.ultConsulta ? ' (última há ' + Math.max(0, Math.round((Date.now() - rp.stats.ultConsulta) / 1000)) + ' s)' : '') : '') + (rp.stats && rp.stats.comprados ? ' · comprados: ' + rp.stats.comprados : '') + (rp.stats && rp.stats.falhas ? ' · falhas: ' + rp.stats.falhas : '');
       if (!emFocoRp() && root.activeElement !== $('pkInt')) $('pkInt').value = String(rp.cfg.intervaloS || 5);
       if (root.activeElement !== $('imAnte')) $('imAnte').value = String(rp.cfg.antecipaMs || 0);
       if (!rpRegras) rpRegras = JSON.parse(JSON.stringify(rp.cfg.regras || []));

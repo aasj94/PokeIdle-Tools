@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.56
+- Compra de Pokémon: ritmo das consultas das regras corrigido (não depende mais dos pedidos do motor de itens); painel mostra consultas feitas e última.
+
 ## v2.3.55
 - Renovação: botão Carregar com estado Carregando…; contador Renovações feitas corrigido.
 
