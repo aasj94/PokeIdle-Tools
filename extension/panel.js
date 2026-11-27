@@ -623,9 +623,15 @@
 .ate-dock .at-btn:hover { filter: brightness(1.12); box-shadow: inset 0 1px 0 #fff, inset 0 -3px 0 rgba(6,22,48,.45), inset 0 0 0 1px #8fd0ff, 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 18px rgba(110,200,255,.8); }
 .ate-dock .at-btn:active { transform: translateY(1px); }
 .ate-dock .at-gy { width: 56px; height: 40px; padding: 0; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; background: radial-gradient(circle at 50% 35%, #1d3a63, #0b1b33); }
+.ate-dock .at-gy:not(.at-sh):not(.at-open) img { height: 34px !important; max-width: 50px !important; }
+.ate-dock .at-sh img { height: 32px; width: auto; max-width: 48px; pointer-events: none; image-rendering: auto; }
+.ate-dock .at-sh:not(.sh-on) img { animation: ate-brilho 1.8s ease-in-out infinite; }
+.ate-dock .at-sh.sh-on { box-shadow: inset 0 0 0 1px #ff7b85, 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 12px rgba(230,70,80,.65); }
+.ate-dock .at-sh.sh-on img { filter: drop-shadow(0 0 3px rgba(255,110,120,.8)); }
+@keyframes ate-brilho { 0%, 100% { filter: drop-shadow(0 0 1px rgba(255,220,120,.4)) brightness(1); } 50% { filter: drop-shadow(0 0 7px rgba(255,225,120,.95)) brightness(1.18); } }
 .ate-dock .at-open.on { box-shadow: inset 0 1px 0 #fff, inset 0 -3px 0 rgba(6,22,48,.45), inset 0 0 0 1px #ffd166, 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 14px rgba(255,209,102,.6); }
 /* caixa de ferramentas: a cor da borda mostra a conexão (verde = conectado, amarelo = aguardando, vermelho = sem conexão) */
-.ate-dock.toolbox { --tb: #ff4d4f; position: relative; display: flex; align-items: center; justify-content: center; gap: 9px; box-sizing: border-box; width: fit-content; max-width: 100%;
+.ate-dock.toolbox { --tb: #ff4d4f; position: relative; display: grid; grid-template-columns: repeat(2, auto); align-items: center; justify-items: center; justify-content: center; gap: 9px; box-sizing: border-box; width: fit-content; max-width: 100%;
   margin: 16px auto 6px; padding: 9px 12px; border: 2px solid var(--tb); border-radius: 12px; background: linear-gradient(180deg, #14263f 0%, #0b1627 100%);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 0 1px #0b1b33, 0 0 12px color-mix(in srgb, var(--tb) 55%, transparent); transition: border-color .25s, box-shadow .25s; }
 .ate-dock.toolbox::before { content: ""; position: absolute; top: -11px; left: 50%; width: 30px; height: 10px; transform: translateX(-50%); box-sizing: border-box;
@@ -641,7 +647,7 @@
     ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22" style="pointer-events:none">${sword(5, 4, 25, 24, '#ffd9a0')}${sword(27, 4, 7, 24, '#ffd9a0')}${ball(6, 26, 4.6)}${ball(26, 26, 4.6)}${ball(16, 15, 5.2)}</svg>`
     : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22" style="pointer-events:none">${sword(27, 4, 14, 17, '#bcd2ec')}${ball(11, 21, 8.2)}</svg>`;
   const pvpIcon = (on) => { const d = new DOMParser().parseFromString(pvpSvg(on), 'image/svg+xml'); return document.importNode(d.documentElement, true); };
-  let pvBtn = null, pvShown = null;
+  let pvBtn = null, pvShown = null, shBtn = null, shShown = null;
 
   const toolSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="pointer-events:none"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" fill="#cfe3ff" stroke="#14202e" stroke-width="1.5" stroke-linejoin="round"/></svg>';
   const toolIcon = () => { const d = new DOMParser().parseFromString(toolSvg, 'image/svg+xml'); return document.importNode(d.documentElement, true); };
@@ -661,6 +667,11 @@
     pvBtn.className = 'at-btn at-gy';
     pvBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); api.setPvp(!api.pvp()); });
 
+    shBtn = document.createElement('button');
+    shBtn.type = 'button';
+    shBtn.className = 'at-btn at-gy at-sh';
+    shBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); api.setShiny(!api.shiny()); });
+
     openBtn = document.createElement('button');
     openBtn.type = 'button';
     openBtn.className = 'at-btn at-gy at-open';
@@ -668,7 +679,7 @@
     openBtn.append(toolIcon());
     openBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggle(); });
 
-    wrap.append(gyBtn, pvBtn, openBtn);
+    wrap.append(gyBtn, shBtn, pvBtn, openBtn);
     syncDock(true);
   }
 
@@ -680,7 +691,7 @@
       gyBtn.title = on ? 'Auto captura LIGADA - Gyarados shiny (clique para desligar)' : 'Auto captura DESLIGADA - Gyarados azul (clique para ligar)';
       gyBtn.style.borderColor = on ? '#5a1a1f' : '#0b1b33';
       gyBtn.style.boxShadow = on ? 'inset 0 0 0 1px #ff7b85, 0 0 0 1px #14355f, 0 2px 0 1px #0b1b33, 0 0 12px rgba(230,70,80,.65)' : '';
-      const old = gyBtn.querySelector('svg');
+      const old = gyBtn.querySelector('svg,img');
       const nv = window.__ATE.gyarados(on, 22);
       if (old) gyBtn.replaceChild(nv, old); else gyBtn.appendChild(nv);
       $('logo').textContent = '';
@@ -695,6 +706,16 @@
       const old = pvBtn.querySelector('svg');
       const nv = pvpIcon(pon);
       if (old) pvBtn.replaceChild(nv, old); else pvBtn.appendChild(nv);
+    }
+    const son = api.shiny();
+    if (force || shShown !== son) {
+      shShown = son;
+      shBtn.title = son ? 'Shiny Hunt LIGADO - Luxio (clique para desligar)' : 'Shiny Hunt DESLIGADO - Shinx brilhando (clique para ligar)';
+      shBtn.classList.toggle('sh-on', son);
+      shBtn.style.borderColor = son ? '#5a1a1f' : '#0b1b33';
+      shBtn.textContent = '';
+      const im = document.createElement('img'); im.src = son ? window.__ATE.shinx.on : window.__ATE.shinx.off; im.alt = son ? 'Luxio' : 'Shinx'; im.draggable = false;
+      shBtn.append(im);
     }
     // borda da caixa: verde se o jogo está online (conectado), vermelho se não
     const online = api.conectado();

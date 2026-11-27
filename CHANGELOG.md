@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.48
+- Caixa de ferramentas em duas linhas; botão Shinx/Luxio do Shiny Hunt; ícone do Gyarados com a arte normal/shiny; contador de avistados.
+
 ## v2.3.47
 - Shiny Hunt: texto explicando a opção do Centro Pokémon.
 

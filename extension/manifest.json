@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PokeIdle Tools by Ateforp",
-  "version": "2.3.47",
+  "version": "2.3.48",
   "description": "Configurações de PvE, PvP, compras, tudo automático e num painel só.",
   "permissions": [
     "storage"
@@ -51,6 +51,7 @@
       ],
       "js": [
         "gyarados.js",
+        "shinxicons.js",
         "qrcode.min.js",
         "panel-style.js",
         "releases.js",

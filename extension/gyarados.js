@@ -27,6 +27,15 @@ window.__ATE = window.__ATE || {};
   <path d="M32 0 L35.5 9 L35.5 22 L32 30 L28.5 22 L28.5 9 Z" fill="${c.crista}" stroke="${c.linha}" stroke-width="1.3" stroke-linejoin="round"/>
 </svg>`;
   window.__ATE.gyarados = (on, px) => {
+    if (window.__ATE.gyaImg) {   // arte do Gyarados normal (desligado) e shiny vermelho (ligado)
+      const im = document.createElement('img');
+      im.src = on ? window.__ATE.gyaImg.on : window.__ATE.gyaImg.off; im.alt = on ? 'Gyarados shiny' : 'Gyarados'; im.draggable = false;
+      im.style.cssText = 'height:' + (px || 30) + 'px;width:auto;max-width:' + Math.round((px || 30) * 1.4) + 'px;pointer-events:none;object-fit:contain';
+      return im;
+    }
+    return window.__ATE.gyaSvg(on, px);
+  };
+  window.__ATE.gyaSvg = (on, px) => {
     const doc = new DOMParser().parseFromString(svg(on ? COR_ON : COR_OFF), 'image/svg+xml');
     const el = document.importNode(doc.documentElement, true);
     if (px) { el.setAttribute('width', String(px)); el.setAttribute('height', String(px)); }

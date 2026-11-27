@@ -1057,7 +1057,7 @@ function createUI(root) {
     if (root.activeElement !== $('hnPasso')) $('hnPasso').value = String((hn.cfg.passoMs || 1000) / 1000);
     if (root.activeElement !== $('hnOlhar')) $('hnOlhar').value = String((hn.cfg.olharMs || 300) / 1000);
     $('hnParar').checked = !!hn.cfg.parar; $('hnCentro').checked = !!hn.cfg.centro;
-    $('hnStats').textContent = 'Rodada ' + (hn.rodadas + 1) + ' · mapa ' + Math.min(hn.prox + (hn.cur >= 0 ? 0 : 0), (hn.rota || []).length) + ' de ' + (hn.rota || []).length + ' · shinies ' + hn.shinies.achados + ' (capturados ' + hn.shinies.capturados + ')';
+    $('hnStats').textContent = 'Rodada ' + (hn.rodadas + 1) + ' · mapa ' + Math.min(hn.prox + (hn.cur >= 0 ? 0 : 0), (hn.rota || []).length) + ' de ' + (hn.rota || []).length + ' · avistados ' + fmt(hn.avistados || 0) + (hn.desde ? ' desde ' + new Date(hn.desde).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '') + ' · shinies ' + hn.shinies.achados + ' (capturados ' + hn.shinies.capturados + ')';
     { // rota esperada
       const rota = hn.rota || []; const sigR = rota.length + ':' + hn.prox + ':' + hn.cur;
       if ($('hnRota').dataset.sig !== sigR) {
@@ -1083,7 +1083,7 @@ function createUI(root) {
   window.addEventListener('message', (ev) => {
     const m = ev.data;
     if (ev.source !== window || !m || m.ch !== 'ateforp-hunt' || m.from !== 'hunt') return;
-    if (m.type === 'state') { hn = m.state; renderHunt(); }
+    if (m.type === 'state') { hn = m.state; renderHunt(); listeners.forEach((f) => { try { f(); } catch (e2) { /* ignora */ } }); }
     else if (m.type === 'diag') copiarTextoHunt(JSON.stringify(m.diag, null, 1), 'Diagnóstico dos mapas copiado. Cole na conversa.');
   });
   $('hnOn').addEventListener('change', async (e) => {
@@ -1253,6 +1253,8 @@ function createUI(root) {
     setCaptura: (v) => { catchCmd({ type: 'captura', value: !!v }); if (cs) { cs.ativo = !!v; renderCatch(); } },
     pvp: () => !!(pvp && pvp.ativo),
     setPvp: (v) => pvpCmd({ type: 'ativo', value: !!v }),
+    shiny: () => !!(hn && hn.ligado),
+    setShiny: (v) => hnCmd({ type: 'ligar', value: !!v }),
     onChange: (f) => listeners.push(f)
   };
 }
