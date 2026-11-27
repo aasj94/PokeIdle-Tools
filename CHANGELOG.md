@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.41
+- Shiny Hunt movido para dentro de PvE > Captura.
+
 ## v2.3.40
 - Shiny Hunt: acompanha os ataques e só tenta sair ~3 s depois do último dano.
 

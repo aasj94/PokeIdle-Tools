@@ -52,7 +52,6 @@
           <button data-p="est" class="on">Reposição de itens</button>
           <button data-p="cap">Captura</button>
           <button data-p="venda">Venda Pokémon</button>
-          <button data-p="hunt">Shiny Hunt</button>
         </nav>
         <div class="subp" data-g="pve" data-p="est">
         <div class="card">
@@ -116,9 +115,7 @@
             <label><input type="checkbox" data-hs="compras"> Compras</label>
           </div>
         </div>
-        </div>
-        <div class="subp" data-g="pve" data-p="hunt" hidden>
-        <div class="card">
+                <div class="card">
           <h2>SHINY HUNT <small>beta</small></h2>
           <label class="switch">
             <input type="checkbox" id="hnOn">
