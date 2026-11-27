@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.54", "itens": ["Shiny Hunt, Rota esperada: o mapa em que o herói está agora fica azul o tempo todo (antes ficava verde já na espera da troca de mapa) e o próximo, roxo. O mapa atual é lido do que o próprio jogo informa. Os shinies por mapa aparecem sempre como ✨ 0, ✨ 1…"]},
  {"v": "2.3.53", "itens": ["Shiny Hunt: a Rota esperada agora mostra, em cada mapa já visitado, quantos Pokémon foram avistados e quantos shinies apareceram nele (somando todas as visitas). O botão zerar contagens limpa esses números."]},
  {"v": "2.3.52", "itens": ["Shiny Hunt: nova opção Ligar automaticamente ao se logar (desmarcada por padrão, igual à da Auto Captura e do PvP). Quando marcada, o Shiny Hunt liga sozinho assim que o jogo conecta e informa os mapas e o nível da conta, inclusive depois de uma reconexão."]},
  {"v": "2.3.51", "itens": ["Descrição da chave inglesa reformulada: mostra o que cada menu principal faz (PvE, PvP, Mercado RMT e Logs), o significado das cores e o que está ativo agora."]},

@@ -96,7 +96,7 @@
   let alvoShiny = new Set(), tShiny = 0;
   const mobs = new Map();   // slot -> {n, sh, em}
   let sujo = true, ultEmit = 0;
-  let tentouCentro = 0, confirmou = false;
+  let tentouCentro = 0, confirmou = false, noMapa = '';   // noMapa = slug do mapa em que o herói está de fato
   let noCentro = false, bloqueioAte = 0, trocaLivreAt = 0, offSrv = 0;   // regras do servidor: sem combate ~3 s para sair; ~10 s entre trocas de mapa
 
   const log = (txt, lvl) => { logs.push({ t: Date.now(), msg: txt, lvl: lvl || 'info' }); if (logs.length > 120) logs.shift(); sujo = true; try { console.log('[Ateforp Shiny Hunt] ' + txt); } catch (e) { /* ignora */ } };
@@ -108,13 +108,14 @@
   function aoMensagem(d) {
     if (typeof d !== 'string' || d.charCodeAt(0) !== 123) return;
     if (d.indexOf('"t":"welcome"') === 1) {
-      { const a = /"servidorAgora":(\d+)/.exec(d); if (a) offSrv = Number(a[1]) - Date.now(); const c = /"noCentro":(true|false)/.exec(d); if (c) noCentro = c[1] === 'true'; }
+      { const a = /"servidorAgora":(\d+)/.exec(d); if (a) offSrv = Number(a[1]) - Date.now(); const c = /"noCentro":(true|false)/.exec(d); if (c) noCentro = c[1] === 'true'; const hs = /"huntSlug":(null|"([^"]*)")/.exec(d); if (hs) noMapa = hs[2] || ''; }
       try { const m = JSON.parse(d); normalizar(m.hunts); const lv = m.estado && num(m.estado.level); if (lv != null) nivel = lv; sujo = true; } catch (e) { /* ignora */ }
       return;
     }
     if (d.indexOf('"t":"estado"') === 1) {
       const a = /"servidorAgora":(\d+)/.exec(d); if (a) offSrv = Number(a[1]) - Date.now();
-      const c = /"noCentro":(true|false)/.exec(d); if (c) { noCentro = c[1] === 'true'; sujo = true; }
+      const c = /"noCentro":(true|false)/.exec(d); if (c) { noCentro = c[1] === 'true'; if (noCentro) noMapa = ''; sujo = true; }
+      const hs = /"huntSlug":(null|"([^"]*)")/.exec(d); if (hs) { noMapa = noCentro ? '' : (hs[2] || ''); sujo = true; }
     }
     if (d.indexOf('"t":"estado"') === 1 && d.indexOf('"level"') !== -1 && d.length < 200000) {
       try { const m = JSON.parse(d); const lv = m.estado && num(m.estado.level); if (lv != null && lv !== nivel) { nivel = lv; sujo = true; } } catch (e) { /* ignora */ }
@@ -144,7 +145,7 @@
           if (e.k === 'aviso' && typeof e.msg === 'string') {
             const w = /espere\s+([\d.]+)\s*s/i.exec(e.msg);
             if (w && /combate/i.test(e.msg)) { tentouCentro = 0; if (est === 'olhando' && !confirmou && ligado) { est = 'espera'; idx = Math.max(0, idx - 1); visitados = Math.max(0, visitados - 1); mobs.clear(); } bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }
-          } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; mobs.clear(); confirmou = true; }
+          } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; mobs.clear(); confirmou = true; if (e.slug) noMapa = String(e.slug); sujo = true; }
           else if (e.k === 'centro') { noCentro = true; }
           if (e.k === 'spawn' && e.slot !== undefined) { if (e.slot > maxSlot) maxSlot = e.slot; if (!mobs.has(e.slot)) mobs.set(e.slot, { em: Date.now(), n: e.nome, nv: e.level !== undefined ? Number(e.level) : undefined }); if (e.shiny || e.sh) mobs.get(e.slot).sh = true; }
           else if (e.k === 'bola') { ult = e.slot; if (e.shiny && alvoShiny.has(e.slot)) { if (e.sucesso) { /* o "capturado" vem em seguida */ } } }
@@ -273,7 +274,7 @@
     window.postMessage({ ch: CH, from: 'hunt', type: 'state', state: {
       ligado, est, msg, nivel, conectado: aberto(), atual: atual ? atual.nome : '', visitados, rodadas, shinies, cfg,
       mapas: { total: mapas.total, elegiveis: el.length, outland: mapas.outland, semRegiao: mapas.semRegiao, semSlug: mapas.semSlug, regioes: [...new Set(el.map((h) => h.regiao))] },
-      avistados, desde, rota: el.map((h) => [h.nome, h.regiao, niveis[h.slug] || '', (mapaStats[h.slug] || {}).a || 0, (mapaStats[h.slug] || {}).s || 0]), prox: idx >= el.length ? 0 : idx, cur: (est === 'olhando' || est === 'cacando') ? idx - 1 : -1,
+      avistados, desde, rota: el.map((h) => [h.nome, h.regiao, niveis[h.slug] || '', (mapaStats[h.slug] || {}).a || 0, (mapaStats[h.slug] || {}).s || 0]), prox: idx >= el.length ? 0 : idx, cur: el.findIndex((h) => h.slug === noMapa),
       bloqueados: (() => { const g = {}; for (const h of hunts) { if (h.outland || elSet.has(h)) continue; const k = (h.regiao || '?') + '|' + (h.req != null ? h.req : '?'); g[k] = (g[k] || 0) + 1; } return Object.keys(g).map((k) => { const [r, n] = k.split('|'); return { r, nivel: n === '?' ? null : Number(n), qtd: g[k] }; }); })(),
       log: logs.slice(-60)
     } }, '*');

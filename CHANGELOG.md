@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.54
+- Rota esperada: mapa atual sempre azul (lido do jogo), próximo roxo; shinies como ✨ N.
+
 ## v2.3.53
 - Shiny Hunt: avistados e shinies por mapa na Rota esperada.
 
