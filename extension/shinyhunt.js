@@ -23,7 +23,7 @@
     { n: 'Sinnoh', nivel: 1000, de: 387, ate: 493 }, { n: 'Unova', nivel: 5000, de: 494, ate: 649 }, { n: 'Kalos', nivel: 10000, de: 650, ate: 721 },
     { n: 'Alola', nivel: 25000, de: 722, ate: 809 }, { n: 'Galar', nivel: 40000, de: 810, ate: 905 }, { n: 'Paldea', nivel: 75000, de: 906, ate: 1025 }
   ];
-  const PADRAO = { passoMs: 1000, olharMs: 300, parar: false };
+  const PADRAO = { passoMs: 1000, olharMs: 300, parar: false, centro: false };
 
   let cfg = Object.assign({}, PADRAO);
   let idx = 0;
@@ -94,7 +94,7 @@
   let alvoShiny = new Set(), tShiny = 0;
   const mobs = new Map();   // slot -> {n, sh, em}
   let sujo = true, ultEmit = 0;
-  let tentouCentro = 0;
+  let tentouCentro = 0, confirmou = false;
   let noCentro = false, bloqueioAte = 0, trocaLivreAt = 0, offSrv = 0;   // regras do servidor: sem combate ~3 s para sair; ~10 s entre trocas de mapa
 
   const log = (txt, lvl) => { logs.push({ t: Date.now(), msg: txt, lvl: lvl || 'info' }); if (logs.length > 120) logs.shift(); sujo = true; try { console.log('[Ateforp Shiny Hunt] ' + txt); } catch (e) { /* ignora */ } };
@@ -138,11 +138,11 @@
       try {
         const j = JSON.parse(d); let ult = null;
         for (const e of j.ev || []) {
-          if (e.k === 'ataque') { bloqueioAte = Math.max(bloqueioAte, Date.now() + 2900); }   // o servidor só deixa sair ~2,8 s depois do último dano dado ou levado
+          if (e.k === 'ataque' && cfg.centro) { bloqueioAte = Math.max(bloqueioAte, Date.now() + 2900); }   // o servidor só deixa sair ~2,8 s depois do último dano dado ou levado
           if (e.k === 'aviso' && typeof e.msg === 'string') {
             const w = /espere\s+([\d.]+)\s*s/i.exec(e.msg);
-            if (w && /combate/i.test(e.msg)) { tentouCentro = 0; bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }
-          } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; mobs.clear(); }
+            if (w && /combate/i.test(e.msg)) { tentouCentro = 0; if (est === 'olhando' && !confirmou && ligado) { est = 'espera'; idx = Math.max(0, idx - 1); visitados = Math.max(0, visitados - 1); mobs.clear(); } bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }
+          } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; mobs.clear(); confirmou = true; }
           else if (e.k === 'centro') { noCentro = true; }
           if (e.k === 'spawn' && e.slot !== undefined) { if (e.slot > maxSlot) maxSlot = e.slot; if (!mobs.has(e.slot)) mobs.set(e.slot, { em: Date.now(), n: e.nome, nv: e.level !== undefined ? Number(e.level) : undefined }); if (e.shiny || e.sh) mobs.get(e.slot).sh = true; }
           else if (e.k === 'bola') { ult = e.slot; if (e.shiny && alvoShiny.has(e.slot)) { if (e.sucesso) { /* o "capturado" vem em seguida */ } } }
@@ -188,7 +188,16 @@
       msg = est === 'cacando' ? 'SHINY em ' + (atual ? atual.nome : '?') + ' — derrotando e capturando…' : msg;
       return;
     }
+    if (est === 'espera' && !cfg.centro && atual) {
+      // esperando a troca de mapa liberar (sem sair pelo Centro): se aparecer um shiny nas ondas seguintes, fica
+      const sh = [...mobs.entries()].filter(([, m]) => m.sh);
+      if (sh.length) { alvoShiny = new Set(sh.map(([s]) => s)); tShiny = agora; shinies.achados += sh.length; est = 'cacando'; errosSeguidos = 0; log('✨ SHINY achado em ' + atual.nome + ' (' + (sh[0][1].n || '?') + ')! Ficando no mapa para derrotar e capturar.', 'ok'); return; }
+    }
     if (!gate()) return;
+    if (est === 'olhando' && !confirmou) {
+      if (agora - tEntrada > 5000) { est = 'espera'; idx = Math.max(0, idx - 1); visitados = Math.max(0, visitados - 1); log('O jogo não confirmou a troca para ' + (atual ? atual.nome : '?') + '; tentando de novo', 'erro'); }
+      return;
+    }
     if (est === 'olhando') {
       const novos = [...mobs.entries()];
       if (novos.length) {
@@ -204,7 +213,7 @@
     }
     // espera/parado: 1) sair do mapa (Centro) quando o servidor deixar (sem combate); 2) esperar a troca de mapa liberar; 3) entrar no próximo
     if (agora < bloqueioAte) { msg = 'Esperando o combate acabar para sair…'; return; }
-    if (!noCentro) {
+    if (cfg.centro && !noCentro) {
       // se já estávamos no Centro, o servidor não responde ao centro.ir: sem aviso em ~2,5 s, consideramos que já saímos
       if (tentouCentro && agora - tentouCentro > 2500 && ultAcao === 'centro.ir' && agora >= bloqueioAte) { noCentro = true; tentouCentro = 0; log('Já estava no Centro Pokémon', 'info'); return; }
       if (mandar({ t: 'centro.ir' }, 'centro.ir')) { msg = 'Saindo do mapa…'; bloqueioAte = agora + 900; if (!tentouCentro) tentouCentro = agora; } return;
@@ -212,7 +221,7 @@
     tentouCentro = 0;
     if (agora < trocaLivreAt) { msg = 'Esperando a troca de mapa liberar (' + Math.ceil((trocaLivreAt - agora) / 1000) + ' s)…'; return; }
     const h = proximoMapa(); if (!h) return;
-    mobs.clear(); tPrimeiro = 0; tEntrada = agora; atual = h; visitados++;
+    mobs.clear(); confirmou = false; tPrimeiro = 0; tEntrada = agora; atual = h; visitados++;
     if (mandar({ t: 'hunt.select', slug: h.slug }, 'hunt.select ' + h.slug)) { est = 'olhando'; noCentro = false; msg = 'Olhando ' + h.nome + '…'; sujo = true; }
     else { idx--; visitados--; }
   }
@@ -265,7 +274,7 @@
         ligado = true; est = 'espera'; errosSeguidos = 0; passoExtra = 0; msg = 'Ligado.'; log('Shiny Hunt LIGADO: ' + elegiveis().length + ' mapa(s) liberado(s) (nível ' + nivel + '), sem Outland', 'info');
       } else parar('Shiny Hunt desligado.');
     } else if (m.type === 'cfg') {
-      cfg = { passoMs: Math.max(1000, Math.min(10000, Math.floor(num(m.passoMs) || PADRAO.passoMs))), olharMs: Math.max(300, Math.min(5000, Math.floor(num(m.olharMs) || PADRAO.olharMs))), parar: !!m.parar };
+      cfg = { passoMs: Math.max(1000, Math.min(10000, Math.floor(num(m.passoMs) || PADRAO.passoMs))), olharMs: Math.max(300, Math.min(5000, Math.floor(num(m.olharMs) || PADRAO.olharMs))), parar: !!m.parar, centro: !!m.centro };
       salvar(); sujo = true;
     } else if (m.type === 'limpar-log') { logs = []; sujo = true; }
     else if (m.type === 'resetar-rota') { idx = 0; if (ligado && est === 'olhando') est = 'espera'; log('Rota reiniciada do primeiro mapa', 'info'); sujo = true; salvar(); }

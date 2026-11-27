@@ -126,6 +126,7 @@
           <div class="fld"><label for="hnPasso">Intervalo mínimo entre ações (s)</label><input id="hnPasso" type="number" min="1" max="10" step="0.5" value="1"></div>
           <div class="fld"><label for="hnOlhar">Tempo olhando cada mapa (s)</label><input id="hnOlhar" type="number" min="0.3" max="5" step="0.1" value="0.3"></div>
           <div class="fld"><label><input id="hnParar" type="checkbox"> parar depois de resolver um shiny</label></div>
+          <div class="fld"><label><input id="hnCentro" type="checkbox"> passar pelo Centro Pokémon entre os mapas (mais estável, só para casos em que a troca direta falha)</label></div>
           <div class="mut" id="hnStats"></div>
           <details class="rotabox"><summary>Rota esperada</summary>
             <div class="mut" id="hnRotaResumo"></div>

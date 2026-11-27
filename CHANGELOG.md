@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.46
+- Shiny Hunt: troca direta de mapa (sem Centro Pokémon), com retentativa quando o jogo recusa por combate; Centro virou opção.
+
 ## v2.3.45
 - Shiny Hunt: nível dos Pokémon no registro e na rota.
 - Compra de Pokémon: removido o modo simulação.
