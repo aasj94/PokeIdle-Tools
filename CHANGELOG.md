@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.38
+- **Shiny Hunt** (PvE > Shiny Hunt, beta, desligado por padrão): percorre os mapas liberados pelo nível da conta (sem Outland), sai na hora quando não há shiny e fica para derrotar/capturar quando há. Botão **Escape imediato** abaixo de Desistir do Combate.
+
 ## v2.3.37
 - Captura (PvE > Captura): chave **Usar Beast Ball para capturar shiny** (desligada por padrão). Ligada, lança a Beast Ball uma única vez no shiny (só com as que você já tem). O Shiny Monitor registra o resultado.
 

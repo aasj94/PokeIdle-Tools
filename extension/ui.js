@@ -1050,6 +1050,56 @@ function createUI(root) {
     if (t === 'registro') renderLog();
     if (t === 'novidades') renderNovidades();
   }
+  // ---------- Shiny Hunt (shinyhunt.js) ----------
+  let hn = null, hnLogSig = '';
+  const hnCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-hunt', from: 'ui' }, o), '*');
+  const hnEnviarCfg = () => hnCmd({ type: 'cfg', passoMs: Math.round((Number($('hnPasso').value) || 1.5) * 1000), olharMs: Math.round((Number($('hnOlhar').value) || 0.7) * 1000), parar: $('hnParar').checked });
+  function renderHunt() {
+    if (!hn) return;
+    $('hnOn').checked = !!hn.ligado;
+    const ESTADO = { parado: 'desligado', espera: 'ligado — escolhendo o próximo mapa', olhando: 'ligado — olhando o mapa', cacando: 'ligado — SHINY! derrotando e capturando' };
+    $('hnHint').textContent = hn.ligado ? ESTADO[hn.est] || 'ligado' : (hn.msg && hn.msg !== 'Desligado.' ? hn.msg : 'desligado');
+    const m = hn.mapas;
+    $('hnInfo').textContent = !hn.conectado ? 'Sem conexão com o jogo.' : !m.total ? 'O jogo ainda não mandou a lista de mapas: recarregue a página do jogo (F5) com a extensão atualizada.' : 'Nível da conta: ' + (hn.nivel != null ? fmt(hn.nivel) : '?') + ' · mapas liberados: ' + m.elegiveis + ' de ' + m.total + (m.regioes.length ? ' (' + m.regioes.join(', ') + ')' : '') + ' · Outland ignorado (' + m.outland + ')' + (m.semRegiao ? ' · sem região identificada: ' + m.semRegiao : '');
+    if (root.activeElement !== $('hnPasso')) $('hnPasso').value = String((hn.cfg.passoMs || 1500) / 1000);
+    if (root.activeElement !== $('hnOlhar')) $('hnOlhar').value = String((hn.cfg.olharMs || 700) / 1000);
+    $('hnParar').checked = !!hn.cfg.parar;
+    $('hnStats').textContent = 'Mapa atual: ' + (hn.atual || '—') + ' · mapas visitados: ' + fmt(hn.visitados) + ' · rodadas completas: ' + hn.rodadas + ' · shinies achados: ' + hn.shinies.achados + ' (capturados ' + hn.shinies.capturados + ', fugiram ' + hn.shinies.fugiram + ')';
+    const box = $('hnLog'); const lg = hn.log || []; const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);
+    if (box.dataset.sig !== sig) {
+      box.dataset.sig = sig; const fim = box.scrollTop + box.clientHeight >= box.scrollHeight - 8; box.textContent = '';
+      for (const l of lg) box.append(el('div', { className: l.lvl }, el('time', { textContent: new Date(l.t).toLocaleTimeString('pt-BR') }), l.msg));
+      if (!lg.length) box.append(el('div', { className: 'mut', textContent: 'Sem registros ainda.' }));
+      if (fim) box.scrollTop = box.scrollHeight;
+    }
+  }
+  async function copiarTextoHunt(txt, aviso) {
+    let ok = false;
+    try { await navigator.clipboard.writeText(txt); ok = true; } catch (e) { try { const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'; document.body.append(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch (e2) { ok = false; } }
+    $('hnInfo').textContent = ok ? aviso : 'Não consegui copiar automaticamente.';
+  }
+  window.addEventListener('message', (ev) => {
+    const m = ev.data;
+    if (ev.source !== window || !m || m.ch !== 'ateforp-hunt' || m.from !== 'hunt') return;
+    if (m.type === 'state') { hn = m.state; renderHunt(); }
+    else if (m.type === 'diag') copiarTextoHunt(JSON.stringify(m.diag, null, 1), 'Diagnóstico dos mapas copiado. Cole na conversa.');
+  });
+  $('hnOn').addEventListener('change', async (e) => {
+    const on = e.target.checked;
+    if (on) {
+      e.target.checked = false;
+      const ok = await confirmar('O Shiny Hunt vai ENTRAR E SAIR dos mapas liberados na sua conta automaticamente, um por vez, até achar um shiny. Seu personagem sai do mapa em que está agora. Deixe a Auto Captura ligada para capturar. Pode desligar a qualquer momento.', 'Ligar Shiny Hunt', 'Ligar');
+      if (!ok) return;
+    }
+    hnCmd({ type: 'ligar', value: on });
+  });
+  for (const id of ['hnPasso', 'hnOlhar', 'hnParar']) $(id).addEventListener('change', hnEnviarCfg);
+  $('hnDiag').addEventListener('click', () => hnCmd({ type: 'diag' }));
+  $('hnZerar').addEventListener('click', () => hnCmd({ type: 'zerar' }));
+  $('hnLogLimpar').addEventListener('click', () => hnCmd({ type: 'limpar-log' }));
+  $('hnLogCopiar').addEventListener('click', () => copiarTextoHunt(((hn && hn.log) || []).map((l) => new Date(l.t).toLocaleTimeString('pt-BR') + ' [' + l.lvl + '] ' + l.msg).join('\n'), 'Registro copiado.'));
+  hnCmd({ type: 'hello' });
+
   // ---------- Shiny Monitor (shinymon.js) ----------
   let sm = null;
   const smCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-shiny', from: 'ui' }, o), '*');

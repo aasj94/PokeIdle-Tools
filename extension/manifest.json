@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PokeIdle Tools by Ateforp",
-  "version": "2.3.37",
+  "version": "2.3.38",
   "description": "Configurações de PvE, PvP, compras, tudo automático e num painel só.",
   "permissions": [
     "storage"
@@ -30,7 +30,8 @@
         "autovenda.js",
         "pvp.js",
         "rmtpoke.js",
-        "shinymon.js"
+        "shinymon.js",
+        "shinyhunt.js"
       ],
       "run_at": "document_start",
       "world": "MAIN"
