@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.51
+// @version      2.3.52
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAPI0lEQVR4AdxbCXBW1RX+3vv/P+ufQAIBAoEqAQGBLCrVjktHK6Ki7YzMqK0LUpaK4rSjRevCpu1YBey4UZaigDogyqKtWLFSBR2kCBJAFBBQQoAQlkBWsvy337lvyXvZA1ET/7n3nnvuue/c851z7n1LwEQLfurLOzupLeOuUTnjRrJOZJ3aRqrYMlLbtnNc5xZAQpMOUJ+Ni1Nbxk6m8s2oiDkKA+9xgQWsT7NOaSNVbFmgbStHAYOySW0d+5jYTvsaLY06QOWMHYGQ2gnDmAYD2Y1qalvCC6CMJxDCl2rrmF81ZlqDDiD4hYDxJmsaPL8d+Yl4b1cqFmzujb9v6Nsmqtiyenc37DjSwWOp7vaCMlcye1/SXD1NHQeonDFpTKGtgHEn7F9+UQweeCcLQ14chpsXX4o/rsrGzLX9MOvTvnhxfR/MWt+XlfQH4meu7U/7snELbRvy4lBMXJWFoyXRtvUkBkbRCZvVV7/tTs5XfA5QOXfE02Oyxwc7s5Zu7YkbF10G8XB5hQFDKSgVoVgBkUib48srAnh3ZzcMX3g5VmzvQTvtIlu4PLBabb8nbI9o4nMAELMUBs4XyanyIMavzMbj/xmAMipVBEvoGrwB9to4X1JuYtL7g3DviiwUnw4KJMAwBqKqagk8P9cBTPvxgHE9+KusNjB+RTbW7e1MjmCdiNvUzYB2wH+0LwX3vZWJ6gihSDEwnNvhd9KVqh2gUx9qigxIffrD87DloBwoNngllCmvKTVpSl4yQZzg8Jq2PfnG3CRM/+g8gWZVA1PVvrtihNEOAKJvBYyu4O/AyRgs/pxnhYBhmhOjTns2LAIONqVT2pH8tc1pyC3UmIkS3XAqeLN0bAcYNwkj9fl15xIzd7lElj0n3f3UdkI7kldHFOZ8eo5AtKsxQjqmPhUVhglTwb2/endnK8IanJPmtSkzoR3KV+/sXHMWANfKNjChKi7i6RgQB/xvf0fIrY4eYCFIdxsw3SUj2jlffDqAjblytglaI4rbYAgdYHLDywCwqyCOHQ9YAa0jbTvjR8DvKognRruoQHcTEaTaLMoqTSvyDujvkZYU7Ebhvk9wZNtK5K2fh9x1L+DQhgWaP5W7GRWlJ2imHZyzsKus0qAep0R6mDCQ4LIMNI+/GifwlPfxzAAf3wry6ooS5G95E8d3vIOi/Rtx+vg3iHAMkSpUlRdq/uTetcjfuBAnczfRXI8TzmD9qmrTgQsYRqKHg/7JEx89ABAsGz7t0ivc+5onbU356VN5OLxpCSpO5um1uyaHMOLyJDxzT0+8MSUdT47tgZQO9lMcZ0QqymiGxx5mQoROAO2C2EvapH2cQ1Vu8TtAC20P64M/AjfilPluhWcpLzn8FQpylkNVliAu2sCc+8/BnlczsPDh3hh3Qxdcd3FH7DtUgYKTVdrYqMRUJPS8gP2zt49K3OJ3AD2qCNTQNCItvDxkpBXklcVHcGL3Gm3EBX3j8Nnsgbjt6k6ad5o/vPAt5v6rQLNRid3Q6fzrYQaCPnvoCh/fHPu0Qk/jdwDBWUoinMIQS3oJaE05pCmXlXTjOPcHB8nrcXY1Jd+IPFJZhqNfrOJkhcz0WHwwsz96dY0mX1ME/D9WHdUDUQkEP0DAh+Cu14h+0C7VhFwrthu/Azjo7CFLCdX5QNk8HXWm8lM86CKVpUhOCOD1yekIBb2nMvDw3Fw44EPhrkgecK0deQlKzfonvl6LgxteRunRPWI1M8Evb9A+2s4L3OJzAGNHAVvxICdaSlqXL+Xtjotg4q3dkJbij/yUBQfw/MojIkYo3IVpL+BDFjiPPcd3rUFp/g6o6gqU5O+sI9d2e+b7ea3ebXwOkFE9mR2LKkt5K/GlR2gsjaa6Ont+/RdFmLk0X0QEn8LID2PkbfAcdew5vvtDlB39miNWqSjcj0h1pW1n0/ZyonWh3fodQK8xyaC3gewlJ/1biZ4usqJ765XJ3ALc07YRQj7ZXixE1+R+11jga60r4MuP7tZzLs+o+bBTfuIAxwi+1vyGcHCyW0x+03I3oaIDGrqoVcbt6Pfr6b6WuoZcOqgGkJwTtdeTPV9uR/7qCxPx7l/74dxUawtVlxU2P2jE6C7KjsnqFvqQfbZyBkgGtDKNVFv39MJii3Ixt/xsYAJ+P0J/kkBZwS4U7lkLZa9/Ys86OOCvyk7Ayif66usCduicec2j+lK38TlAp7+9aPOUtcxZgWh52QK27StzDfB2/jI6DSOHyWc4oPzYXshhV7j3E3jBL+Wdw7km6NxBDD65NNNuwehcL9TvAKYHVcGbfq3JhxKsCH+YU4STJdWyfp36/H29cBMfh0VQUZjrgr8iIwFLp/RBTLR+c8fxoirsPXhapiEQLduHweAZ0JS9jTuA6vSzNdMf/IIik1uTj7IdQDvxweZTXK1uMU0Di/g4PP6XXVzhLVcmYfm0dMRE1cRr4b8LUFGlACOIKD4mN9dexSDD86vRKIMUyrZSdjoxFfguQDe0El96xDrBZaljp+qeAzLu1Ol398TORYOQM28g5k/sDSfyIj98rBIzlh6WLqI79oBhCgw6g3Y2x359od3IlXaXQBl5Aa/TiMoUHaJIHaVMMlg8exxXLZCXHN6BkrzP9VrXX9wBo6619roeaKDp0Tka6T3q3jHuemovtxCf/IwA4lMHuUGiVc2wj47yrOdzAPFTRDWS/gRHbTbPxYSXcU5SQoWXqvnG5cUHt6M4bwt1ATf8rKPey0HnCNejzW+mLcrDx/YzQ0KvIQjGhKFkT4ktYpe2hyCFVwo6rD65fy0TEUMCrEf1NTJZlDDC7sVnwRfnbUPJoW1av0T+1Ud6635Lm4LCSgx/eBemL7FSP6ZTb8Qm97LAt8A+CEjP4v4MoCIN2gF/lrToYI5+Zpf1hl/SocHIP7vsMAaP3o6nFh/EwYIKme6rqzYU4qK7d+Aj3j1EENu1P+TbgDpD+0SHU/0OoHd8Sh2+NqWj9Lza4w5PeVHeVpTxRUUWunZIIt/8+ki3Tp26MA+Pzs/jx4/TeOKVQzhv5DaEr9/kqzdP2wM5NI1gDBLTr0A4dSADGWGsuF3FCc66DuX6DdpHmdcInwOozlIq28BRVh9tQl6Um4Pygl16nWE/7YA3p1lPbnrA00x+OQ8zXrdSOsRbZDC+4YMxqkN3JJ33C0TFd4Kz5xsE2ah9HgPY9TmAPLRSeulMaXEewR+z3taGXpSIZVPrj7y89z/zhgU+umMaEs+5BB3TL0PSwOFI7H0ZYrsNRLhHlu4nnX8d5MAzg87bIUMlkT8DOxlhgelWvwMYbZlggWfPt0jTfBE/X8sjrGiXJ7fXJ6VLt069f9Z+971fHmLi07L1HFnXNAMIxScjLqUPonnISd8MWG+OIqcVdpDYa6F9zvV6MbvxO0B71LqFKMVHVTpEsXJFFmfP1S8vPvA5Tp/Yr9UK+OWP90FUqJZ6SgX8XPdbXyrie17o3se5CEv9+pWApS2KlZNYWmafcq+nEZ7is1BRucGq9GTLwzW8lXY1fI1c0t4B//PMcJ3HVme9Bxh5B3woIRVhfuUVA6z1GtbfqnIG2bFHqKwv1K16MZkkTuBoRFOJCjOAfG156YlcX+SX8cCLsV9YOF0XRadOePZbzLEjH0rognBalpY1pb/15cSiV7YaOkAZVpcRhYCUSMgkVoLXj8VyqtIpirzMUgQkFOTL87/Ulw86NwbLar2waAGbCc/tx4L3rK+8IZ72YUl7WZXXN6W/9eU0yFPoAA/HrhKjCFCosqm2leNweJtWV/AvNfZXnkl3dEdsPZEfO2MfFjrgwymI75HBj1Di5AjVWbQh/U2tfyZyHTjidIrfAQRGq1iYCbpvUWWDh00dPmKDF2WZ6XFCfHXczG+weM1xPRaMT2HaZ/PAY0xtPbX1fV+8Nshu/A7wpTnBN8EHo2v+1PynefJh0tZKMmb6Pg/4zgSfyVEr4hIF7cQm9H8n87gmDXGLzwE0jwK2tfd8I3xUUi9eA6z8uBCXTNiBB+fsR8aYbVjyXzvycZ34QFMLfCP6NOjvVK7NdRufA8Q5bmTECG6DpvjYlHQEY5O0wu17yzDrrQJ+qrJeaOTAi0/LoMx2ajP0NbXe2cpBG2iQW/wOsDzAOZ705wXuovberc3Hp2Uitkt/BHnCB+KSEOIfM+P4oSKu2wAGlODlOurW1zVDn553hvNpPEsj9lOvi56dOg6oWZy3QU5uLh9K7Ir4bv0R330w4rr2Q5AvLUTvMaZl+hQd9d1cL3YQuV1MGIb7dTIcbQn125YLnmbIdviR8PHRNnJNVLHJEFmvZBxISWC6arA2aEbBdYaMu3z7laeE+Q5BrLoo87AJGNZfJAEMSI2Ad2n6JEKOziBgi5fM8PLtVz4oTWwnPCmB6nwT0eWbGE9BiEE9FZLixUNk7YPL/yyu+PldFLRPeXI4gn7uPwpkdE21yTQGLDrG7b1eHCL19kv5iCrpzkGQ6gwgpZPQ3vlRl/n+FvGxMXD+cW4BgY23dcvm3qHVSIyxnKDoBDkDHCe0Zz4cVY17hkr2EqQUhZXgz3JArDGf/WJWJMYCD93o3wbK3g6waXvkJ98UQVzNHYBZX6n/H5F2gNFv7lGCf5RVl9FXAledL95izAU0t4sDul7axuXXZUZwx+UamtUo9ZiRvaBQGO0A6RiZc58D1CrpS509GhhyLp3gBWefBbItZI6mbVx+cXoEz43koS0G66reMrLmzdZdNq4D2Aeiq2+lE/QXjkS+3f7zQQO/uVQuZia44GvxdACv4e6gs/SZ0XbkEvW3J5pIiDU0PDb8E1X5baRu8TnA6P9SEcyqYVBqizPjb3eaeP8RA9dk8CiU7SAg66V0Q73jdJ4e//7kQwcrrHkMmHG7C1wW3wJlXmdkvlLiYBPqc4AMGINfzmWKZNMJrwkvNeMnBl6dYGLHjACeZI5MvNHAxBvBarIKbRv8k7828dUzJm0NYFAvDzSlFggmI2t2nuDxVs8s7zDAC26HMkbQde6Xjs6JBkZfFSBop4oDnL7QH5YffaWJ5LAn6kAuA3kTsYxCA78GHSDzjaw5y1Fp9KOSKVCw/riPdvHbzA+Pk1CJ/gS/Ao38GnWAXGdcNLeUSh43suZegKjyzlD6/xfdxZeGhyif9kNXe/0HSe/SttFG3tEuNDLm/Vls53ij5f8AAAD//w/+al0AAAAGSURBVAMAb8DMDCpxzhIAAAAASUVORK5CYII=
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -2805,7 +2805,7 @@ function definirCaptura(v) {
     { n: 'Sinnoh', nivel: 1000, de: 387, ate: 493 }, { n: 'Unova', nivel: 5000, de: 494, ate: 649 }, { n: 'Kalos', nivel: 10000, de: 650, ate: 721 },
     { n: 'Alola', nivel: 25000, de: 722, ate: 809 }, { n: 'Galar', nivel: 40000, de: 810, ate: 905 }, { n: 'Paldea', nivel: 75000, de: 906, ate: 1025 }
   ];
-  const PADRAO = { passoMs: 1000, olharMs: 300, parar: false, centro: false };
+  const PADRAO = { passoMs: 1000, olharMs: 300, parar: false, centro: false, autoLigar: false };
 
   let cfg = Object.assign({}, PADRAO);
   let idx = 0;
@@ -3009,6 +3009,15 @@ function definirCaptura(v) {
     else { idx--; visitados--; }
   }
   setInterval(tick, 200);
+  // "Ligar automaticamente ao se logar": liga sozinho quando o jogo está conectado e mandou a lista de mapas e o nível (cada reconexão é um novo login)
+  let wsVisto = null, autoFeito = false;
+  setInterval(() => {
+    const w = getWs(); if (w !== wsVisto) { wsVisto = w; autoFeito = false; }
+    if (!cfg.autoLigar || autoFeito || ligado || !aberto() || !hunts.length || nivel == null || !elegiveis().length) return;
+    autoFeito = true;
+    ligado = true; est = 'espera'; errosSeguidos = 0; passoExtra = 0; msg = 'Ligado.';
+    log('Shiny Hunt LIGADO automaticamente ao logar: ' + elegiveis().length + ' mapa(s) liberado(s) (nível ' + nivel + ')', 'info'); sujo = true;
+  }, 1000);
 
   // ---------- botão "Escape imediato" (igual ao do jogo) ----------
   const porTexto = (re) => { for (const b of document.querySelectorAll('button')) if (re.test((b.textContent || '').trim())) return b; return null; };
@@ -3057,7 +3066,7 @@ function definirCaptura(v) {
         ligado = true; est = 'espera'; errosSeguidos = 0; passoExtra = 0; msg = 'Ligado.'; log('Shiny Hunt LIGADO: ' + elegiveis().length + ' mapa(s) liberado(s) (nível ' + nivel + '), sem Outland', 'info');
       } else parar('Shiny Hunt desligado.');
     } else if (m.type === 'cfg') {
-      cfg = { passoMs: Math.max(1000, Math.min(10000, Math.floor(num(m.passoMs) || PADRAO.passoMs))), olharMs: Math.max(300, Math.min(5000, Math.floor(num(m.olharMs) || PADRAO.olharMs))), parar: !!m.parar, centro: !!m.centro };
+      cfg = { passoMs: Math.max(1000, Math.min(10000, Math.floor(num(m.passoMs) || PADRAO.passoMs))), olharMs: Math.max(300, Math.min(5000, Math.floor(num(m.olharMs) || PADRAO.olharMs))), parar: !!m.parar, centro: !!m.centro, autoLigar: !!m.autoLigar };
       salvar(); sujo = true;
     } else if (m.type === 'limpar-log') { logs = []; sujo = true; }
     else if (m.type === 'resetar-rota') { idx = 0; if (ligado && est === 'olhando') est = 'espera'; log('Rota reiniciada do primeiro mapa', 'info'); sujo = true; salvar(); }
@@ -3337,6 +3346,7 @@ function definirCaptura(v) {
     
     // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
     window.__ateforpReleases = [
+     {"v": "2.3.52", "itens": ["Shiny Hunt: nova opção Ligar automaticamente ao se logar (desmarcada por padrão, igual à da Auto Captura e do PvP). Quando marcada, o Shiny Hunt liga sozinho assim que o jogo conecta e informa os mapas e o nível da conta, inclusive depois de uma reconexão."]},
      {"v": "2.3.51", "itens": ["Descrição da chave inglesa reformulada: mostra o que cada menu principal faz (PvE, PvP, Mercado RMT e Logs), o significado das cores e o que está ativo agora."]},
      {"v": "2.3.50", "itens": ["A chave inglesa agora fica vermelha só quando o jogo está conectado e há alguma função ativa além de PvP, Auto Captura e Shiny Hunt (compra de itens, reposição de itens, compra de Pokémon, compra imediata, renovação de anúncios ou venda de Pokémon). Sem isso fica verde; amarela se estiver aguardando o jogo ou houver aviso. O texto ao passar o mouse lista o que está ativo."]},
      {"v": "2.3.49", "itens": ["O ícone do PvP agora usa a arte do Zacian (espada) quando desligado e do Zamazenta (escudo) quando ligado."]},
@@ -4474,7 +4484,7 @@ function definirCaptura(v) {
       // ---------- Shiny Hunt (shinyhunt.js) ----------
       let hn = null, hnLogSig = '';
       const hnCmd = (o) => window.postMessage(Object.assign({ ch: 'ateforp-hunt', from: 'ui' }, o), '*');
-      const hnEnviarCfg = () => hnCmd({ type: 'cfg', passoMs: Math.round((Number($('hnPasso').value) || 1) * 1000), olharMs: Math.round((Number($('hnOlhar').value) || 0.3) * 1000), parar: $('hnParar').checked, centro: $('hnCentro').checked });
+      const hnEnviarCfg = () => hnCmd({ type: 'cfg', passoMs: Math.round((Number($('hnPasso').value) || 1) * 1000), olharMs: Math.round((Number($('hnOlhar').value) || 0.3) * 1000), parar: $('hnParar').checked, centro: $('hnCentro').checked, autoLigar: $('hnAuto').checked });
       function renderHunt() {
         if (!hn) return;
         $('hnOn').checked = !!hn.ligado;
@@ -4484,7 +4494,7 @@ function definirCaptura(v) {
         $('hnInfo').textContent = !hn.conectado ? 'Sem conexão com o jogo.' : !m.total ? 'Sem a lista de mapas: recarregue o jogo (F5).' : 'Nível ' + (hn.nivel != null ? fmt(hn.nivel) : '?') + ' · ' + m.elegiveis + ' mapas liberados (sem Outland)';
         if (root.activeElement !== $('hnPasso')) $('hnPasso').value = String((hn.cfg.passoMs || 1000) / 1000);
         if (root.activeElement !== $('hnOlhar')) $('hnOlhar').value = String((hn.cfg.olharMs || 300) / 1000);
-        $('hnParar').checked = !!hn.cfg.parar; $('hnCentro').checked = !!hn.cfg.centro;
+        $('hnParar').checked = !!hn.cfg.parar; $('hnCentro').checked = !!hn.cfg.centro; $('hnAuto').checked = !!hn.cfg.autoLigar;
         $('hnStats').textContent = 'Rodada ' + (hn.rodadas + 1) + ' · mapa ' + Math.min(hn.prox + (hn.cur >= 0 ? 0 : 0), (hn.rota || []).length) + ' de ' + (hn.rota || []).length + ' · avistados ' + fmt(hn.avistados || 0) + (hn.desde ? ' desde ' + new Date(hn.desde).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '') + ' · shinies ' + hn.shinies.achados + ' (capturados ' + hn.shinies.capturados + ')';
         { // rota esperada
           const rota = hn.rota || []; const sigR = rota.length + ':' + hn.prox + ':' + hn.cur;
@@ -4523,7 +4533,7 @@ function definirCaptura(v) {
         }
         hnCmd({ type: 'ligar', value: on });
       });
-      for (const id of ['hnPasso', 'hnOlhar', 'hnParar', 'hnCentro']) $(id).addEventListener('change', hnEnviarCfg);
+      for (const id of ['hnPasso', 'hnOlhar', 'hnParar', 'hnCentro', 'hnAuto']) $(id).addEventListener('change', hnEnviarCfg);
       $('hnRotaCopiar').addEventListener('click', () => copiarTextoHunt(((hn && hn.rota) || []).map(([n, r], i) => (i + 1) + '. ' + n + ' (' + r + ')').join('\n'), 'Rota copiada.'));
       $('hnRotaReset').addEventListener('click', async () => { if (await confirmar('Reiniciar a rota do Shiny Hunt a partir do primeiro mapa?', 'Resetar rota', 'Resetar')) hnCmd({ type: 'resetar-rota' }); });
       $('hnZerar').addEventListener('click', () => hnCmd({ type: 'zerar' }));
@@ -4824,6 +4834,11 @@ function definirCaptura(v) {
               <div class="mut" id="hnInfo"></div>
               <div class="fld"><label for="hnPasso">Intervalo mínimo entre ações (s)</label><input id="hnPasso" type="number" min="1" max="10" step="0.5" value="1"></div>
               <div class="fld"><label for="hnOlhar">Tempo olhando cada mapa (s)</label><input id="hnOlhar" type="number" min="0.3" max="5" step="0.1" value="0.3"></div>
+              <label class="switch">
+                <input type="checkbox" id="hnAuto">
+                <span class="slider"></span>
+                <span class="lbl"><b>Ligar automaticamente ao se logar</b><small>desmarcado: o Shiny Hunt sempre começa desligado quando você entra no jogo</small></span>
+              </label>
               <div class="fld"><label><input id="hnParar" type="checkbox"> parar depois de resolver um shiny</label></div>
               <div class="fld"><label><input id="hnCentro" type="checkbox"> passar pelo Centro Pokémon entre os mapas</label><small class="mut">Costuma ser um pouco mais rápido (cerca de 1 a 2 s por mapa) e mais constante, porque sai do mapa antes de o herói começar a lutar. Sem o Centro, a troca direta às vezes é recusada por combate e espera um pouco. O jogo só deixa trocar de mapa a cada ~10 s nos dois casos.</small></div>
               <div class="mut" id="hnStats"></div>

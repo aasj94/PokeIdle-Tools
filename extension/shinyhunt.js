@@ -23,7 +23,7 @@
     { n: 'Sinnoh', nivel: 1000, de: 387, ate: 493 }, { n: 'Unova', nivel: 5000, de: 494, ate: 649 }, { n: 'Kalos', nivel: 10000, de: 650, ate: 721 },
     { n: 'Alola', nivel: 25000, de: 722, ate: 809 }, { n: 'Galar', nivel: 40000, de: 810, ate: 905 }, { n: 'Paldea', nivel: 75000, de: 906, ate: 1025 }
   ];
-  const PADRAO = { passoMs: 1000, olharMs: 300, parar: false, centro: false };
+  const PADRAO = { passoMs: 1000, olharMs: 300, parar: false, centro: false, autoLigar: false };
 
   let cfg = Object.assign({}, PADRAO);
   let idx = 0;
@@ -227,6 +227,15 @@
     else { idx--; visitados--; }
   }
   setInterval(tick, 200);
+  // "Ligar automaticamente ao se logar": liga sozinho quando o jogo está conectado e mandou a lista de mapas e o nível (cada reconexão é um novo login)
+  let wsVisto = null, autoFeito = false;
+  setInterval(() => {
+    const w = getWs(); if (w !== wsVisto) { wsVisto = w; autoFeito = false; }
+    if (!cfg.autoLigar || autoFeito || ligado || !aberto() || !hunts.length || nivel == null || !elegiveis().length) return;
+    autoFeito = true;
+    ligado = true; est = 'espera'; errosSeguidos = 0; passoExtra = 0; msg = 'Ligado.';
+    log('Shiny Hunt LIGADO automaticamente ao logar: ' + elegiveis().length + ' mapa(s) liberado(s) (nível ' + nivel + ')', 'info'); sujo = true;
+  }, 1000);
 
   // ---------- botão "Escape imediato" (igual ao do jogo) ----------
   const porTexto = (re) => { for (const b of document.querySelectorAll('button')) if (re.test((b.textContent || '').trim())) return b; return null; };
@@ -275,7 +284,7 @@
         ligado = true; est = 'espera'; errosSeguidos = 0; passoExtra = 0; msg = 'Ligado.'; log('Shiny Hunt LIGADO: ' + elegiveis().length + ' mapa(s) liberado(s) (nível ' + nivel + '), sem Outland', 'info');
       } else parar('Shiny Hunt desligado.');
     } else if (m.type === 'cfg') {
-      cfg = { passoMs: Math.max(1000, Math.min(10000, Math.floor(num(m.passoMs) || PADRAO.passoMs))), olharMs: Math.max(300, Math.min(5000, Math.floor(num(m.olharMs) || PADRAO.olharMs))), parar: !!m.parar, centro: !!m.centro };
+      cfg = { passoMs: Math.max(1000, Math.min(10000, Math.floor(num(m.passoMs) || PADRAO.passoMs))), olharMs: Math.max(300, Math.min(5000, Math.floor(num(m.olharMs) || PADRAO.olharMs))), parar: !!m.parar, centro: !!m.centro, autoLigar: !!m.autoLigar };
       salvar(); sujo = true;
     } else if (m.type === 'limpar-log') { logs = []; sujo = true; }
     else if (m.type === 'resetar-rota') { idx = 0; if (ligado && est === 'olhando') est = 'espera'; log('Rota reiniciada do primeiro mapa', 'info'); sujo = true; salvar(); }

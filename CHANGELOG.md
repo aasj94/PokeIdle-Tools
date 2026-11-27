@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.52
+- Shiny Hunt: opção Ligar automaticamente ao se logar.
+
 ## v2.3.51
 - Descrição da chave inglesa por menu (PvE, PvP, Mercado RMT, Logs), cores e estado atual.
 
