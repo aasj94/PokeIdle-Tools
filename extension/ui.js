@@ -1060,19 +1060,18 @@ function createUI(root) {
     const ESTADO = { parado: 'desligado', espera: 'ligado — escolhendo o próximo mapa', olhando: 'ligado — olhando o mapa', cacando: 'ligado — SHINY! derrotando e capturando' };
     $('hnHint').textContent = hn.ligado ? ESTADO[hn.est] || 'ligado' : (hn.msg && hn.msg !== 'Desligado.' ? hn.msg : 'desligado');
     const m = hn.mapas;
-    $('hnInfo').textContent = !hn.conectado ? 'Sem conexão com o jogo.' : !m.total ? 'O jogo ainda não mandou a lista de mapas: recarregue a página do jogo (F5) com a extensão atualizada.' : 'Nível da conta: ' + (hn.nivel != null ? fmt(hn.nivel) : '?') + ' · mapas liberados: ' + m.elegiveis + ' de ' + m.total + (m.regioes.length ? ' (' + m.regioes.join(', ') + ')' : '') + ' · Outland ignorado (' + m.outland + ')' + (m.semRegiao ? ' · sem região identificada: ' + m.semRegiao : '');
+    $('hnInfo').textContent = !hn.conectado ? 'Sem conexão com o jogo.' : !m.total ? 'Sem a lista de mapas: recarregue o jogo (F5).' : 'Nível ' + (hn.nivel != null ? fmt(hn.nivel) : '?') + ' · ' + m.elegiveis + ' mapas liberados (sem Outland)';
     if (root.activeElement !== $('hnPasso')) $('hnPasso').value = String((hn.cfg.passoMs || 1000) / 1000);
     if (root.activeElement !== $('hnOlhar')) $('hnOlhar').value = String((hn.cfg.olharMs || 300) / 1000);
     $('hnParar').checked = !!hn.cfg.parar;
-    $('hnStats').textContent = 'Mapa atual: ' + (hn.atual || '—') + ' · mapas visitados: ' + fmt(hn.visitados) + ' · rodadas completas: ' + hn.rodadas + ' · shinies achados: ' + hn.shinies.achados + ' (capturados ' + hn.shinies.capturados + ', fugiram ' + hn.shinies.fugiram + ')';
+    $('hnStats').textContent = 'Rodada ' + (hn.rodadas + 1) + ' · mapa ' + Math.min(hn.prox + (hn.cur >= 0 ? 0 : 0), (hn.rota || []).length) + ' de ' + (hn.rota || []).length + ' · shinies ' + hn.shinies.achados + ' (capturados ' + hn.shinies.capturados + ')';
     { // rota esperada
-      const rota = hn.rota || []; const sigR = rota.length + ':' + hn.prox + ':' + (hn.atual || '');
+      const rota = hn.rota || []; const sigR = rota.length + ':' + hn.prox + ':' + hn.cur;
       if ($('hnRota').dataset.sig !== sigR) {
         $('hnRota').dataset.sig = sigR; $('hnRota').textContent = '';
-        const cont = {}; for (const [, r] of rota) cont[r || '?'] = (cont[r || '?'] || 0) + 1;
-        const bl = (hn.bloqueados || []).map((b) => b.r + ' (nível ' + (b.nivel != null ? fmt(b.nivel) : '?') + '): ' + b.qtd).join(' · ');
-        $('hnRotaResumo').textContent = rota.length + ' mapas na rota: ' + Object.keys(cont).map((r) => r + ' ' + cont[r]).join(' · ') + (bl ? ' · Ainda bloqueados: ' + bl : '') + '. Próximo: ' + (rota.length ? (rota[hn.prox % rota.length] || rota[0])[0] : '—');
-        rota.forEach(([nome, r], i) => { const feito = i < hn.prox; const prox = i === hn.prox % rota.length; $('hnRota').append(el('div', { className: prox ? 'ok' : '' }, (prox ? '▶ ' : feito ? '✓ ' : '   ') + (i + 1) + '. ' + nome + ' (' + (r || '?') + ')')); });
+        $('hnRotaResumo').textContent = rota.length + ' mapas · próximo: ' + (rota.length ? rota[hn.prox][0] : '—');
+        rota.forEach(([nome, r], i) => { const cls = i === hn.cur ? 'atual' : i === hn.prox ? 'prox' : i < hn.prox ? 'feito' : 'falta'; $('hnRota').append(el('div', { className: 'rt ' + cls, textContent: (i + 1) + '. ' + nome + ' · ' + (r || '?') })); });
+        const a = $('hnRota').querySelector('.atual,.prox'); if (a && !$('hnRota').dataset.rolou) { $('hnRota').dataset.rolou = '1'; $('hnRota').scrollTop = Math.max(0, a.offsetTop - 60); }
       }
     }
     const box = $('hnLog'); const lg = hn.log || []; const sig = lg.length + ':' + (lg.length ? lg[lg.length - 1].t : 0);
@@ -1105,7 +1104,7 @@ function createUI(root) {
   });
   for (const id of ['hnPasso', 'hnOlhar', 'hnParar']) $(id).addEventListener('change', hnEnviarCfg);
   $('hnRotaCopiar').addEventListener('click', () => copiarTextoHunt(((hn && hn.rota) || []).map(([n, r], i) => (i + 1) + '. ' + n + ' (' + r + ')').join('\n'), 'Rota copiada.'));
-  $('hnDiag').addEventListener('click', () => hnCmd({ type: 'diag' }));
+  $('hnRotaReset').addEventListener('click', async () => { if (await confirmar('Reiniciar a rota do Shiny Hunt a partir do primeiro mapa?', 'Resetar rota', 'Resetar')) hnCmd({ type: 'resetar-rota' }); });
   $('hnZerar').addEventListener('click', () => hnCmd({ type: 'zerar' }));
   $('hnLogLimpar').addEventListener('click', () => hnCmd({ type: 'limpar-log' }));
   $('hnLogCopiar').addEventListener('click', () => copiarTextoHunt(((hn && hn.log) || []).map((l) => new Date(l.t).toLocaleTimeString('pt-BR') + ' [' + l.lvl + '] ' + l.msg).join('\n'), 'Registro copiado.'));

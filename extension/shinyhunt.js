@@ -139,7 +139,7 @@
           if (e.k === 'aviso' && typeof e.msg === 'string') {
             const w = /espere\s+([\d.]+)\s*s/i.exec(e.msg);
             if (w && /combate/i.test(e.msg)) { tentouCentro = 0; bloqueioAte = Date.now() + Number(w[1]) * 1000 + 250; sujo = true; }
-          } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; }
+          } else if (e.k === 'hunt' && e.trocaLivreEm) { trocaLivreAt = Number(e.trocaLivreEm) - offSrv + 150; mobs.clear(); }
           else if (e.k === 'centro') { noCentro = true; }
           if (e.k === 'spawn' && e.slot !== undefined) { if (e.slot > maxSlot) maxSlot = e.slot; if (!mobs.has(e.slot)) mobs.set(e.slot, { em: Date.now(), n: e.nome }); if (e.shiny || e.sh) mobs.get(e.slot).sh = true; }
           else if (e.k === 'bola') { ult = e.slot; if (e.shiny && alvoShiny.has(e.slot)) { if (e.sucesso) { /* o "capturado" vem em seguida */ } } }
@@ -181,16 +181,16 @@
     }
     if (!gate()) return;
     if (est === 'olhando') {
-      const novos = [...mobs.entries()].filter(([s]) => s > maxSlotAntes);
+      const novos = [...mobs.entries()];
       if (novos.length) {
         if (!tPrimeiro) tPrimeiro = agora;
         const sh = novos.filter(([, m]) => m.sh);
         if (sh.length) {
           alvoShiny = new Set(sh.map(([s]) => s)); tShiny = agora; shinies.achados += sh.length; est = 'cacando'; errosSeguidos = 0;
-          log('✨ SHINY achado em ' + (atual ? atual.nome : '?') + ' (' + (sh[0][1].n || '?') + ')! Ficando no mapa para derrotar e capturar.', 'ok'); return;
+          log('✨ SHINY achado em ' + (atual ? atual.nome : '?') + ' (' + (sh[0][1].n || '?') + ') entre ' + novos.length + ' avistados! Ficando no mapa para derrotar e capturar.', 'ok'); return;
         }
-        if (agora - tPrimeiro >= cfg.olharMs) { errosSeguidos = 0; log((atual ? atual.nome : '?') + ': sem shiny — saindo', 'info'); est = 'espera'; sujo = true; }
-      } else if (agora - tEntrada > 12000) { log((atual ? atual.nome : '?') + ': nenhum Pokémon apareceu em 12 s — saindo', 'info'); est = 'espera'; sujo = true; }
+        if (agora - tPrimeiro >= cfg.olharMs) { errosSeguidos = 0; log((atual ? atual.nome : '?') + ': ' + novos.length + ' Pokémon avistados, nenhum shiny — saindo', 'info'); est = 'espera'; sujo = true; }
+      } else if (agora - tEntrada > 12000) { log((atual ? atual.nome : '?') + ': nenhum Pokémon avistado em 12 s — saindo', 'info'); est = 'espera'; sujo = true; }
       return;
     }
     // espera/parado: 1) sair do mapa (Centro) quando o servidor deixar (sem combate); 2) esperar a troca de mapa liberar; 3) entrar no próximo
@@ -203,7 +203,7 @@
     tentouCentro = 0;
     if (agora < trocaLivreAt) { msg = 'Esperando a troca de mapa liberar (' + Math.ceil((trocaLivreAt - agora) / 1000) + ' s)…'; return; }
     const h = proximoMapa(); if (!h) return;
-    maxSlotAntes = maxSlot; tPrimeiro = 0; tEntrada = agora; atual = h; visitados++;
+    mobs.clear(); tPrimeiro = 0; tEntrada = agora; atual = h; visitados++;
     if (mandar({ t: 'hunt.select', slug: h.slug }, 'hunt.select ' + h.slug)) { est = 'olhando'; noCentro = false; msg = 'Olhando ' + h.nome + '…'; sujo = true; }
     else { idx--; visitados--; }
   }
@@ -239,7 +239,7 @@
     window.postMessage({ ch: CH, from: 'hunt', type: 'state', state: {
       ligado, est, msg, nivel, conectado: aberto(), atual: atual ? atual.nome : '', visitados, rodadas, shinies, cfg,
       mapas: { total: mapas.total, elegiveis: el.length, outland: mapas.outland, semRegiao: mapas.semRegiao, semSlug: mapas.semSlug, regioes: [...new Set(el.map((h) => h.regiao))] },
-      rota: el.map((h) => [h.nome, h.regiao]), prox: idx,
+      rota: el.map((h) => [h.nome, h.regiao]), prox: idx >= el.length ? 0 : idx, cur: (est === 'olhando' || est === 'cacando') ? idx - 1 : -1,
       bloqueados: (() => { const g = {}; for (const h of hunts) { if (h.outland || elSet.has(h)) continue; const k = (h.regiao || '?') + '|' + (h.req != null ? h.req : '?'); g[k] = (g[k] || 0) + 1; } return Object.keys(g).map((k) => { const [r, n] = k.split('|'); return { r, nivel: n === '?' ? null : Number(n), qtd: g[k] }; }); })(),
       log: logs.slice(-60)
     } }, '*');
@@ -259,6 +259,7 @@
       cfg = { passoMs: Math.max(1000, Math.min(10000, Math.floor(num(m.passoMs) || PADRAO.passoMs))), olharMs: Math.max(300, Math.min(5000, Math.floor(num(m.olharMs) || PADRAO.olharMs))), parar: !!m.parar };
       salvar(); sujo = true;
     } else if (m.type === 'limpar-log') { logs = []; sujo = true; }
+    else if (m.type === 'resetar-rota') { idx = 0; if (ligado && est === 'olhando') est = 'espera'; log('Rota reiniciada do primeiro mapa', 'info'); sujo = true; salvar(); }
     else if (m.type === 'zerar') { idx = 0; visitados = 0; rodadas = 0; shinies = { achados: 0, capturados: 0, fugiram: 0 }; sujo = true; salvar(); }
     else if (m.type === 'diag') { window.postMessage({ ch: CH, from: 'hunt', type: 'diag', diag: diag() }, '*'); }
   });

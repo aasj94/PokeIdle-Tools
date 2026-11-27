@@ -100,6 +100,12 @@ header button.icon { border-color: var(--frameD); background: rgba(10,30,60,.35)
 
 .log { background: #0c1726; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; height: 300px; overflow-y: auto; font: 11px/1.45 ui-monospace, Menlo, Consolas, monospace; }
 .log div { white-space: pre-wrap; word-break: break-word; }
+/* rota do Shiny Hunt */
+.rota { background: #0c1726; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; max-height: 260px; overflow-y: auto; font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace; margin: 6px 0; position: relative; }
+.rota .rt.feito { color: #4ade80; }
+.rota .rt.atual { color: #60a5fa; font-weight: 700; }
+.rota .rt.prox { color: #c084fc; font-weight: 700; }
+.rota .rt.falta { color: #facc15; }
 .log .ok { color: var(--ok); }
 .log .erro { color: var(--bad); }
 .log .debug { color: var(--mut); }

@@ -122,17 +122,15 @@
             <span class="slider"></span>
             <span class="lbl"><b>Caçar shiny nos mapas</b><small id="hnHint">desligado</small></span>
           </label>
-          <div class="resumo">Como funciona: a extensão entra, um por vez, em todos os mapas que a SUA conta já liberou (pelo nível), usando as mesmas ações do jogo (escolher o mapa e "Ir para o Centro Pokémon"). Em cada mapa ela olha os Pokémon que aparecem: se algum for shiny, ela FICA no mapa (o herói derrota e a Auto Captura tenta capturar); se não houver, ela sai na hora e vai para o próximo da lista. Outland não entra (não tem shiny). Se o jogo recusar, avisar "Devagar aí" ou pedir verificação anti-bot, ela obedece e para. Deixe a <b>Auto Captura</b> ligada (aba Captura) para capturar o shiny.</div>
           <div class="mut" id="hnInfo"></div>
-          <div class="fld"><label for="hnPasso">Intervalo mínimo entre ações (segundos; o jogo ainda impõe ~10 s entre trocas de mapa)</label><input id="hnPasso" type="number" min="1" max="10" step="0.5" value="1"></div>
-          <div class="fld"><label for="hnOlhar">Tempo olhando cada mapa (segundos)</label><input id="hnOlhar" type="number" min="0.3" max="5" step="0.1" value="0.3"></div>
-          <div class="fld"><label><input id="hnParar" type="checkbox"> parar depois de resolver um shiny (capturado ou fugiu)</label></div>
-          <div class="resumo" id="hnStats"></div>
-          <div class="btns"><button id="hnDiag" class="icon">Copiar diagnóstico dos mapas</button><button id="hnZerar" class="link">zerar contagens</button></div>
-          <details class="rotabox"><summary>Rota esperada (ordem dos mapas)</summary>
+          <div class="fld"><label for="hnPasso">Intervalo mínimo entre ações (s)</label><input id="hnPasso" type="number" min="1" max="10" step="0.5" value="1"></div>
+          <div class="fld"><label for="hnOlhar">Tempo olhando cada mapa (s)</label><input id="hnOlhar" type="number" min="0.3" max="5" step="0.1" value="0.3"></div>
+          <div class="fld"><label><input id="hnParar" type="checkbox"> parar depois de resolver um shiny</label></div>
+          <div class="mut" id="hnStats"></div>
+          <details class="rotabox"><summary>Rota esperada</summary>
             <div class="mut" id="hnRotaResumo"></div>
-            <div id="hnRota" class="log"></div>
-            <div class="btns"><button id="hnRotaCopiar" class="link">copiar rota</button></div>
+            <div id="hnRota" class="rota"></div>
+            <div class="btns"><button id="hnRotaReset" class="icon">Resetar rota</button><button id="hnRotaCopiar" class="link">copiar</button><button id="hnZerar" class="link">zerar contagens</button></div>
           </details>
           <h2>REGISTRO <button id="hnLogCopiar" class="link">copiar</button> <button id="hnLogLimpar" class="link">limpar</button></h2>
           <div id="hnLog" class="log"></div>

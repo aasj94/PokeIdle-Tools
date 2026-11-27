@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.44
+- Shiny Hunt: corrige espera de 12 s por mapa (slots recomeçam em 1), rota colorida, Resetar rota, avistados no registro, painel mais limpo.
+
 ## v2.3.43
 - Shiny Hunt: seção Rota esperada (ordem dos mapas, por região, bloqueados por nível, copiar).
 
