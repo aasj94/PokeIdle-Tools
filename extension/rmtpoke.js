@@ -237,6 +237,7 @@
       if (alvo.status === 'agendado') {
         if (alvo.estado && alvo.estado !== 'aberto') { alvo.status = 'falhou'; alvo.msg = 'anúncio não está mais aberto'; log('Cancelado ' + alvo.nome + ' (anúncio ' + alvo.id + '): não está mais aberto (' + alvo.estado + ')', 'erro'); sujo = true; continue; }
         const falta = alvo.compravelEm - t;
+        if (alvo.origem === 'imediata' && IMED.ativo && alvo.msg === 'Compra Imediata desligada: não vou comprar') { alvo.msg = ''; sujo = true; }
         if (alvo.origem === 'imediata' && !IMED.ativo) { if (alvo.msg !== 'Compra Imediata desligada: não vou comprar') { alvo.msg = 'Compra Imediata desligada: não vou comprar'; sujo = true; } continue; }
         if (alvo.origem === 'imediata' && IMED.comprados >= IMED.limite) { alvo.status = 'falhou'; alvo.msg = 'limite de ' + IMED.limite + ' compra(s) atingido'; log('Cancelado ' + alvo.nome + ' (anúncio ' + alvo.id + '): ' + alvo.msg, 'info'); sujo = true; continue; }
         if (falta <= cfg.antecipaMs) {

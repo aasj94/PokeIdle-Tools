@@ -626,7 +626,7 @@ function createUI(root) {
         a.status === 'agendado' ? el('button', { className: 'link', textContent: 'cancelar', onclick: () => rpCmd({ type: 'desarmar', id: a.id }) }) : ''));
     }
     if (!alvos.length) arm.append(el('div', { className: 'mut', textContent: 'Nenhuma compra armada.' }));
-    $('imHint').textContent = alvos.some((a) => a.status === 'agendado') ? 'armada' : '';
+    if (alvos.some((a) => a.status === 'agendado')) $('imHint').textContent += ' · armada';
   }
   let rnRegras = null, rnSig = '', rnEnvio = null;
   const rnEnviar = () => { clearTimeout(rnEnvio); rnEnvio = setTimeout(() => rpCmd({ type: 'ren-cfg', regras: rnRegras }), 300); };
