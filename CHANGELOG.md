@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.60
+- Renovação de anúncios: a chave liga sozinha ao logar se estava ligada, retomando os anúncios ainda não vendidos.
+
 ## v2.3.59
 - Compra Imediata: aviso 'desligada' não fica mais preso na compra armada depois de ligar; estado LIGADA sempre visível.
 
