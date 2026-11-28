@@ -634,11 +634,11 @@ function createUI(root) {
   let rnCarga = null, rnFeito = 0;
   // ---------- Apoiar amigo ----------
   let apNicks = null, apSig = '';
-  const apEnviar = () => rpCmd({ type: 'apoiar-cfg', apoiar: { nicks: apNicks || [], intervaloMin: Number($('apInt').value) || 2, paginas: Number($('apPag').value) || 15 } });
+  const apEnviar = () => rpCmd({ type: 'apoiar-cfg', apoiar: { permanece: $('apPerm').checked, nicks: apNicks || [], intervaloMin: Number($('apInt').value) || 2, paginas: Number($('apPag').value) || 15 } });
   function renderApoiar() {
     if (!rp || !rp.apoiar) return;
     const a = rp.apoiar, c = (rp.cfg && rp.cfg.apoiar) || { nicks: [] };
-    if (!apNicks) { apNicks = (c.nicks || []).slice(); $('apInt').value = c.intervaloMin || 2; $('apPag').value = c.paginas || 15; }
+    if (!apNicks) { apNicks = (c.nicks || []).slice(); $('apPerm').checked = c.permanece !== false; $('apInt').value = c.intervaloMin || 2; $('apPag').value = c.paginas || 15; }
     $('apOn').checked = !!a.ativo;
     $('apHint').textContent = a.ativo ? 'ligado' : 'desligado';
     $('apInfo').textContent = !a.ativo ? '' : (a.varrendo ? 'Varrendo o mercado… ' : '') + (a.ultCiclo ? a.msg + ' ' : '') + 'Favoritados: ' + a.feitos + (a.fila ? ' · na fila: ' + a.fila : '');
@@ -652,7 +652,9 @@ function createUI(root) {
   $('apOn').addEventListener('change', (e) => rpCmd({ type: 'apoiar-ativo', value: e.target.checked }));
   $('apAdd').addEventListener('click', () => { const v = $('apNick').value.trim(); if (!v || (apNicks || []).some((x) => x.toLowerCase() === v.toLowerCase())) return; (apNicks = apNicks || []).push(v); $('apNick').value = ''; apEnviar(); renderApoiar(); });
   $('apNick').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('apAdd').click(); });
-  $('apInt').addEventListener('change', apEnviar); $('apPag').addEventListener('change', apEnviar);
+  $('apPerm').addEventListener('change', apEnviar); $('apInt').addEventListener('change', apEnviar); $('apPag').addEventListener('change', apEnviar);
+  const rnExp = {};
+  const rnTodosAbertos = () => !!(rp && rp.ren && rp.ren.meus.length) && rp.ren.meus.every((l) => rnExp[l.id]);
   function renderRen(force) {
     if (!rp || !rp.ren) return;
     $('rnOn').checked = !!rp.ren.ativo;
@@ -674,6 +676,17 @@ function createUI(root) {
     rnSig = sig;
     const box = $('rnLista'); box.textContent = '';
     if (!rp.ren.meus.length) box.append(el('div', { className: 'card' }, el('div', { className: 'mut', textContent: 'Nenhum anúncio de Pokémon carregado. Clique em "Carregar meus anúncios".' })));
+    const regraOk = (r) => r && r.ativo && r.a >= 2 && r.b >= 2 && r.a !== r.b;
+    const criaRegra = (l) => { let r = rnRegras.find((x) => x.id === l.id); if (!r) { r = { id: l.id, nome: l.nome + ' Nv ' + l.level, a: l.preco, b: Math.max(2, l.preco - 1), intervaloMin: 30, ativo: true, renovacoes: 0 }; rnRegras.push(r); } return r; };
+    const marcarTodos = (v) => { for (const l of rp.ren.meus) { if (v) { const r = criaRegra(l); r.ativo = true; if (!(r.a >= 2 && r.b >= 2 && r.a !== r.b)) { r.a = l.preco; r.b = Math.max(2, l.preco - 1); } } else { const r = rnRegras.find((x) => x.id === l.id); if (r) r.ativo = false; } } rnEnviar(); renderRen(true); };
+    if (rp.ren.meus.length) {
+      box.append(el('div', { className: 'card' },
+        el('div', { id: 'rnResumo', className: 'mut' }),
+        el('div', { className: 'btns' },
+          el('button', { className: 'icon', textContent: 'Selecionar todos', onclick: () => marcarTodos(true) }),
+          el('button', { className: 'icon', textContent: 'Desmarcar todos', onclick: () => marcarTodos(false) }),
+          el('button', { className: 'icon', textContent: rnTodosAbertos() ? 'Recolher todos' : 'Expandir todos', onclick: () => { const ab = !rnTodosAbertos(); for (const l of rp.ren.meus) rnExp[l.id] = ab; renderRen(true); } }))));
+    }
     for (const l of rp.ren.meus) {
       let r = rnRegras.find((x) => x.id === l.id);
       const on = el('input', { type: 'checkbox', checked: !!(r && r.ativo) });
@@ -681,24 +694,31 @@ function createUI(root) {
       const b = el('input', { type: 'text', placeholder: 'Preço B', value: r && r.b ? String(r.b) : '' });
       const iv = el('input', { type: 'number', min: '30', max: '1440', step: '5', value: String(r ? r.intervaloMin : 30) });
       const set = () => {
-        if (!r) { r = { id: l.id, nome: l.nome + ' Nv ' + l.level, a: l.preco, b: Math.max(2, l.preco - 1), intervaloMin: 30, ativo: true, renovacoes: 0 }; rnRegras.push(r); a.value = String(r.a); b.value = String(r.b); }
+        if (!r) { r = criaRegra(l); a.value = String(r.a); b.value = String(r.b); }
         r.ativo = on.checked; r.a = Math.floor(parseNum(a.value)) || 0; r.b = Math.floor(parseNum(b.value)) || 0; r.intervaloMin = Math.max(30, Math.floor(Number(iv.value) || 30)); r.nome = l.nome + ' Nv ' + l.level;
-        rnEnviar();
+        rnEnviar(); rnTempos();
       };
       on.addEventListener('change', set); for (const x of [a, b, iv]) x.addEventListener('input', () => { if (r) set(); });
-      const ok = r && r.ativo && r.a >= 2 && r.b >= 2 && r.a !== r.b;
-      box.append(el('div', { className: 'card' + (r && r.ativo && !ok ? ' warn' : '') },
-        el('div', { className: 'row inline' }, el('label', {}, on, ' renovar'), el('b', { textContent: l.nome + (l.shiny ? ' ✨' : '') }), el('span', { className: 'mut', textContent: ' ' + infoPoke(l) })),
-        el('div', { textContent: 'Preço atual: ' + fmt(l.preco) + (l.moeda === 'gold' ? ' coins' : ' ' + l.moeda) }),
+      const ok = regraOk(r);
+      const corpo = el('div', { hidden: !rnExp[l.id] },
         el('div', { className: 'row inline' }, el('label', {}, 'Preço A ', a), el('label', {}, 'Preço B ', b), el('label', {}, 'Intervalo (min) ', iv)),
+        el('div', { className: 'mut', textContent: r && r.ativo && !ok ? 'Preencha Preço A e Preço B (diferentes, mínimo 2).' : 'Renovações feitas: ' + (r ? r.renovacoes || 0 : 0) }));
+      const seta = el('button', { className: 'link', textContent: rnExp[l.id] ? '▾' : '▸', title: 'Mostrar ou esconder os preços e o intervalo', onclick: () => { rnExp[l.id] = !rnExp[l.id]; corpo.hidden = !rnExp[l.id]; seta.textContent = rnExp[l.id] ? '▾' : '▸'; } });
+      box.append(el('div', { className: 'card' + (r && r.ativo && !ok ? ' warn' : '') },
+        el('div', { className: 'rnh' }, seta, el('label', { className: 'rnl' }, on, ' renovar'), el('b', { textContent: l.nome.replace(/ ?✨/g, '') + (l.shiny ? ' ✨' : '') }), el('span', { className: 'mut', textContent: ' ' + infoPoke(l) + ' · ' + fmt(l.preco) + (l.moeda === 'gold' ? ' coins' : ' ' + l.moeda) })),
         el('div', { className: 'mut', id: 'rnT_' + l.id, 'data-id': String(l.id) }),
-        el('div', { className: 'mut', textContent: r && r.ativo && !ok ? 'Preencha Preço A e Preço B (diferentes, mínimo 2).' : 'Renovações feitas: ' + (r ? r.renovacoes || 0 : 0) })));
+        corpo));
     }
     rnTempos();
   }
   function rnTempos() {
     if (!rp || !rp.ren) return;
     const agoraSrv = Date.now() + (rp.offset || 0);
+    { const rs = $('rnResumo'); if (rs) {
+      let sel = 0, prox = Infinity;
+      for (const l of rp.ren.meus) { const r = rnRegras && rnRegras.find((x) => x.id === l.id); if (r && r.ativo && r.a >= 2 && r.b >= 2 && r.a !== r.b) { sel++; const dev = Math.max(l.editavelEm, (l.criadoEm || 0) + (r.intervaloMin || 30) * 60000); prox = Math.min(prox, dev); } }
+      rs.textContent = rp.ren.meus.length + ' anúncio(s) · ' + sel + ' com renovação' + (sel ? ' · próxima ' + (prox > agoraSrv ? 'em ' + mmss(prox - agoraSrv) : 'agora') : '') + (rp.ren.ativo ? ' · renovados: ' + (rp.ren.renovadas || 0) : '');
+    } }
     for (const l of rp.ren.meus) {
       const t = root.getElementById ? root.getElementById('rnT_' + l.id) : $('rnT_' + l.id); if (!t) continue;
       const r = rnRegras && rnRegras.find((x) => x.id === l.id);

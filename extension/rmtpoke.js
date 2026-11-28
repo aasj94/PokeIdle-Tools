@@ -35,7 +35,7 @@
   const REFRESCO_MS = 9000;           // antes da liberação, confere de novo o preço do anúncio escolhido
 
   // ---------- configuração ----------
-  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], renAtivo: false, apoiar: { ativo: false, nicks: [], intervaloMin: 2, paginas: 15, feitos: [] }, simular: false };
+  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], renAtivo: false, apoiar: { ativo: false, permanece: true, nicks: [], intervaloMin: 2, paginas: 15, feitos: [] }, simular: false };
   let cfg = JSON.parse(JSON.stringify(PADRAO));
   const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
   function normRegra(r) {
@@ -69,7 +69,7 @@
     a = a || {};
     const nicks = []; for (const n of Array.isArray(a.nicks) ? a.nicks : []) { const s = String(n || '').trim().slice(0, 40); if (s && !nicks.some((x) => x.toLowerCase() === s.toLowerCase())) nicks.push(s); if (nicks.length >= 100) break; }
     const im = num(a.intervaloMin), pg = num(a.paginas);
-    return { ativo: !!a.ativo, nicks, intervaloMin: im >= 1 && im <= 120 ? im : 2, paginas: pg >= 1 && pg <= 15 ? Math.floor(pg) : 15, feitos: (Array.isArray(a.feitos) ? a.feitos : []).map(Number).filter((x) => x > 0).slice(-1500) };
+    return { ativo: !!a.ativo, permanece: a.permanece !== false, nicks, intervaloMin: im >= 1 && im <= 120 ? im : 2, paginas: pg >= 1 && pg <= 15 ? Math.floor(pg) : 15, feitos: (Array.isArray(a.feitos) ? a.feitos : []).map(Number).filter((x) => x > 0).slice(-1500) };
   }
   function normCfg(c) {
     const o = JSON.parse(JSON.stringify(PADRAO));
@@ -395,6 +395,7 @@
   }
   // ---------- apoiar amigo: favorita os Pokémon à venda dos amigos cadastrados ----------
   // O jogo recebe {"t":"market.favoritar","id":<anúncio>,"ativo":true} (não alterna: sempre favorita). Favoritou, não desfaz.
+  if (!cfg.apoiar.permanece) cfg.apoiar.ativo = false; // sem "permanecer ativo": começa desligado ao logar (a lista de amigos fica)
   const ap = { ciclo: null, proxEm: 0, alt: false, fila: [], ultFav: 0, ultCiclo: 0, favoritados: 0, vistos: 0, msg: '' };
   const apFeitos = new Set(cfg.apoiar.feitos);
   const apNick = (n) => cfg.apoiar.nicks.some((x) => x.toLowerCase() === String(n || '').toLowerCase());
@@ -623,7 +624,7 @@
     else if (m.type === 'ren-ativo') { ren.ativo = !!m.value; cfg.renAtivo = ren.ativo; salvar(); ren.msg = ren.ativo ? 'Ligada.' : 'Desligada.'; if (ren.ativo) { ren.forcar = true; cfg.renova.forEach((r) => { r.sumiu = false; }); } log(ren.ativo ? 'Renovação automática LIGADA (' + cfg.renova.filter(renValida).length + ' anúncio(s))' : 'Renovação automática desligada', 'info'); sujo = true; }
     else if (m.type === 'ren-carregar') { ren.forcar = true; ren.em = 0; if (!ren.ativo) { const ws = getWs(); if (ws && ws.readyState === 1 && podeConsultar(true) && enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); } } sujo = true; }
     else if (m.type === 'apoiar-ativo') { cfg.apoiar.ativo = !!m.value; if (cfg.apoiar.ativo) ap.proxEm = 0; ap.ciclo = null; ap.fila = []; salvar(); log(cfg.apoiar.ativo ? 'Apoiar amigo LIGADO (' + cfg.apoiar.nicks.length + ' amigo(s))' : 'Apoiar amigo desligado', 'info'); sujo = true; }
-    else if (m.type === 'apoiar-cfg') { const f = cfg.apoiar.feitos, at = cfg.apoiar.ativo; cfg.apoiar = normApoiar(Object.assign({}, m.apoiar, { ativo: at, feitos: f })); salvar(); sujo = true; }
+    else if (m.type === 'apoiar-cfg') { const f = cfg.apoiar.feitos, at = cfg.apoiar.ativo; cfg.apoiar = normApoiar(Object.assign({}, m.apoiar, { ativo: at, feitos: f })); if (!cfg.apoiar.permanece) log('Apoiar amigo: ao logar de novo ele começa desligado (a lista de amigos continua salva)', 'info'); salvar(); sujo = true; }
     else if (m.type === 'ren-cfg') { cfg.renova = (Array.isArray(m.regras) ? m.regras : []).slice(0, 30).map(normRen); salvar(); sujo = true; }
     else if (m.type === 'armar') {
       const a = busca.rows.find((r) => r.id === m.id);

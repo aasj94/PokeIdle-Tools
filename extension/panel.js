@@ -374,17 +374,18 @@
             <div class="row inline"><label class="switch"><input id="rnOn" type="checkbox"><span class="slider"></span></label> <span id="rnInfo" class="mut"></span></div>
             <div class="btns"><button id="rnCarregar" class="icon">↻ Carregar meus anúncios</button></div>
           </div>
+          <div id="rnLista"></div>
           <div class="card" id="apCard">
             <h2>APOIAR AMIGO <small id="apHint"></small></h2>
             <div class="mut">
               Cadastre os nicks dos seus amigos. A cada intervalo a extensão varre as primeiras páginas (até 15, ordem "recentes", onde os anúncios novos costumam estar) do Mercado de Pokémon, em coins e gemas e, se achar Pokémon à venda desses jogadores, <b>favorita</b> o anúncio para ajudar a divulgar. Depois de favoritado, nunca é desfavoritado. Fica desligado até você ligar.
             </div>
             <div class="row inline"><label class="switch"><input id="apOn" type="checkbox"><span class="slider"></span></label> <span id="apInfo" class="mut"></span></div>
+            <div class="row inline"><label><input id="apPerm" type="checkbox" checked> Permanecer ativo ao se logar</label> <span class="mut">A lista de amigos é fixa: só some se você remover.</span></div>
             <div class="row"><input id="apNick" type="text" maxlength="40" placeholder="nick do amigo"> <button id="apAdd" class="icon">Adicionar</button></div>
             <div id="apLista"></div>
             <div class="row"><label>Varrer a cada (min) <input id="apInt" type="number" min="1" max="120" value="2"></label> <label>Páginas por varredura <input id="apPag" type="number" min="1" max="15" value="15"></label></div>
           </div>
-          <div id="rnLista"></div>
         </div>
         </div>
       </section>

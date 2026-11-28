@@ -106,6 +106,9 @@ header button.icon { border-color: var(--frameD); background: rgba(10,30,60,.35)
 .rota .rt.atual { color: #60a5fa; font-weight: 700; }
 .rota .rt.prox { color: #c084fc; font-weight: 700; }
 .rota .rt.falta { color: #facc15; }
+.rnh { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 4px 8px; text-align: left; }
+.rnh > * { margin: 0 !important; }
+.rnl { display: inline-flex; align-items: center; gap: 4px; width: auto; }
 .girando { opacity: .85; cursor: progress; animation: ate-pulsa 1s ease-in-out infinite; }
 @keyframes ate-pulsa { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
 .log .ok { color: var(--ok); }

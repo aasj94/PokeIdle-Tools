@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.62
+- Renovação: lista recolhível, Selecionar todos/Desmarcar todos, resumo; Apoiar amigo abaixo da lista, com Permanecer ativo ao se logar.
+
 ## v2.3.61
 - Apoiar amigo: favorita os Pokémon à venda dos amigos cadastrados (até 15 páginas dos recentes, coins e gemas).
 
