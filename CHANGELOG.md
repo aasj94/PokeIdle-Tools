@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v2.3.61
+- Apoiar amigo: favorita os Pokémon à venda dos amigos cadastrados (até 15 páginas dos recentes, coins e gemas).
+
 ## v2.3.60
 - Renovação de anúncios: a chave liga sozinha ao logar se estava ligada, retomando os anúncios ainda não vendidos.
 

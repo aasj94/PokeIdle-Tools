@@ -1,5 +1,6 @@
 // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
 window.__ateforpReleases = [
+ {"v": "2.3.61", "itens": ["Novo: Apoiar amigo (em Renovação de anúncios). Cadastre os nicks dos amigos; a cada X minutos a extensão varre as primeiras páginas (até 15, padrão 15) do Mercado de Pokémon em coins e gemas e favorita os anúncios desses jogadores. Favoritou, nunca desfavorita, e o mesmo anúncio não é favoritado duas vezes. Fica desligado até você ligar."]},
  {"v": "2.3.60", "itens": ["Renovação automática de anúncios: a chave agora é lembrada. Ao logar de novo, se estava ligada, ela volta ligada sozinha e retoma os anúncios que já estavam na renovação e ainda não foram vendidos (os vendidos continuam de fora)."]},
  {"v": "2.3.59", "itens": ["Compra Imediata: corrigido o aviso \"Compra Imediata desligada: não vou comprar\" que continuava na compra armada depois de ligar a chave, e o texto \"armada\" não esconde mais o estado LIGADA."]},
  {"v": "2.3.58", "itens": ["A aba Logs agora se chama Histórico e tem duas partes: Compras (compras de itens e de Pokémon, tentativas e o Registro das consultas) e Logs (conexão, Shiny Monitor e logs). O histórico saiu do Mercado RMT e os registros saíram de Regras e Renovação, ficando todos em Histórico > Compras. O Registro volta a ter uma linha por consulta, com o horário."]},

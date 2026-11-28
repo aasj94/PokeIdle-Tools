@@ -35,7 +35,7 @@
   const REFRESCO_MS = 9000;           // antes da liberação, confere de novo o preço do anúncio escolhido
 
   // ---------- configuração ----------
-  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], renAtivo: false, simular: false };
+  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], renAtivo: false, apoiar: { ativo: false, nicks: [], intervaloMin: 2, paginas: 15, feitos: [] }, simular: false };
   let cfg = JSON.parse(JSON.stringify(PADRAO));
   const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
   function normRegra(r) {
@@ -65,6 +65,12 @@
     };
   }
   const renValida = (r) => r.ativo && r.id > 0 && r.a >= 2 && r.b >= 2 && r.a !== r.b;
+  function normApoiar(a) {
+    a = a || {};
+    const nicks = []; for (const n of Array.isArray(a.nicks) ? a.nicks : []) { const s = String(n || '').trim().slice(0, 40); if (s && !nicks.some((x) => x.toLowerCase() === s.toLowerCase())) nicks.push(s); if (nicks.length >= 100) break; }
+    const im = num(a.intervaloMin), pg = num(a.paginas);
+    return { ativo: !!a.ativo, nicks, intervaloMin: im >= 1 && im <= 120 ? im : 2, paginas: pg >= 1 && pg <= 15 ? Math.floor(pg) : 15, feitos: (Array.isArray(a.feitos) ? a.feitos : []).map(Number).filter((x) => x > 0).slice(-1500) };
+  }
   function normCfg(c) {
     const o = JSON.parse(JSON.stringify(PADRAO));
     c = c || {};
@@ -73,6 +79,7 @@
     if (Array.isArray(c.regras)) o.regras = c.regras.slice(0, 20).map(normRegra);
     if (Array.isArray(c.renova)) o.renova = c.renova.slice(0, 30).map(normRen);
     o.renAtivo = !!c.renAtivo;
+    o.apoiar = normApoiar(c.apoiar);
     return o;
   }
   try { const c = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (c) cfg = normCfg(c); } catch (e) { /* ignora */ }
@@ -301,6 +308,7 @@
       logConsulta('Consulta · ' + (rr ? (rr.nome || rr.especie || 'regra') : 'regra') + ': ' + (abertos.length ? abertos.length + ' anúncio(s) vistos' + (Number.isFinite(tot) && tot > abertos.length ? ' (de ' + tot + ' no mercado)' : '') + ', ' + (casam ? casam + ' batem na regra' : 'nenhum bate na regra') : 'nenhum anúncio com esses filtros no mercado agora'), casam ? 'ok' : 'info');
     }
     else if (pendConsulta && pendConsulta.tipo === 'refresco' && Date.now() - pendConsulta.em < 8000) pendConsulta = null;
+    else if (pendConsulta && pendConsulta.tipo === 'apoiar' && Date.now() - pendConsulta.em < 8000) apTratar(m);
     // compra automática por regras
     if (ativo && lider) {
       for (const a of linhas) {
@@ -385,6 +393,54 @@
     if (r.nivMax != null) x.nivelMax = String(r.nivMax);
     return x;
   }
+  // ---------- apoiar amigo: favorita os Pokémon à venda dos amigos cadastrados ----------
+  // O jogo recebe {"t":"market.favoritar","id":<anúncio>,"ativo":true} (não alterna: sempre favorita). Favoritou, não desfaz.
+  const ap = { ciclo: null, proxEm: 0, alt: false, fila: [], ultFav: 0, ultCiclo: 0, favoritados: 0, vistos: 0, msg: '' };
+  const apFeitos = new Set(cfg.apoiar.feitos);
+  const apNick = (n) => cfg.apoiar.nicks.some((x) => x.toLowerCase() === String(n || '').toLowerCase());
+  function apDevido() {
+    if (!cfg.apoiar.ativo || !cfg.apoiar.nicks.length) return false;
+    if (ap.ciclo) return true;
+    return Date.now() >= ap.proxEm;
+  }
+  function apConsulta() {
+    if (!ap.ciclo) ap.ciclo = { moedas: ['gold', 'orb'], mi: 0, pag: 0, pags: cfg.apoiar.paginas, vistos: 0, achou: 0 };
+    const c = ap.ciclo;
+    if (!enviar(pedidoLista({ moeda: c.moedas[c.mi], pagina: c.pag, semOutland: false }))) return false;
+    marcarReq(); S.consultas++; pendConsulta = { tipo: 'apoiar', em: Date.now(), moeda: c.moedas[c.mi], pag: c.pag };
+    return true;
+  }
+  function apTratar(m) {
+    const c = ap.ciclo; const pc = pendConsulta; pendConsulta = null;
+    if (!c) return;
+    const rows = (m.linhas || []).filter((l) => l && l.tipo !== 'item' && l.pokemonId != null);
+    c.vistos += rows.length; ap.vistos += rows.length;
+    for (const l of rows) {
+      if (!apNick(l.vendedor) || apFeitos.has(l.id)) continue;
+      apFeitos.add(l.id); c.achou++;
+      ap.fila.push({ id: l.id, desc: ((l.ficha && l.ficha.nome) || 'Pokémon') + (l.ficha && l.ficha.level ? ' Nv ' + l.ficha.level : '') + ' de ' + l.vendedor });
+    }
+    const tot = Number(m.total) || 0, pp = Number(m.porPagina) || 24;
+    const ultimaPag = !rows.length || (pc ? pc.pag + 1 : c.pag + 1) * pp >= tot || c.pag + 1 >= c.pags;
+    if (!ultimaPag) c.pag++;
+    else if (c.mi + 1 < c.moedas.length) { c.mi++; c.pag = 0; }
+    else {
+      ap.ultCiclo = Date.now(); ap.proxEm = Date.now() + cfg.apoiar.intervaloMin * 60000;
+      ap.msg = 'Última varredura: ' + c.vistos + ' anúncio(s) vistos' + (c.achou ? ', ' + c.achou + ' de amigo(s) favoritado(s)' : ', nenhum de amigo') + '.';
+      log('Apoiar amigo · varredura: ' + c.vistos + ' anúncio(s) vistos, ' + (c.achou ? c.achou + ' de amigo(s)' : 'nenhum de amigo'), c.achou ? 'ok' : 'info');
+      ap.ciclo = null;
+    }
+    sujo = true;
+  }
+  function apFavoritar() {
+    if (!ap.fila.length || Date.now() - ap.ultFav < 1500) return;
+    const f = ap.fila.shift();
+    if (enviar({ t: 'market.favoritar', id: f.id, ativo: true })) {
+      ap.ultFav = Date.now(); ap.favoritados++;
+      cfg.apoiar.feitos = [...apFeitos].slice(-1500); salvar();
+      log('Apoiar amigo · favoritei ' + f.desc + ' (anúncio ' + f.id + ')', 'ok'); sujo = true;
+    } else apFeitos.delete(f.id);
+  }
   // ---------- laço principal ----------
   function consultaRegra() {
     const regras = cfg.regras.filter(regraValida);
@@ -401,7 +457,7 @@
   }
   function tick() {
     const ws = getWs(); const aberto = !!(ws && ws.readyState === 1);
-    pump(); renTick();
+    pump(); renTick(); if (aberto && lider) apFavoritar();
     if (busca.carregando && !fila.length && (!pendConsulta || pendConsulta.tipo !== 'busca' || Date.now() - pendConsulta.em > 10000)) { busca.carregando = false; busca.msg = busca.rows.length + ' anúncio(s) em retenção (algumas páginas não responderam).'; pendConsulta = null; sujo = true; }
     if (cons.carregando && !fila.length && pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em > 10000) {
       pendConsulta = null; cons.tent = (cons.tent || 0) + 1;
@@ -419,7 +475,10 @@
       if (fila.length) {
         const q = fila.shift();
         if (enviar(q)) { marcarReq(); S.consultas++; pendConsulta = { tipo: 'busca', em: Date.now() }; }
+      } else if (apDevido() && (!ativo || ap.alt || ap.ciclo)) {
+        ap.alt = false; apConsulta();
       } else if (ativo) {
+        ap.alt = true;
         const ocupado = [...alvos.values()].some((a) => a.status === 'agendado' && a.compravelEm - agora() < 3000);
         if (!ocupado) consultaRegra();
       }
@@ -505,6 +564,7 @@
     sujo = false; ultEmit = Date.now();
     window.postMessage({
       ch: CH, from: 'rmtpoke', type: 'state', state: {
+        apoiar: { ativo: cfg.apoiar.ativo, msg: ap.msg, favoritados: ap.favoritados, fila: ap.fila.length, varrendo: !!ap.ciclo, ultCiclo: ap.ultCiclo, proxEm: ap.proxEm, vistos: ap.vistos, feitos: apFeitos.size },
         ativo, lider, conectado: !!(getWs() && getWs().readyState === 1), offset, cfg, msg: S.msg, stats: S,
         hist: hist.slice(0, 40), log: logs.slice(-80), busca, imed: { ativo: IMED.ativo, limite: IMED.limite, comprados: IMED.comprados }, ren: { ativo: ren.ativo, msg: ren.msg, em: ren.em, meus: ren.meus.slice(0, 60), renovadas: ren.renovadas }, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
         alvos: [...alvos.values()].map((a) => ({ id: a.id, nome: a.nome, level: a.level, shiny: a.shiny, vendedor: a.vendedor, preco: a.preco, precoMax: a.precoMax, compravelEm: a.compravelEm, p: a.p, iv: a.iv, q: a.q, n: a.n, origem: a.origem, regraNome: a.regraNome || '', status: a.status, msg: a.msg || '' }))
@@ -550,7 +610,7 @@
     else if (m.type === 'ativo') {
       ativo = !!m.value; S.msg = ativo ? 'Ligado.' : 'Desligado.'; log(ativo ? 'Compra automática de Pokémon LIGADA (' + cfg.regras.filter(regraValida).length + ' regra(s) válida(s))' : 'Compra automática de Pokémon desligada', 'info'); if (ativo) ultReq = 0; sujo = true;
     } else if (m.type === 'cfg') {
-      { const rv = cfg.renova, sm = cfg.simular, ra = cfg.renAtivo; cfg = normCfg(m.cfg); cfg.renAtivo = ra; if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; if (!m.cfg || m.cfg.simular === undefined) cfg.simular = sm; for (const r of cfg.renova) { const o = (rv || []).find((x) => x.id === r.id); if (o) { r.renovacoes = o.renovacoes; r.ultima = o.ultima; } } }
+      { const rv = cfg.renova, sm = cfg.simular, ra = cfg.renAtivo, ap = cfg.apoiar; cfg = normCfg(m.cfg); cfg.renAtivo = ra; cfg.apoiar = ap; if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; if (!m.cfg || m.cfg.simular === undefined) cfg.simular = sm; for (const r of cfg.renova) { const o = (rv || []).find((x) => x.id === r.id); if (o) { r.renovacoes = o.renovacoes; r.ultima = o.ultima; } } }
       // preserva a contagem de comprados que a tela não conhece
       salvar(); sujo = true;
     } else if (m.type === 'zerar-contagens') { cfg.regras.forEach((r) => { r.comprados = 0; }); salvar(); sujo = true; }
@@ -562,6 +622,8 @@
     else if (m.type === 'simular-antigo') { cfg.simular = !!m.value; salvar(); log(cfg.simular ? 'Modo SIMULAÇÃO ligado: as regras só avisam, não compram' : 'Modo SIMULAÇÃO desligado: as regras COMPRAM de verdade', 'info'); sujo = true; }
     else if (m.type === 'ren-ativo') { ren.ativo = !!m.value; cfg.renAtivo = ren.ativo; salvar(); ren.msg = ren.ativo ? 'Ligada.' : 'Desligada.'; if (ren.ativo) { ren.forcar = true; cfg.renova.forEach((r) => { r.sumiu = false; }); } log(ren.ativo ? 'Renovação automática LIGADA (' + cfg.renova.filter(renValida).length + ' anúncio(s))' : 'Renovação automática desligada', 'info'); sujo = true; }
     else if (m.type === 'ren-carregar') { ren.forcar = true; ren.em = 0; if (!ren.ativo) { const ws = getWs(); if (ws && ws.readyState === 1 && podeConsultar(true) && enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); } } sujo = true; }
+    else if (m.type === 'apoiar-ativo') { cfg.apoiar.ativo = !!m.value; if (cfg.apoiar.ativo) ap.proxEm = 0; ap.ciclo = null; ap.fila = []; salvar(); log(cfg.apoiar.ativo ? 'Apoiar amigo LIGADO (' + cfg.apoiar.nicks.length + ' amigo(s))' : 'Apoiar amigo desligado', 'info'); sujo = true; }
+    else if (m.type === 'apoiar-cfg') { const f = cfg.apoiar.feitos, at = cfg.apoiar.ativo; cfg.apoiar = normApoiar(Object.assign({}, m.apoiar, { ativo: at, feitos: f })); salvar(); sujo = true; }
     else if (m.type === 'ren-cfg') { cfg.renova = (Array.isArray(m.regras) ? m.regras : []).slice(0, 30).map(normRen); salvar(); sujo = true; }
     else if (m.type === 'armar') {
       const a = busca.rows.find((r) => r.id === m.id);

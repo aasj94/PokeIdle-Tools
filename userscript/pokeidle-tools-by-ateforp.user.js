@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeIdle Tools by Ateforp
 // @namespace    https://pokeidle.io/
-// @version      2.3.60
+// @version      2.3.61
 // @icon         data:image/png;base64,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
 // @description  Configurações de PvE, PvP, compras, tudo automático e num painel só.
 // @match        https://pokeidle.io/*
@@ -2096,7 +2096,7 @@ function definirCaptura(v) {
   const REFRESCO_MS = 9000;           // antes da liberação, confere de novo o preço do anúncio escolhido
 
   // ---------- configuração ----------
-  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], renAtivo: false, simular: false };
+  const PADRAO = { intervaloS: 5, antecipaMs: 0, regras: [], renova: [], renAtivo: false, apoiar: { ativo: false, nicks: [], intervaloMin: 2, paginas: 15, feitos: [] }, simular: false };
   let cfg = JSON.parse(JSON.stringify(PADRAO));
   const num = (v) => (v === null || v === '' || v === undefined || !isFinite(Number(v)) ? null : Number(v));
   function normRegra(r) {
@@ -2126,6 +2126,12 @@ function definirCaptura(v) {
     };
   }
   const renValida = (r) => r.ativo && r.id > 0 && r.a >= 2 && r.b >= 2 && r.a !== r.b;
+  function normApoiar(a) {
+    a = a || {};
+    const nicks = []; for (const n of Array.isArray(a.nicks) ? a.nicks : []) { const s = String(n || '').trim().slice(0, 40); if (s && !nicks.some((x) => x.toLowerCase() === s.toLowerCase())) nicks.push(s); if (nicks.length >= 100) break; }
+    const im = num(a.intervaloMin), pg = num(a.paginas);
+    return { ativo: !!a.ativo, nicks, intervaloMin: im >= 1 && im <= 120 ? im : 2, paginas: pg >= 1 && pg <= 15 ? Math.floor(pg) : 15, feitos: (Array.isArray(a.feitos) ? a.feitos : []).map(Number).filter((x) => x > 0).slice(-1500) };
+  }
   function normCfg(c) {
     const o = JSON.parse(JSON.stringify(PADRAO));
     c = c || {};
@@ -2134,6 +2140,7 @@ function definirCaptura(v) {
     if (Array.isArray(c.regras)) o.regras = c.regras.slice(0, 20).map(normRegra);
     if (Array.isArray(c.renova)) o.renova = c.renova.slice(0, 30).map(normRen);
     o.renAtivo = !!c.renAtivo;
+    o.apoiar = normApoiar(c.apoiar);
     return o;
   }
   try { const c = JSON.parse(localStorage.getItem(CHAVE) || 'null'); if (c) cfg = normCfg(c); } catch (e) { /* ignora */ }
@@ -2362,6 +2369,7 @@ function definirCaptura(v) {
       logConsulta('Consulta · ' + (rr ? (rr.nome || rr.especie || 'regra') : 'regra') + ': ' + (abertos.length ? abertos.length + ' anúncio(s) vistos' + (Number.isFinite(tot) && tot > abertos.length ? ' (de ' + tot + ' no mercado)' : '') + ', ' + (casam ? casam + ' batem na regra' : 'nenhum bate na regra') : 'nenhum anúncio com esses filtros no mercado agora'), casam ? 'ok' : 'info');
     }
     else if (pendConsulta && pendConsulta.tipo === 'refresco' && Date.now() - pendConsulta.em < 8000) pendConsulta = null;
+    else if (pendConsulta && pendConsulta.tipo === 'apoiar' && Date.now() - pendConsulta.em < 8000) apTratar(m);
     // compra automática por regras
     if (ativo && lider) {
       for (const a of linhas) {
@@ -2446,6 +2454,54 @@ function definirCaptura(v) {
     if (r.nivMax != null) x.nivelMax = String(r.nivMax);
     return x;
   }
+  // ---------- apoiar amigo: favorita os Pokémon à venda dos amigos cadastrados ----------
+  // O jogo recebe {"t":"market.favoritar","id":<anúncio>,"ativo":true} (não alterna: sempre favorita). Favoritou, não desfaz.
+  const ap = { ciclo: null, proxEm: 0, alt: false, fila: [], ultFav: 0, ultCiclo: 0, favoritados: 0, vistos: 0, msg: '' };
+  const apFeitos = new Set(cfg.apoiar.feitos);
+  const apNick = (n) => cfg.apoiar.nicks.some((x) => x.toLowerCase() === String(n || '').toLowerCase());
+  function apDevido() {
+    if (!cfg.apoiar.ativo || !cfg.apoiar.nicks.length) return false;
+    if (ap.ciclo) return true;
+    return Date.now() >= ap.proxEm;
+  }
+  function apConsulta() {
+    if (!ap.ciclo) ap.ciclo = { moedas: ['gold', 'orb'], mi: 0, pag: 0, pags: cfg.apoiar.paginas, vistos: 0, achou: 0 };
+    const c = ap.ciclo;
+    if (!enviar(pedidoLista({ moeda: c.moedas[c.mi], pagina: c.pag, semOutland: false }))) return false;
+    marcarReq(); S.consultas++; pendConsulta = { tipo: 'apoiar', em: Date.now(), moeda: c.moedas[c.mi], pag: c.pag };
+    return true;
+  }
+  function apTratar(m) {
+    const c = ap.ciclo; const pc = pendConsulta; pendConsulta = null;
+    if (!c) return;
+    const rows = (m.linhas || []).filter((l) => l && l.tipo !== 'item' && l.pokemonId != null);
+    c.vistos += rows.length; ap.vistos += rows.length;
+    for (const l of rows) {
+      if (!apNick(l.vendedor) || apFeitos.has(l.id)) continue;
+      apFeitos.add(l.id); c.achou++;
+      ap.fila.push({ id: l.id, desc: ((l.ficha && l.ficha.nome) || 'Pokémon') + (l.ficha && l.ficha.level ? ' Nv ' + l.ficha.level : '') + ' de ' + l.vendedor });
+    }
+    const tot = Number(m.total) || 0, pp = Number(m.porPagina) || 24;
+    const ultimaPag = !rows.length || (pc ? pc.pag + 1 : c.pag + 1) * pp >= tot || c.pag + 1 >= c.pags;
+    if (!ultimaPag) c.pag++;
+    else if (c.mi + 1 < c.moedas.length) { c.mi++; c.pag = 0; }
+    else {
+      ap.ultCiclo = Date.now(); ap.proxEm = Date.now() + cfg.apoiar.intervaloMin * 60000;
+      ap.msg = 'Última varredura: ' + c.vistos + ' anúncio(s) vistos' + (c.achou ? ', ' + c.achou + ' de amigo(s) favoritado(s)' : ', nenhum de amigo') + '.';
+      log('Apoiar amigo · varredura: ' + c.vistos + ' anúncio(s) vistos, ' + (c.achou ? c.achou + ' de amigo(s)' : 'nenhum de amigo'), c.achou ? 'ok' : 'info');
+      ap.ciclo = null;
+    }
+    sujo = true;
+  }
+  function apFavoritar() {
+    if (!ap.fila.length || Date.now() - ap.ultFav < 1500) return;
+    const f = ap.fila.shift();
+    if (enviar({ t: 'market.favoritar', id: f.id, ativo: true })) {
+      ap.ultFav = Date.now(); ap.favoritados++;
+      cfg.apoiar.feitos = [...apFeitos].slice(-1500); salvar();
+      log('Apoiar amigo · favoritei ' + f.desc + ' (anúncio ' + f.id + ')', 'ok'); sujo = true;
+    } else apFeitos.delete(f.id);
+  }
   // ---------- laço principal ----------
   function consultaRegra() {
     const regras = cfg.regras.filter(regraValida);
@@ -2462,7 +2518,7 @@ function definirCaptura(v) {
   }
   function tick() {
     const ws = getWs(); const aberto = !!(ws && ws.readyState === 1);
-    pump(); renTick();
+    pump(); renTick(); if (aberto && lider) apFavoritar();
     if (busca.carregando && !fila.length && (!pendConsulta || pendConsulta.tipo !== 'busca' || Date.now() - pendConsulta.em > 10000)) { busca.carregando = false; busca.msg = busca.rows.length + ' anúncio(s) em retenção (algumas páginas não responderam).'; pendConsulta = null; sujo = true; }
     if (cons.carregando && !fila.length && pendConsulta && pendConsulta.tipo === 'cons' && Date.now() - pendConsulta.em > 10000) {
       pendConsulta = null; cons.tent = (cons.tent || 0) + 1;
@@ -2480,7 +2536,10 @@ function definirCaptura(v) {
       if (fila.length) {
         const q = fila.shift();
         if (enviar(q)) { marcarReq(); S.consultas++; pendConsulta = { tipo: 'busca', em: Date.now() }; }
+      } else if (apDevido() && (!ativo || ap.alt || ap.ciclo)) {
+        ap.alt = false; apConsulta();
       } else if (ativo) {
+        ap.alt = true;
         const ocupado = [...alvos.values()].some((a) => a.status === 'agendado' && a.compravelEm - agora() < 3000);
         if (!ocupado) consultaRegra();
       }
@@ -2566,6 +2625,7 @@ function definirCaptura(v) {
     sujo = false; ultEmit = Date.now();
     window.postMessage({
       ch: CH, from: 'rmtpoke', type: 'state', state: {
+        apoiar: { ativo: cfg.apoiar.ativo, msg: ap.msg, favoritados: ap.favoritados, fila: ap.fila.length, varrendo: !!ap.ciclo, ultCiclo: ap.ultCiclo, proxEm: ap.proxEm, vistos: ap.vistos, feitos: apFeitos.size },
         ativo, lider, conectado: !!(getWs() && getWs().readyState === 1), offset, cfg, msg: S.msg, stats: S,
         hist: hist.slice(0, 40), log: logs.slice(-80), busca, imed: { ativo: IMED.ativo, limite: IMED.limite, comprados: IMED.comprados }, ren: { ativo: ren.ativo, msg: ren.msg, em: ren.em, meus: ren.meus.slice(0, 60), renovadas: ren.renovadas }, cons: { rows: cons.rows.slice(0, 150), carregando: cons.carregando, msg: cons.msg, total: cons.total },
         alvos: [...alvos.values()].map((a) => ({ id: a.id, nome: a.nome, level: a.level, shiny: a.shiny, vendedor: a.vendedor, preco: a.preco, precoMax: a.precoMax, compravelEm: a.compravelEm, p: a.p, iv: a.iv, q: a.q, n: a.n, origem: a.origem, regraNome: a.regraNome || '', status: a.status, msg: a.msg || '' }))
@@ -2611,7 +2671,7 @@ function definirCaptura(v) {
     else if (m.type === 'ativo') {
       ativo = !!m.value; S.msg = ativo ? 'Ligado.' : 'Desligado.'; log(ativo ? 'Compra automática de Pokémon LIGADA (' + cfg.regras.filter(regraValida).length + ' regra(s) válida(s))' : 'Compra automática de Pokémon desligada', 'info'); if (ativo) ultReq = 0; sujo = true;
     } else if (m.type === 'cfg') {
-      { const rv = cfg.renova, sm = cfg.simular, ra = cfg.renAtivo; cfg = normCfg(m.cfg); cfg.renAtivo = ra; if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; if (!m.cfg || m.cfg.simular === undefined) cfg.simular = sm; for (const r of cfg.renova) { const o = (rv || []).find((x) => x.id === r.id); if (o) { r.renovacoes = o.renovacoes; r.ultima = o.ultima; } } }
+      { const rv = cfg.renova, sm = cfg.simular, ra = cfg.renAtivo, ap = cfg.apoiar; cfg = normCfg(m.cfg); cfg.renAtivo = ra; cfg.apoiar = ap; if (!m.cfg || !Array.isArray(m.cfg.renova)) cfg.renova = rv; if (!m.cfg || m.cfg.simular === undefined) cfg.simular = sm; for (const r of cfg.renova) { const o = (rv || []).find((x) => x.id === r.id); if (o) { r.renovacoes = o.renovacoes; r.ultima = o.ultima; } } }
       // preserva a contagem de comprados que a tela não conhece
       salvar(); sujo = true;
     } else if (m.type === 'zerar-contagens') { cfg.regras.forEach((r) => { r.comprados = 0; }); salvar(); sujo = true; }
@@ -2623,6 +2683,8 @@ function definirCaptura(v) {
     else if (m.type === 'simular-antigo') { cfg.simular = !!m.value; salvar(); log(cfg.simular ? 'Modo SIMULAÇÃO ligado: as regras só avisam, não compram' : 'Modo SIMULAÇÃO desligado: as regras COMPRAM de verdade', 'info'); sujo = true; }
     else if (m.type === 'ren-ativo') { ren.ativo = !!m.value; cfg.renAtivo = ren.ativo; salvar(); ren.msg = ren.ativo ? 'Ligada.' : 'Desligada.'; if (ren.ativo) { ren.forcar = true; cfg.renova.forEach((r) => { r.sumiu = false; }); } log(ren.ativo ? 'Renovação automática LIGADA (' + cfg.renova.filter(renValida).length + ' anúncio(s))' : 'Renovação automática desligada', 'info'); sujo = true; }
     else if (m.type === 'ren-carregar') { ren.forcar = true; ren.em = 0; if (!ren.ativo) { const ws = getWs(); if (ws && ws.readyState === 1 && podeConsultar(true) && enviar({ t: 'market.meus' })) { marcarReq(); ren.pend = Date.now(); } } sujo = true; }
+    else if (m.type === 'apoiar-ativo') { cfg.apoiar.ativo = !!m.value; if (cfg.apoiar.ativo) ap.proxEm = 0; ap.ciclo = null; ap.fila = []; salvar(); log(cfg.apoiar.ativo ? 'Apoiar amigo LIGADO (' + cfg.apoiar.nicks.length + ' amigo(s))' : 'Apoiar amigo desligado', 'info'); sujo = true; }
+    else if (m.type === 'apoiar-cfg') { const f = cfg.apoiar.feitos, at = cfg.apoiar.ativo; cfg.apoiar = normApoiar(Object.assign({}, m.apoiar, { ativo: at, feitos: f })); salvar(); sujo = true; }
     else if (m.type === 'ren-cfg') { cfg.renova = (Array.isArray(m.regras) ? m.regras : []).slice(0, 30).map(normRen); salvar(); sujo = true; }
     else if (m.type === 'armar') {
       const a = busca.rows.find((r) => r.id === m.id);
@@ -3364,6 +3426,7 @@ function definirCaptura(v) {
     
     // Resumo das versões (aba "Novidades"). A primeira entrada é a versão instalada.
     window.__ateforpReleases = [
+     {"v": "2.3.61", "itens": ["Novo: Apoiar amigo (em Renovação de anúncios). Cadastre os nicks dos amigos; a cada X minutos a extensão varre as primeiras páginas (até 15, padrão 15) do Mercado de Pokémon em coins e gemas e favorita os anúncios desses jogadores. Favoritou, nunca desfavorita, e o mesmo anúncio não é favoritado duas vezes. Fica desligado até você ligar."]},
      {"v": "2.3.60", "itens": ["Renovação automática de anúncios: a chave agora é lembrada. Ao logar de novo, se estava ligada, ela volta ligada sozinha e retoma os anúncios que já estavam na renovação e ainda não foram vendidos (os vendidos continuam de fora)."]},
      {"v": "2.3.59", "itens": ["Compra Imediata: corrigido o aviso \"Compra Imediata desligada: não vou comprar\" que continuava na compra armada depois de ligar a chave, e o texto \"armada\" não esconde mais o estado LIGADA."]},
      {"v": "2.3.58", "itens": ["A aba Logs agora se chama Histórico e tem duas partes: Compras (compras de itens e de Pokémon, tentativas e o Registro das consultas) e Logs (conexão, Shiny Monitor e logs). O histórico saiu do Mercado RMT e os registros saíram de Regras e Renovação, ficando todos em Histórico > Compras. O Registro volta a ter uma linha por consulta, com o horário."]},
@@ -3918,7 +3981,7 @@ function definirCaptura(v) {
         if (sub === 'poke') renderPoke(true);
         if (sub === 'imed') renderImed();
         if (sub === 'cons') renderCons();
-        if (sub === 'ren') renderRen(true);
+        if (sub === 'ren') { renderRen(true); renderApoiar(); }
       }
     
       // ---------- Compra de Pokémon no Mercado (rmtpoke.js) ----------
@@ -4096,6 +4159,27 @@ function definirCaptura(v) {
       const rnEnviar = () => { clearTimeout(rnEnvio); rnEnvio = setTimeout(() => rpCmd({ type: 'ren-cfg', regras: rnRegras }), 300); };
       const emFocoRn = () => { const a = root.activeElement; return !!(a && a.closest && a.closest('#rnLista')); };
       let rnCarga = null, rnFeito = 0;
+      // ---------- Apoiar amigo ----------
+      let apNicks = null, apSig = '';
+      const apEnviar = () => rpCmd({ type: 'apoiar-cfg', apoiar: { nicks: apNicks || [], intervaloMin: Number($('apInt').value) || 2, paginas: Number($('apPag').value) || 15 } });
+      function renderApoiar() {
+        if (!rp || !rp.apoiar) return;
+        const a = rp.apoiar, c = (rp.cfg && rp.cfg.apoiar) || { nicks: [] };
+        if (!apNicks) { apNicks = (c.nicks || []).slice(); $('apInt').value = c.intervaloMin || 2; $('apPag').value = c.paginas || 15; }
+        $('apOn').checked = !!a.ativo;
+        $('apHint').textContent = a.ativo ? 'ligado' : 'desligado';
+        $('apInfo').textContent = !a.ativo ? '' : (a.varrendo ? 'Varrendo o mercado… ' : '') + (a.ultCiclo ? a.msg + ' ' : '') + 'Favoritados: ' + a.feitos + (a.fila ? ' · na fila: ' + a.fila : '');
+        const sig = JSON.stringify(apNicks);
+        if (sig !== apSig) {
+          apSig = sig; const box = $('apLista'); box.textContent = '';
+          if (!apNicks.length) box.append(el('div', { className: 'mut', textContent: 'Nenhum amigo cadastrado.' }));
+          apNicks.forEach((n, i) => box.append(el('div', { className: 'row-poke' }, el('b', { textContent: n }), ' ', el('button', { className: 'link', textContent: 'remover', onclick: () => { apNicks.splice(i, 1); apEnviar(); renderApoiar(); } }))));
+        }
+      }
+      $('apOn').addEventListener('change', (e) => rpCmd({ type: 'apoiar-ativo', value: e.target.checked }));
+      $('apAdd').addEventListener('click', () => { const v = $('apNick').value.trim(); if (!v || (apNicks || []).some((x) => x.toLowerCase() === v.toLowerCase())) return; (apNicks = apNicks || []).push(v); $('apNick').value = ''; apEnviar(); renderApoiar(); });
+      $('apNick').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('apAdd').click(); });
+      $('apInt').addEventListener('change', apEnviar); $('apPag').addEventListener('change', apEnviar);
       function renderRen(force) {
         if (!rp || !rp.ren) return;
         $('rnOn').checked = !!rp.ren.ativo;
@@ -4255,7 +4339,7 @@ function definirCaptura(v) {
         if (sub === 'imed') renderImed();
         if (tab === 'registro' && navHs === 'compras') { renderPkHist(); renderPkLog(); }
         if (sub === 'cons') renderCons();
-        if (sub === 'ren') renderRen(false);
+        if (sub === 'ren') { renderRen(false); renderApoiar(); }
       });
       rpCmd({ type: 'hello' });
       $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
@@ -5129,6 +5213,16 @@ function definirCaptura(v) {
                 </div>
                 <div class="row inline"><label class="switch"><input id="rnOn" type="checkbox"><span class="slider"></span></label> <span id="rnInfo" class="mut"></span></div>
                 <div class="btns"><button id="rnCarregar" class="icon">↻ Carregar meus anúncios</button></div>
+              </div>
+              <div class="card" id="apCard">
+                <h2>APOIAR AMIGO <small id="apHint"></small></h2>
+                <div class="mut">
+                  Cadastre os nicks dos seus amigos. A cada intervalo a extensão varre as primeiras páginas (até 15, ordem "recentes", onde os anúncios novos costumam estar) do Mercado de Pokémon, em coins e gemas e, se achar Pokémon à venda desses jogadores, <b>favorita</b> o anúncio para ajudar a divulgar. Depois de favoritado, nunca é desfavoritado. Fica desligado até você ligar.
+                </div>
+                <div class="row inline"><label class="switch"><input id="apOn" type="checkbox"><span class="slider"></span></label> <span id="apInfo" class="mut"></span></div>
+                <div class="row"><input id="apNick" type="text" maxlength="40" placeholder="nick do amigo"> <button id="apAdd" class="icon">Adicionar</button></div>
+                <div id="apLista"></div>
+                <div class="row"><label>Varrer a cada (min) <input id="apInt" type="number" min="1" max="120" value="2"></label> <label>Páginas por varredura <input id="apPag" type="number" min="1" max="15" value="15"></label></div>
               </div>
               <div id="rnLista"></div>
             </div>

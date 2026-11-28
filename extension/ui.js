@@ -454,7 +454,7 @@ function createUI(root) {
     if (sub === 'poke') renderPoke(true);
     if (sub === 'imed') renderImed();
     if (sub === 'cons') renderCons();
-    if (sub === 'ren') renderRen(true);
+    if (sub === 'ren') { renderRen(true); renderApoiar(); }
   }
 
   // ---------- Compra de Pokémon no Mercado (rmtpoke.js) ----------
@@ -632,6 +632,27 @@ function createUI(root) {
   const rnEnviar = () => { clearTimeout(rnEnvio); rnEnvio = setTimeout(() => rpCmd({ type: 'ren-cfg', regras: rnRegras }), 300); };
   const emFocoRn = () => { const a = root.activeElement; return !!(a && a.closest && a.closest('#rnLista')); };
   let rnCarga = null, rnFeito = 0;
+  // ---------- Apoiar amigo ----------
+  let apNicks = null, apSig = '';
+  const apEnviar = () => rpCmd({ type: 'apoiar-cfg', apoiar: { nicks: apNicks || [], intervaloMin: Number($('apInt').value) || 2, paginas: Number($('apPag').value) || 15 } });
+  function renderApoiar() {
+    if (!rp || !rp.apoiar) return;
+    const a = rp.apoiar, c = (rp.cfg && rp.cfg.apoiar) || { nicks: [] };
+    if (!apNicks) { apNicks = (c.nicks || []).slice(); $('apInt').value = c.intervaloMin || 2; $('apPag').value = c.paginas || 15; }
+    $('apOn').checked = !!a.ativo;
+    $('apHint').textContent = a.ativo ? 'ligado' : 'desligado';
+    $('apInfo').textContent = !a.ativo ? '' : (a.varrendo ? 'Varrendo o mercado… ' : '') + (a.ultCiclo ? a.msg + ' ' : '') + 'Favoritados: ' + a.feitos + (a.fila ? ' · na fila: ' + a.fila : '');
+    const sig = JSON.stringify(apNicks);
+    if (sig !== apSig) {
+      apSig = sig; const box = $('apLista'); box.textContent = '';
+      if (!apNicks.length) box.append(el('div', { className: 'mut', textContent: 'Nenhum amigo cadastrado.' }));
+      apNicks.forEach((n, i) => box.append(el('div', { className: 'row-poke' }, el('b', { textContent: n }), ' ', el('button', { className: 'link', textContent: 'remover', onclick: () => { apNicks.splice(i, 1); apEnviar(); renderApoiar(); } }))));
+    }
+  }
+  $('apOn').addEventListener('change', (e) => rpCmd({ type: 'apoiar-ativo', value: e.target.checked }));
+  $('apAdd').addEventListener('click', () => { const v = $('apNick').value.trim(); if (!v || (apNicks || []).some((x) => x.toLowerCase() === v.toLowerCase())) return; (apNicks = apNicks || []).push(v); $('apNick').value = ''; apEnviar(); renderApoiar(); });
+  $('apNick').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('apAdd').click(); });
+  $('apInt').addEventListener('change', apEnviar); $('apPag').addEventListener('change', apEnviar);
   function renderRen(force) {
     if (!rp || !rp.ren) return;
     $('rnOn').checked = !!rp.ren.ativo;
@@ -791,7 +812,7 @@ function createUI(root) {
     if (sub === 'imed') renderImed();
     if (tab === 'registro' && navHs === 'compras') { renderPkHist(); renderPkLog(); }
     if (sub === 'cons') renderCons();
-    if (sub === 'ren') renderRen(false);
+    if (sub === 'ren') { renderRen(false); renderApoiar(); }
   });
   rpCmd({ type: 'hello' });
   $('rnOn').addEventListener('change', (e) => rpCmd({ type: 'ren-ativo', value: e.target.checked }));
